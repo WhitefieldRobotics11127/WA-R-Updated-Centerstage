@@ -21,7 +21,6 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -37,12 +36,12 @@ import org.openftc.easyopencv.OpenCvWebcam;
  * command is issued. The pipeline is re-used from ocvSkystoneDeterminationExample
  */
 @TeleOp
-@Disabled
+//@Disabled
 public class ocvAutoInitDetectExample extends LinearOpMode
 {
     OpenCvWebcam webcam;
-    ocvSkystoneDeterminationExample.SkystoneDeterminationPipeline pipeline;
-    ocvSkystoneDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = ocvSkystoneDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default
+    CenterstageAuto.TSEDeterminationPipeline pipeline;
+    CenterstageAuto.TSEDeterminationPipeline.TSEPosition savedAnalysis = CenterstageAuto.TSEDeterminationPipeline.TSEPosition.LEFT; // default
 
     @Override
     public void runOpMode()
@@ -56,7 +55,7 @@ public class ocvAutoInitDetectExample extends LinearOpMode
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        pipeline = new ocvSkystoneDeterminationExample.SkystoneDeterminationPipeline();
+        pipeline = new CenterstageAuto.TSEDeterminationPipeline();
         webcam.setPipeline(pipeline);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -64,7 +63,7 @@ public class ocvAutoInitDetectExample extends LinearOpMode
             @Override
             public void onOpened()
             {
-                webcam.startStreaming(320,240, OpenCvCameraRotation.UPRIGHT);
+                webcam.startStreaming(640,360, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -89,15 +88,15 @@ public class ocvAutoInitDetectExample extends LinearOpMode
          * for later use. We must do this because the analysis will continue
          * to change as the camera view changes once the robot starts moving!
          */
-        snapshotAnalysis = pipeline.getAnalysis();
+        savedAnalysis = pipeline.getAnalysis();
 
         /*
          * Show that snapshot on the telemetry
          */
-        telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
+        telemetry.addData("Snapshot post-START analysis", savedAnalysis);
         telemetry.update();
 
-        switch (snapshotAnalysis)
+        switch (savedAnalysis)
         {
             case LEFT:
             {

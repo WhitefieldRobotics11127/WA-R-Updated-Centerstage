@@ -179,19 +179,27 @@ public class CenterstageRover extends OpMode {
 
         /** GAMEPAD 2 */
 
+        //Left stick moves the slide up
         robot.dcMotor5.setPower(-gamepad2.left_stick_y);
         robot.dcMotor6.setPower(-gamepad2.left_stick_y);
 
+        //Right stick articulates the entire slide back/forth
+        robot.dcMotor6.setPower(-gamepad2.right_stick_y);
+
         //Bumpers open/close the 2 sides simultaneously
-
-
         if (gamepad2.right_bumper){
-            robot.theClaw.setPosition(CenterstagePackBot.theClawOpen);
+            robot.leftClaw.setPosition(CenterstagePackBot.leftClawOpen);
+            robot.rightClaw.setPosition(CenterstagePackBot.rightClawOpen);
         }
 
         if (gamepad2.left_bumper){
-            robot.theClaw.setPosition(CenterstagePackBot.theClawClosed);
+            robot.leftClaw.setPosition(CenterstagePackBot.leftClawClosed);
+            robot.rightClaw.setPosition(CenterstagePackBot.rightClawClosed);
         }
+
+        //Left and right triggers move the servo that articulates the grabber back/forth
+        robot.swivel.setPower(gamepad2.left_trigger);
+        robot.swivel.setPower(-gamepad2.right_trigger);
 
         /*
         if (gamepad2.back){ //retract the odometer wheels

@@ -252,6 +252,49 @@ public class CenterstageAuto {
          */
     }
 
+    public void placePurplePixel(){
+        //The base method to place a purple pixel on the spike it's supposed to be on
+        // THE ROBOT MUST BE FACING BACKWARDS AT START
+        double driveSpeed = 0.4;
+        double rotateSpeed = 0.4;
+        int sleepTime = 300;
+        String markerPos = "Left";
+
+        markerPos = scanSaved();
+        myOpMode.telemetry.addData("Marker Pos", markerPos);
+        myOpMode.telemetry.update();
+
+        /*
+        myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE THAT CLEARS THE WALL, "Backward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+        while (getHeading() < 180){
+            myRobot.rotateCCW(rotateSpeed);
+        }
+        myOpMode.sleep(sleepTime);
+        myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE AT THE FIRST 2 SPIKES LEVEL, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        if (markerPos.equals("Right")){
+            myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE TO HOVER OVER THE SPIKE/AVOID THE METAL BARS, "Right", driveSpeed);
+            myOpMode.sleep(sleepTime);
+            WHICHEVERSERVO.OPENLEFT/RIGHTGRABBER();
+            myOpMode.sleep(sleepTime);
+        }
+        else if (markerPos.equals("Middle")){
+            myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE, "Forward", driveSpeed);
+            myOpMode.sleep(sleepTime);
+            WHICHEVERSERVO.OPENLEFT/RIGHTGRABBER();
+            myOpMode.sleep(sleepTime);
+        }
+        else { //when markerPos.equals("Left") or we can't/don't detect the prop
+            myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE TO HOVER OVER THE SPIKE/AVOID THE METAL BARS, "Left", driveSpeed);
+            myOpMode.sleep(sleepTime);
+            WHICHEVERSERVO.OPENLEFT/RIGHTGRABBER();
+            myOpMode.sleep(sleepTime);
+        }
+         */
+    }
+
     public void placePark(String color, String side){
         //The base method to place a purple pixel on the spike it's supposed to be on and park
         // THE ROBOT MUST BE FACING BACKWARDS AT START

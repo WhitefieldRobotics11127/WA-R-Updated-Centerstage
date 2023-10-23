@@ -33,6 +33,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -105,7 +106,9 @@ public class CenterstagePackBot {
 
     //public Servo  = null;
 
-    public Servo theClaw = null;
+    public Servo leftClaw = null;
+    public Servo rightClaw = null;
+    public CRServo swivel = null;
 
     public BNO055IMU imu;
     Orientation angles; //not sure if we need this
@@ -120,8 +123,10 @@ public class CenterstagePackBot {
     public static final double     COUNTS_PER_LIFT_INCH         = (537.7) / (1.75 * 3.1415);
 
 
-    public static final double theClawOpen = 0.8;
-    public static final double theClawClosed = 0.73;
+    public static final double leftClawOpen = 0.8;
+    public static final double leftClawClosed = 0.73;
+    public static final double rightClawOpen = 0.73;
+    public static final double rightClawClosed = 0.8;
 
 
 
@@ -193,7 +198,9 @@ public class CenterstagePackBot {
 
         // Define and initialize installed servos.
 
-        theClaw = hwMap.get(Servo.class, "theClaw");
+        leftClaw = hwMap.get(Servo.class, "leftClaw");
+        rightClaw = hwMap.get(Servo.class, "rightClaw");
+        swivel = hwMap.get(CRServo.class, "swivel");
 
 
 
@@ -276,13 +283,13 @@ public class CenterstagePackBot {
     */
 
     public void moveLiftUp(LinearOpMode opMode, double targetCt, double speed) {
-        int posCurrent = -(dcMotor5.getCurrentPosition());
+        int posCurrent = -(dcMotor6.getCurrentPosition());
         // Converts the vertical distance to diagonal distance using trig.
 //        double targetCt = inches * COUNTS_PER_LIFT_INCH /.982; //Math is incorrect. Counts are easy.
         while (!opMode.isStopRequested() && posCurrent < targetCt) {
             dcMotor5.setPower(speed);
             dcMotor6.setPower(speed);
-            posCurrent = -(dcMotor5.getCurrentPosition());
+            posCurrent = -(dcMotor6.getCurrentPosition());
         }
         dcMotor5.setPower(0);
         dcMotor6.setPower(0);
@@ -290,13 +297,13 @@ public class CenterstagePackBot {
 
 
     public void moveLiftDown(LinearOpMode opMode, double targetCt, double speed) {
-        int posCurrent = -(dcMotor5.getCurrentPosition());
+        int posCurrent = -(dcMotor6.getCurrentPosition());
         // Converts the vertical distance to diagonal distance using trig.
 //        double targetCt = inches * COUNTS_PER_LIFT_INCH /.982; //see above comment
         while (!opMode.isStopRequested() && posCurrent > targetCt) {
             dcMotor5.setPower(-speed);
             dcMotor6.setPower(-speed);
-            posCurrent = -(dcMotor5.getCurrentPosition());
+            posCurrent = -(dcMotor6.getCurrentPosition());
         }
         dcMotor5.setPower(0);
         dcMotor6.setPower(0);

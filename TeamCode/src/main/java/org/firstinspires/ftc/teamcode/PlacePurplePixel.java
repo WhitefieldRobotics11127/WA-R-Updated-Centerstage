@@ -33,42 +33,41 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
-@Autonomous(name="Scan Barcode Test", group ="Testing")
+@Autonomous(name="Place Purple Pixel", group ="General")
 //@Disabled
-public class ScanBarcodeTest extends LinearOpMode {
+public class PlacePurplePixel extends LinearOpMode {
 
 
-    FreightFrenzyPackBot robot = new FreightFrenzyPackBot();
-    String result = "";
+    CenterstagePackBot robot = new CenterstagePackBot();
 
     @Override public void runOpMode() {
 
         robot.init(hardwareMap);
 
-        FreightFrenzyAuto autoClass = new FreightFrenzyAuto(this, robot, hardwareMap);
+        CenterstageAuto autoClass = new CenterstageAuto(this, robot, hardwareMap);
 
 
-        ///autoClass.initVuforia();
+//        autoClass.initVuforia();
 //        autoClass.initTfod();
+        autoClass.initCV();
 
         telemetry.addData("Ready", "");
         telemetry.update();
 
-        waitForStart();
-        //autoClass.initTfod();
+//        waitForStart();
+//        autoClass.initTfod();
+        while (!isStarted() && !isStopRequested()) //replaces waitForStart()
+        {
+            telemetry.addData("Realtime analysis", autoClass.scanPropCV());
+            telemetry.update();
+        }
 
         while (!isStopRequested()) {
             telemetry.addData("Starting Method", "");
             telemetry.update();
 
-//            autoClass.shipDuckParkDuck("Blue");
+            autoClass.placePurplePixel();
 
-//            robot.encoderDrive(this, 30, "Forward", 0.3);
-//            robot.advancedEncoderDrive(this, 15, "Backward", .3);
-            sleep(2000);
-            result = autoClass.scanBarcode();
-            telemetry.addData("Result", result);
-            telemetry.update();
 
             while (!isStopRequested())
                 sleep(1);
