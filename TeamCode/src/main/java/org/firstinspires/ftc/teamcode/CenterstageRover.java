@@ -184,7 +184,8 @@ public class CenterstageRover extends OpMode {
         robot.dcMotor6.setPower(-gamepad2.left_stick_y);
 
         //Right stick articulates the entire slide back/forth
-        robot.dcMotor6.setPower(-gamepad2.right_stick_y);
+        //robot.dcMotor6.setPower(-gamepad2.right_stick_y);
+        robot.swivel.setPower(-(gamepad2.right_stick_y) * 0.5);
 
         //Left and right bumper toggles the respective side of the grabber open/closed
         if (gamepad2.left_bumper && robot.leftClaw.getPosition() == CenterstagePackBot.leftClawOpen)
@@ -199,9 +200,42 @@ public class CenterstageRover extends OpMode {
         if (gamepad2.right_bumper && robot.rightClaw.getPosition() == CenterstagePackBot.rightClawClosed)
             robot.rightClaw.setPosition(CenterstagePackBot.rightClawOpen);
 
+
+
+        if(gamepad2.y) //left closed
+            robot.leftClaw.setPosition(CenterstagePackBot.leftClawClosed);
+        if (gamepad2.b) //left open
+            robot.leftClaw.setPosition(CenterstagePackBot.leftClawOpen);
+        if (gamepad2.a) //right closed
+            robot.rightClaw.setPosition(CenterstagePackBot.rightClawClosed);
+        if (gamepad2.x) //right open
+            robot.rightClaw.setPosition(CenterstagePackBot.rightClawOpen);
+
+        /*
+        if (gamepad2.dpad_up){
+            robot.swivel.setPower(.1);
+            if (gamepad2.dpad_right)
+                robot.swivel.setPower(0);
+        }
+        if (gamepad2.dpad_right)
+            robot.swivel.setPower(0);
+
+        if (gamepad2.dpad_down) {
+            robot.swivel.setPower(-.1);
+            if (gamepad2.dpad_right)
+                robot.swivel.setPower(0);
+        }
+
         //Left and right triggers move the servo that articulates the grabber back/forth
-        robot.swivel.setPower(gamepad2.left_trigger);
-        robot.swivel.setPower(-gamepad2.right_trigger);
+        //robot.swivel.setPower(gamepad2.left_trigger);
+        //robot.swivel.setPower((-1) * gamepad2.right_trigger);
+        //OR pressing down on the dpad/up on the dpad while holding LT makes it swivel the respective direction
+        /*
+        while (gamepad2.dpad_down && gamepad2.left_trigger)
+            robot.swivel.setPower(gamepad2.left_trigger);
+        while (gamepad2.dpad_up && gamepad2.left_trigger)
+            robot.swivel.setPower(-gamepad2.right_trigger);
+         */
 
         /*
         if (gamepad2.back){ //retract the odometer wheels

@@ -123,10 +123,10 @@ public class CenterstagePackBot {
     public static final double     COUNTS_PER_LIFT_INCH         = (537.7) / (1.75 * 3.1415);
 
 
-    public static final double leftClawOpen = 0.8;
-    public static final double leftClawClosed = 0.73;
-    public static final double rightClawOpen = 0.73;
-    public static final double rightClawClosed = 0.8;
+    public static final double leftClawOpen = .6;
+    public static final double leftClawClosed = .4;
+    public static final double rightClawOpen = .4;
+    public static final double rightClawClosed = .56;
 
 
 
@@ -205,8 +205,8 @@ public class CenterstagePackBot {
 
 
         // blinkin = hwMap.get(RevBlinkinLedDriver.class, "blinkin");
-        colorSensor1 = hwMap.get(NormalizedColorSensor.class, "colorSensor1");
-        colorSensor2 = hwMap.get(NormalizedColorSensor.class, "colorSensor2");
+        //colorSensor1 = hwMap.get(NormalizedColorSensor.class, "colorSensor1");
+        //colorSensor2 = hwMap.get(NormalizedColorSensor.class, "colorSensor2");
 
         /*
         led1R = hwMap.get(DigitalChannel.class, "l1r");
