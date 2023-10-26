@@ -181,7 +181,7 @@ public class CenterstageRover extends OpMode {
 
         //Left stick pushes the slide up/down
         //robot.dcMotor5.setPower(-gamepad2.left_stick_y);
-        robot.dcMotor6.setPower(-gamepad2.left_stick_y);
+        robot.dcMotor6.setPower(-gamepad2.right_stick_y);
 
         //Right trigger articulates the entire slide back/forth, was originally on right stick
         robot.dcMotor6.setPower(gamepad2.left_trigger);
@@ -193,21 +193,23 @@ public class CenterstageRover extends OpMode {
         //robot.dcMotor6.setPower(-gamepad2.right_stick_y);
 
         //Right stick moves the grabber back and forth (not opening it)
-        robot.swivel.setPower(-(gamepad2.right_stick_y) * 0.1);
+        robot.swivel.setPower(-(gamepad2.left_stick_y) * 0.1);
 
         //Left and right bumper toggles the respective side of the grabber open/closed
-        if (gamepad2.left_bumper && robot.leftClaw.getPosition() == CenterstagePackBot.leftClawOpen)
+        if (gamepad2.left_bumper && robot.leftClaw.getPosition() == CenterstagePackBot.leftClawOpen) {
             robot.leftClaw.setPosition(CenterstagePackBot.leftClawClosed);
+        }
 
-        if (gamepad2.left_bumper && robot.leftClaw.getPosition() == CenterstagePackBot.leftClawClosed)
+        if (gamepad2.left_bumper && robot.leftClaw.getPosition() == CenterstagePackBot.leftClawClosed){
             robot.leftClaw.setPosition(CenterstagePackBot.leftClawOpen);
+            }
 
         if (gamepad2.right_bumper && robot.rightClaw.getPosition() == CenterstagePackBot.rightClawOpen)
             robot.rightClaw.setPosition(CenterstagePackBot.rightClawClosed);
 
-        if (gamepad2.right_bumper && robot.rightClaw.getPosition() == CenterstagePackBot.rightClawClosed)
+        if (gamepad2.right_bumper && robot.rightClaw.getPosition() == CenterstagePackBot.rightClawClosed){
             robot.rightClaw.setPosition(CenterstagePackBot.rightClawOpen);
-
+        }
 
         //Buttons to open/close the sides of the grabber individually
         if(gamepad2.y) //left closed

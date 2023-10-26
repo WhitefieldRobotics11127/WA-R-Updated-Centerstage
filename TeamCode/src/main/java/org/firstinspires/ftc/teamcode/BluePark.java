@@ -49,7 +49,7 @@ public class BluePark extends LinearOpMode {
 
 //        autoClass.initVuforia();
 //        autoClass.initTfod();
-        autoClass.initCV();
+        //autoClass.initCV();
 
         telemetry.addData("Ready", "");
         telemetry.update();
@@ -58,7 +58,7 @@ public class BluePark extends LinearOpMode {
 //        autoClass.initTfod();
         while (!isStarted() && !isStopRequested()) //replaces waitForStart()
         {
-            telemetry.addData("Realtime analysis", autoClass.scanPropCV());
+            //telemetry.addData("Realtime analysis", autoClass.scanPropCV());
             telemetry.update();
         }
 
