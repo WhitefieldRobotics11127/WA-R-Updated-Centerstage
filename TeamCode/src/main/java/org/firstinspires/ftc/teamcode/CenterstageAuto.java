@@ -252,6 +252,18 @@ public class CenterstageAuto {
          */
     }
 
+    public void park(String color){
+        double driveSpeed = 0.4;
+        double rotateSpeed = 0.4;
+        int sleepTime = 300;
+        myRobot.advancedEncoderDrive(myOpMode, 1, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+        if (color.equals("Blue"))
+            myRobot.advancedEncoderDrive(myOpMode, 24, "Left", driveSpeed);
+        if (color.equals("Red"))
+            myRobot.advancedEncoderDrive(myOpMode, 24, "Right", driveSpeed);
+    }
+
     public void placePurplePixel(){
         //The base method to place a purple pixel on the spike it's supposed to be on
         // THE ROBOT MUST BE FACING BACKWARDS AT START
