@@ -33,7 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
-@Autonomous(name="Park", group ="Blue")
+@Autonomous(name="BluePark", group ="Blue")
 //@Disabled
 public class BluePark extends LinearOpMode {
 
