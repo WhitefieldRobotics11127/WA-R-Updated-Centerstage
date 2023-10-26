@@ -184,9 +184,9 @@ public class CenterstageRover extends OpMode {
         robot.dcMotor6.setPower(-gamepad2.right_stick_y);
 
         //Right trigger articulates the entire slide back/forth, was originally on right stick
-        robot.dcMotor6.setPower(gamepad2.left_trigger);
+        //robot.dcMotor6.setPower(gamepad2.left_trigger);
         robot.dcMotor5.setPower(gamepad2.left_trigger);
-        robot.dcMotor6.setPower(-gamepad2.right_trigger);
+        //robot.dcMotor6.setPower(-gamepad2.right_trigger);
         robot.dcMotor5.setPower(-gamepad2.right_trigger);
 
         //Slide articulation was originally on right stick
