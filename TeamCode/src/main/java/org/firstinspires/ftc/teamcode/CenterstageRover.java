@@ -193,7 +193,7 @@ public class CenterstageRover extends OpMode {
         //robot.dcMotor6.setPower(-gamepad2.right_stick_y);
 
         //Right stick moves the grabber back and forth (not opening it)
-        robot.swivel.setPower(-(gamepad2.left_stick_y) * 0.1);
+        robot.swivel.setPower(-(gamepad2.left_stick_y) * 0.15);
 
         //Left and right bumper toggles the respective side of the grabber open/closed
         if (gamepad2.left_bumper && robot.leftClaw.getPosition() == CenterstagePackBot.leftClawOpen) {

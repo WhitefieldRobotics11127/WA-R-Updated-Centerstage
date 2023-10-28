@@ -169,6 +169,7 @@ public class CenterstagePackBot {
 //        dcMotor7.setDirection(DcMotor.Direction.REVERSE);
 
         dcMotor2.setDirection(DcMotor.Direction.REVERSE);
+        dcMotor3.setDirection(DcMotor.Direction.REVERSE);
         dcMotor4.setDirection(DcMotor.Direction.REVERSE);
 
         // Set all motors to zero power
