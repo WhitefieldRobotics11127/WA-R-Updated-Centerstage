@@ -84,6 +84,8 @@ public class CenterstageRover extends OpMode {
     Deadline gamepadRateLimit;
     private int currentLiftPos;
 
+    boolean leftClawClosed, rightClawClosed;
+
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -138,7 +140,7 @@ public class CenterstageRover extends OpMode {
 
         forward = gear * gamepad1.left_stick_y;
         strafe = gear * -gamepad1.left_stick_x;
-        rotate = -gear * gamepad1.right_stick_x;
+        rotate = gear * gamepad1.right_stick_x;
         //rotate = -gear * -gamepad1.right_stick_x;
 
         front_left = direction * forward + rotate + (direction * strafe);
@@ -194,31 +196,41 @@ public class CenterstageRover extends OpMode {
 
         //Right stick moves the grabber back and forth (not opening it)
         robot.swivel.setPower(-(gamepad2.left_stick_y) * 0.15);
+        if (gamepad2.dpad_down)
+            robot.swivel.setPower(0);
 
         //Left and right bumper toggles the respective side of the grabber open/closed
-        if (gamepad2.left_bumper && robot.leftClaw.getPosition() == CenterstagePackBot.leftClawOpen) {
-            robot.leftClaw.setPosition(CenterstagePackBot.leftClawClosed);
+        if (gamepad2.start) {
+            leftClawClosed = true;
+            rightClawClosed = true;
         }
 
-        if (gamepad2.left_bumper && robot.leftClaw.getPosition() == CenterstagePackBot.leftClawClosed){
+        if (gamepad2.left_bumper && !leftClawClosed) {
+            robot.leftClaw.setPosition(CenterstagePackBot.leftClawClosed);
+            leftClawClosed = true;
+        }
+        else if (gamepad2.left_bumper && leftClawClosed){
             robot.leftClaw.setPosition(CenterstagePackBot.leftClawOpen);
+            leftClawClosed = false;
             }
 
-        if (gamepad2.right_bumper && robot.rightClaw.getPosition() == CenterstagePackBot.rightClawOpen)
+        if (gamepad2.right_bumper && !rightClawClosed) {
             robot.rightClaw.setPosition(CenterstagePackBot.rightClawClosed);
-
-        if (gamepad2.right_bumper && robot.rightClaw.getPosition() == CenterstagePackBot.rightClawClosed){
+            rightClawClosed = true;
+        }
+        else if (gamepad2.right_bumper && rightClawClosed){
             robot.rightClaw.setPosition(CenterstagePackBot.rightClawOpen);
+            rightClawClosed = false;
         }
 
         //Buttons to open/close the sides of the grabber individually
         if(gamepad2.y) //left closed
             robot.leftClaw.setPosition(CenterstagePackBot.leftClawClosed);
-        if (gamepad2.b) //left open
+        if (gamepad2.x) //left open
             robot.leftClaw.setPosition(CenterstagePackBot.leftClawOpen);
-        if (gamepad2.a) //right closed
+        if (gamepad2.b) //right closed
             robot.rightClaw.setPosition(CenterstagePackBot.rightClawClosed);
-        if (gamepad2.x) //right open
+        if (gamepad2.a) //right open
             robot.rightClaw.setPosition(CenterstagePackBot.rightClawOpen);
 
         /*

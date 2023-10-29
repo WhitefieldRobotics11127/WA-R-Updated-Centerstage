@@ -256,12 +256,23 @@ public class CenterstageAuto {
         double driveSpeed = 0.4;
         double rotateSpeed = 0.4;
         int sleepTime = 300;
-        myRobot.advancedEncoderDrive(myOpMode, 1, "Forward", driveSpeed);
+        myRobot.leftClaw.setPosition(CenterstagePackBot.leftClawClosed);
+        myOpMode.sleep(sleepTime);
+        myRobot.rightClaw.setPosition(CenterstagePackBot.rightClawClosed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 1, "Backward", driveSpeed);
         myOpMode.sleep(sleepTime);
         if (color.equals("Blue"))
-            myRobot.advancedEncoderDrive(myOpMode, 24, "Left", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, 48, "Left", driveSpeed);
         if (color.equals("Red"))
-            myRobot.advancedEncoderDrive(myOpMode, 24, "Right", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, 48, "Right", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.leftClaw.setPosition(CenterstagePackBot.leftClawOpen);
+        myOpMode.sleep(sleepTime);
+        myRobot.rightClaw.setPosition(CenterstagePackBot.rightClawOpen);
+        myOpMode.sleep(sleepTime);
     }
 
     public void placePurplePixel(){

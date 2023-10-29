@@ -68,6 +68,7 @@ public class CenterstagePackBot {
     public DcMotor dcMotor4 = null; //four drive motors
     public DcMotor dcMotor5 = null; //slide articulation
     public DcMotor dcMotor6 = null; //string movement
+    //public DcMotor dcMotor7 = null;
 
     public VoltageSensor vs;
 
@@ -162,6 +163,7 @@ public class CenterstagePackBot {
         dcMotor4 = hwMap.get(DcMotor.class, "motor_4");
         dcMotor5 = hwMap.get(DcMotor.class, "motor_articulate");
         dcMotor6 = hwMap.get(DcMotor.class, "motor_string");
+        //dcMotor7 = hwMap.get(DcMotor.class, "motor_grabber")
 
         // This is what lets us be an omnidirectional bot
         //dcMotor1.setDirection(DcMotor.Direction.REVERSE);
