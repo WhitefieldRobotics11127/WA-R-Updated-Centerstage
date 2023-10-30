@@ -560,11 +560,11 @@ public class CenterstageAuto {
          * The core values which define the location and size of the sample regions
          * TODO: Check these points w/ our camera position and redefine them based on prop location
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(90,200);
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(300,200);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(490,200);
-        static final int REGION_WIDTH = 50;
-        static final int REGION_HEIGHT = 50;
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(1,0);
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(1,0);
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(1,0);
+        static final int REGION_WIDTH = 1;
+        static final int REGION_HEIGHT = 1;
 
         /*
          * Points which actually define the sample region rectangles, derived from above values
@@ -625,7 +625,7 @@ public class CenterstageAuto {
             Core.extractChannel(YCrCb, Cb, 1); //TODO: Change coi to 1 to change to Cr?
         }
 
-        void inputToCr(Mat input){
+        void inputToCr(Mat input) {
             Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
             Core.extractChannel(YCrCb, Cr, 1);
         }
