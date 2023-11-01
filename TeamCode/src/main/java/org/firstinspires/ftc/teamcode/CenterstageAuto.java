@@ -560,11 +560,11 @@ public class CenterstageAuto {
          * The core values which define the location and size of the sample regions
          * TODO: Check these points w/ our camera position and redefine them based on prop location
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(1,0);
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(1,0);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(1,0);
-        static final int REGION_WIDTH = 1;
-        static final int REGION_HEIGHT = 1;
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(90,200);
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(300,200);
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(490,200);
+        static final int REGION_WIDTH = 50;
+        static final int REGION_HEIGHT = 50;
 
         /*
          * Points which actually define the sample region rectangles, derived from above values
@@ -606,10 +606,10 @@ public class CenterstageAuto {
          * Working variables
          */
         Mat region1_Cb, region2_Cb, region3_Cb; //TODO: May need to change to Cr instead of Cb to better detect TSE
-        Mat region1_Cr, region2_Cr, region3_Cr;
+        //Mat region1_Cr, region2_Cr, region3_Cr;
         Mat YCrCb = new Mat();
         Mat Cb = new Mat();
-        Mat Cr = new Mat();
+        //Mat Cr = new Mat();
         int avg1, avg2, avg3;
 
         // Volatile since accessed by OpMode thread w/o synchronization
@@ -625,10 +625,12 @@ public class CenterstageAuto {
             Core.extractChannel(YCrCb, Cb, 1); //TODO: Change coi to 1 to change to Cr?
         }
 
+        /*
         void inputToCr(Mat input) {
             Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
             Core.extractChannel(YCrCb, Cr, 1);
         }
+        */
 
         @Override
         public void init(Mat firstFrame)
@@ -653,14 +655,15 @@ public class CenterstageAuto {
             region2_Cb = Cb.submat(new Rect(region2_pointA, region2_pointB));
             region3_Cb = Cb.submat(new Rect(region3_pointA, region3_pointB));
 
-            region1_Cr = Cr.submat(new Rect(region1_pointA, region1_pointB));
-            region2_Cr = Cr.submat(new Rect(region2_pointA, region2_pointB));
-            region3_Cr = Cr.submat(new Rect(region3_pointA, region3_pointB));
+            //region1_Cr = Cr.submat(new Rect(region1_pointA, region1_pointB));
+            //region2_Cr = Cr.submat(new Rect(region2_pointA, region2_pointB));
+            //region3_Cr = Cr.submat(new Rect(region3_pointA, region3_pointB));
         }
 
         @Override
         public Mat processFrame(Mat input)
         {
+
             /*
              * Overview of what we're doing:
              *
@@ -819,6 +822,109 @@ public class CenterstageAuto {
         public TSEPosition getAnalysis()
         {
             return position;
+        }
+    }
+
+    public static class TSEDeterminationPipelineWithSide extends OpenCvPipeline{
+
+        //An enum to define the skystone position
+        public enum TSEPosition{
+            LEFT,
+            CENTER,
+            RIGHT
+        }
+
+        //Some color constants
+        static final Scalar BLUE = new Scalar(0, 0, 255);
+        static final Scalar GREEN = new Scalar(0, 255, 0);
+
+        //Working variables
+        private Mat hsvMat = new Mat(); //converted image
+        private Mat binaryMat = new Mat(); //image analyzed after thresholding
+        private Mat maskedInputMat = new Mat();
+
+        //Volatile since accessed by OpMode thread w/o synchronization
+        private volatile TSEPosition position = TSEPosition.LEFT;
+
+        //Convert from BGR to HSV
+        void inputToHSV(Mat input){
+            Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_RGB2HSV);
+            Core.inRange(hsvMat, lower, upper, binaryMat);
+        }
+
+        //The core values which define the location and size of the sample regions
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(90,200);
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(300,200);
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(490,200);
+        static final int REGION_WIDTH = 50;
+        static final int REGION_HEIGHT = 50;
+
+
+        //Points which actually define the sample region rectangles, derived from above values
+        Point region1_pointA = new Point(
+                REGION1_TOPLEFT_ANCHOR_POINT.x,
+                REGION1_TOPLEFT_ANCHOR_POINT.y);
+        Point region1_pointB = new Point(
+                REGION1_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
+                REGION1_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
+        Point region2_pointA = new Point(
+                REGION2_TOPLEFT_ANCHOR_POINT.x,
+                REGION2_TOPLEFT_ANCHOR_POINT.y);
+        Point region2_pointB = new Point(
+                REGION2_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
+                REGION2_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
+        Point region3_pointA = new Point(
+                REGION3_TOPLEFT_ANCHOR_POINT.x,
+                REGION3_TOPLEFT_ANCHOR_POINT.y);
+        Point region3_pointB = new Point(
+                REGION3_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
+                REGION3_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
+
+        //HSV threshold bounds
+        public Scalar lower = new Scalar(0, 0, 0);
+        public Scalar upper = new Scalar(0, 0, 255);
+
+        //process the pixel value for each rectangle
+
+        @Override
+        public Mat processFrame(Mat input) {
+            /*
+                Scan all three rectangle regions, keeping track of
+                how many pixels meet the threshold value, indicated
+                by the color blue in the binary image.
+             */
+            double b1 = 0, b2 = 0, b3 = 0;
+            for (int i = (int) region1_pointA.x; i <= region1_pointB.x; i++){
+                for (int j = (int) region1_pointA.y; i <= region1_pointB.y; i++){
+                    if (binaryMat.get(i, j)[2] == 255)
+                        b1++;
+                }
+            }
+            for (int i = (int) region2_pointA.x; i <= region2_pointB.x; i++){
+                for (int j = (int) region2_pointA.y; j <= region2_pointB.y; j++){
+                    if (binaryMat.get(i, j)[2] == 255)
+                        b2++;
+                }
+            }
+
+            for (int i = (int) region3_pointA.x; i<= region3_pointB.x; i++){
+                for (int j = (int) region3_pointA.y; j<= region3_pointB.y; j++){
+                    if (binaryMat.get(i, j)[2] == 255)
+                        b3++;
+                }
+            }
+
+            //Determine object location
+            if (b1 > b2 && b1 > b3) {
+                position = TSEPosition.LEFT;
+            }
+            else if (b2 > b1 && b2 > b3) {
+                position = TSEPosition.CENTER;
+            }
+            else if (b3 > b1 && b3 > b2) {
+                position = TSEPosition.RIGHT;
+            }
+            return input;
         }
     }
 
