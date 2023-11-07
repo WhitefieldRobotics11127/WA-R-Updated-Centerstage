@@ -765,46 +765,27 @@ public class CenterstageAuto {
         }
     }
 
-    public static class TSEDeterminationPipelineWithSide extends OpenCvPipeline{
+    public static class TSEDeterminationPipelineWithSide extends OpenCvPipeline {
 
-        //An enum to define the skystone position
-        public enum TSEPosition{
+        public enum TSEPosition {
             LEFT,
             CENTER,
             RIGHT
         }
 
-        //Some color constants
         static final Scalar BLUE = new Scalar(0, 0, 255);
         static final Scalar GREEN = new Scalar(0, 255, 0);
 
-        //Working variables
-        private Mat hsvMat = new Mat(); //converted image
-        private Mat binaryMat = new Mat(); //image analyzed after thresholding
-        private Mat maskedInputMat = new Mat();
-
-        //Volatile since accessed by OpMode thread w/o synchronization
-        private volatile TSEPosition position = TSEPosition.LEFT;
-
-        //HSV threshold bounds
-        public Scalar lower = new Scalar(0, 0, 0);
-        public Scalar upper = new Scalar(255, 255, 255);
-
-        //Convert from RGB to HSV
-        void inputToHSV(Mat input){
-            Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_RGB2HSV);
-            Core.inRange(hsvMat, lower, upper, binaryMat);
-        }
-
-        //The core values which define the location and size of the sample regions
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(90,200);
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(300,200);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(490,200);
+        /*
+         * The core values which define the location and size of the sample regions
+         * TODO: Check these points w/ our camera position and redefine them based on prop location
+         */
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(90, 200);
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(300, 200);
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(490, 200);
         static final int REGION_WIDTH = 50;
         static final int REGION_HEIGHT = 50;
 
-
-        //Points which actually define the sample region rectangles, derived from above values
         Point region1_pointA = new Point(
                 REGION1_TOPLEFT_ANCHOR_POINT.x,
                 REGION1_TOPLEFT_ANCHOR_POINT.y);
@@ -824,71 +805,119 @@ public class CenterstageAuto {
                 REGION3_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
                 REGION3_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
 
-        public TSEDeterminationPipelineWithSide(){
+        Mat region1_Cb, region2_Cb, region3_Cb; //TODO: May need to change to Cr instead of Cb to better detect TSE
+        //Mat region1_Cr, region2_Cr, region3_Cr;
+        Mat YCrCb = new Mat();
+        Mat Cb = new Mat();
+        //Mat Cr = new Mat();
+        int avg1, avg2, avg3;
 
+        // Volatile since accessed by OpMode thread w/o synchronization
+        private volatile TSEDeterminationPipelineWithSide.TSEPosition position = TSEDeterminationPipelineWithSide.TSEPosition.LEFT;
+
+        void inputToCb(Mat input) {
+            Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
+            Core.extractChannel(YCrCb, Cb, 1); //TODO: Change coi to 1 to change to Cr?
         }
 
-        //process the pixel value for each rectangle
+
 
         @Override
-        public void init(Mat firstFrame){
-            inputToHSV(firstFrame);
+        public void init(Mat firstFrame) {
+
+            inputToCb(firstFrame);
+
+
+            region1_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
+            region2_Cb = Cb.submat(new Rect(region2_pointA, region2_pointB));
+            region3_Cb = Cb.submat(new Rect(region3_pointA, region3_pointB));
+
+            //region1_Cr = Cr.submat(new Rect(region1_pointA, region1_pointB));
+            //region2_Cr = Cr.submat(new Rect(region2_pointA, region2_pointB));
+            //region3_Cr = Cr.submat(new Rect(region3_pointA, region3_pointB));
         }
 
         @Override
         public Mat processFrame(Mat input) {
-            /*
-                Scan all three rectangle regions, keeping track of
-                how many pixels meet the threshold value, indicated
-                by the color blue in the binary image.
-             */
-            inputToHSV(input);
 
-            double b1 = 0, b2 = 0, b3 = 0;
-            for (int i = (int) region1_pointA.x; i < region1_pointB.x; i++){
-                for (int j = (int) region1_pointA.y; i < region1_pointB.y; i++){
-                    if (binaryMat.get(i, j)[0] == 255)
-                        b1++;
-                }
-            }
-            for (int i = (int) region2_pointA.x; i < region2_pointB.x; i++){
-                for (int j = (int) region2_pointA.y; j < region2_pointB.y; j++){
-                    if (binaryMat.get(i, j)[0] == 255)
-                        b2++;
-                }
+            inputToCb(input);
+
+
+            avg1 = (int) Core.mean(region1_Cb).val[0];
+            avg2 = (int) Core.mean(region2_Cb).val[0];
+            avg3 = (int) Core.mean(region3_Cb).val[0];
+
+
+            Imgproc.rectangle(
+                    input, // Buffer to draw on
+                    region1_pointA, // First point which defines the rectangle
+                    region1_pointB, // Second point which defines the rectangle
+                    BLUE, // The color the rectangle is drawn in
+                    2); // Thickness of the rectangle lines
+
+
+            Imgproc.rectangle(
+                    input, // Buffer to draw on
+                    region2_pointA, // First point which defines the rectangle
+                    region2_pointB, // Second point which defines the rectangle
+                    BLUE, // The color the rectangle is drawn in
+                    2); // Thickness of the rectangle lines
+
+
+            Imgproc.rectangle(
+                    input, // Buffer to draw on
+                    region3_pointA, // First point which defines the rectangle
+                    region3_pointB, // Second point which defines the rectangle
+                    BLUE, // The color the rectangle is drawn in
+                    2); // Thickness of the rectangle lines
+
+
+            int minOneTwo = Math.min(avg1, avg2);
+            int min = Math.min(minOneTwo, avg3);
+
+
+            if (min == avg1) // Was it from region 1?
+            {
+                position = TSEDeterminationPipelineWithSide.TSEPosition.LEFT; // Record our analysis
+
+
+                Imgproc.rectangle(
+                        input, // Buffer to draw on
+                        region1_pointA, // First point which defines the rectangle
+                        region1_pointB, // Second point which defines the rectangle
+                        GREEN, // The color the rectangle is drawn in
+                        -1); // Negative thickness means solid fill
+            } else if (min == avg2) // Was it from region 2?
+            {
+                position = TSEDeterminationPipelineWithSide.TSEPosition.CENTER; // Record our analysis
+
+
+                Imgproc.rectangle(
+                        input, // Buffer to draw on
+                        region2_pointA, // First point which defines the rectangle
+                        region2_pointB, // Second point which defines the rectangle
+                        GREEN, // The color the rectangle is drawn in
+                        -1); // Negative thickness means solid fill
+            } else if (min == avg3) // Was it from region 3?
+            {
+                position = TSEDeterminationPipelineWithSide.TSEPosition.RIGHT; // Record our analysis
+
+
+                Imgproc.rectangle(
+                        input, // Buffer to draw on
+                        region3_pointA, // First point which defines the rectangle
+                        region3_pointB, // Second point which defines the rectangle
+                        GREEN, // The color the rectangle is drawn in
+                        -1); // Negative thickness means solid fill
             }
 
-            for (int i = (int) region3_pointA.x; i < region3_pointB.x; i++){
-                for (int j = (int) region3_pointA.y; j < region3_pointB.y; j++){
-                    if (binaryMat.get(i, j)[0] == 255)
-                        b3++;
-                }
-            }
 
-            Imgproc.rectangle(input, region1_pointA, region1_pointB, BLUE, 2);
-            Imgproc.rectangle(input, region2_pointA, region2_pointB, BLUE, 2);
-            Imgproc.rectangle(input, region3_pointA, region3_pointB, BLUE, 2);
-
-            //Determine object location
-            if (b1 > b2 && b1 > b3) {
-                position = TSEPosition.LEFT;
-                Imgproc.rectangle(input, region1_pointA, region1_pointB, GREEN, -1);
-            }
-            else if (b2 > b1 && b2 > b3) {
-                position = TSEPosition.CENTER;
-                Imgproc.rectangle(input, region2_pointA, region2_pointB, GREEN, -1);
-            }
-            else if (b3 > b1 && b3 > b2) {
-                position = TSEPosition.RIGHT;
-                Imgproc.rectangle(input, region3_pointA, region3_pointB, GREEN, -1);
-            }
             return input;
         }
 
-        public TSEPosition getAnalysis(){
+        public TSEDeterminationPipelineWithSide.TSEPosition getAnalysis() {
             return position;
         }
-    }
 
-}
+    }}
 
