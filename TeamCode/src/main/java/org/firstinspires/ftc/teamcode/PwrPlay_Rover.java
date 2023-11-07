@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -45,7 +46,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 @TeleOp(name="PwrPlay_Rover", group="Packbot")
-//@Disabled
+@Disabled
 public class PwrPlay_Rover extends OpMode {
 
     /* Declare OpMode members. */

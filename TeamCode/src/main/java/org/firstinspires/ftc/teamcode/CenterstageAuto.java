@@ -255,6 +255,8 @@ public class CenterstageAuto {
          */
     }
 
+
+    //temporary for meet one, nothing was working here
     public void park(String color){
         double driveSpeed = 0.4;
         double rotateSpeed = 0.4;
@@ -280,7 +282,7 @@ public class CenterstageAuto {
 
     public void placePark(String color, String side){
         //The base method to place a purple pixel on the spike it's supposed to be on and park
-        // THE ROBOT MUST BE FACING BACKWARDS AT START
+        // THE ROBOT MUST BE FACING FORWARDS AT START
         double driveSpeed = 0.4;
         double rotateSpeed = 0.4;
         int sleepTime = 300;
@@ -294,13 +296,7 @@ public class CenterstageAuto {
         myOpMode.telemetry.update();
 
         /*
-        myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE THAT CLEARS THE WALL, "Backward", driveSpeed);
-        myOpMode.sleep(sleepTime);
-        while (getHeading() < 180){
-            myRobot.rotateCCW(rotateSpeed);
-        }
-        myOpMode.sleep(sleepTime);
-        myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE AT THE FIRST 2 SPIKES LEVEL, "Forward", driveSpeed);
+        myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE THAT CLEARS THE WALL, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
         if (markerPos.equals("Right")){
@@ -326,15 +322,14 @@ public class CenterstageAuto {
             if (markerPos.equals("Right")){
                 myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE, "Left", driveSpeed);
                 myOpMode.sleep(sleepTime);
-                myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE, "Forward", driveSpeed);
-                myOpMode.sleep(sleepTime);
             }
             if (markerPos.equals("Left")){
                 myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE, "Right", driveSpeed);
                 myOpMode.sleep(sleepTime);
-                myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE, "Forward", driveSpeed);
-                myOpMode.sleep(sleepTime);
             }
+            myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE, "Forward", driveSpeed);
+                myOpMode.sleep(sleepTime);
+        }
         else{
             myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE, "Forward", driveSpeed);
             myOpMode.sleep(sleepTime);
@@ -921,3 +916,5 @@ public class CenterstageAuto {
 
     }}
 
+//remove color sensor test, scan park, lift test, and scan barcode test
+//remove ocvAutoInitDetectexample, ocvwebcam example, pwryplayrover, color sensor

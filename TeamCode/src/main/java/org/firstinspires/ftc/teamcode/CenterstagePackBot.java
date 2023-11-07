@@ -440,6 +440,7 @@ public class CenterstagePackBot {
             then run the bot at 70% speed (x = 0.7) to the same distance and record the drift (in
             inches). Your y value for each will be the target distance divided by the actual distance
             it went.
+            Power is x and Drift is y (in inches). Use these to find the slope and y-intercept.
         */
 
         double targetHeading = getHeading();

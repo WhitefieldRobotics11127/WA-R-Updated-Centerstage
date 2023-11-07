@@ -30,11 +30,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
 @Autonomous(name= "Lift Test", group ="Test")
-//@Disabled
+@Disabled
 public class LiftTest extends LinearOpMode {
 
     PowerPlayPackBot robot = new PowerPlayPackBot();
