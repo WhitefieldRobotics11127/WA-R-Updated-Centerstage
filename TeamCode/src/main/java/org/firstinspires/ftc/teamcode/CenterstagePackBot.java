@@ -68,7 +68,7 @@ public class CenterstagePackBot {
     public DcMotor dcMotor4 = null; //four drive motors
     public DcMotor dcMotor5 = null; //slide articulation
     public DcMotor dcMotor6 = null; //string movement
-    //public DcMotor dcMotor7 = null;
+    public DcMotor dcMotor7 = null;
 
     public VoltageSensor vs;
 
@@ -109,7 +109,7 @@ public class CenterstagePackBot {
 
     public Servo leftClaw = null;
     public Servo rightClaw = null;
-    public CRServo swivel = null;
+    //public CRServo swivel = null;
 
     public BNO055IMU imu;
     Orientation angles; //not sure if we need this
@@ -163,7 +163,7 @@ public class CenterstagePackBot {
         dcMotor4 = hwMap.get(DcMotor.class, "motor_4");
         dcMotor5 = hwMap.get(DcMotor.class, "motor_articulate");
         dcMotor6 = hwMap.get(DcMotor.class, "motor_string");
-        //dcMotor7 = hwMap.get(DcMotor.class, "motor_grabber")
+        dcMotor7 = hwMap.get(DcMotor.class, "motor_grabber");
 
         // This is what lets us be an omnidirectional bot
         //dcMotor1.setDirection(DcMotor.Direction.REVERSE);
@@ -191,6 +191,7 @@ public class CenterstagePackBot {
         dcMotor3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcMotor5.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcMotor6.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dcMotor7.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         dcMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         dcMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -198,12 +199,13 @@ public class CenterstagePackBot {
         dcMotor4.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         dcMotor5.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         dcMotor6.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        dcMotor7.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Define and initialize installed servos.
 
         leftClaw = hwMap.get(Servo.class, "leftClaw");
         rightClaw = hwMap.get(Servo.class, "rightClaw");
-        swivel = hwMap.get(CRServo.class, "swivel");
+        //swivel = hwMap.get(CRServo.class, "swivel");
 
 
 

@@ -49,7 +49,7 @@ public class RedReadPlaceParkLeft extends LinearOpMode {
 
 //        autoClass.initVuforia();
 //        autoClass.initTfod();
-        autoClass.initCV();
+        autoClass.initCV("Red");
 
         telemetry.addData("Ready", "");
         telemetry.update();
@@ -58,7 +58,7 @@ public class RedReadPlaceParkLeft extends LinearOpMode {
 //        autoClass.initTfod();
         while (!isStarted() && !isStopRequested()) //replaces waitForStart()
         {
-            telemetry.addData("Realtime analysis", autoClass.scanPropCV());
+            telemetry.addData("Realtime analysis", autoClass.scanPropCV("Red"));
             telemetry.update();
         }
 

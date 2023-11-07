@@ -119,8 +119,11 @@ public class CenterstageAuto {
     private String position = "";
     public OpenCvWebcam webcam;
     public TSEDeterminationPipeline pipeline;
+    public TSEDeterminationPipelineWithSide pipelineOther;
     public TSEDeterminationPipeline.TSEPosition savedAnalysis =
             TSEDeterminationPipeline.TSEPosition.LEFT;
+    public TSEDeterminationPipelineWithSide.TSEPosition savedAnalysis1 =
+            TSEDeterminationPipelineWithSide.TSEPosition.LEFT;
 
     private double t, tInit;
 
@@ -275,49 +278,6 @@ public class CenterstageAuto {
         myOpMode.sleep(sleepTime);
     }
 
-    public void placePurplePixel(){
-        //The base method to place a purple pixel on the spike it's supposed to be on
-        // THE ROBOT MUST BE FACING BACKWARDS AT START
-        double driveSpeed = 0.4;
-        double rotateSpeed = 0.4;
-        int sleepTime = 300;
-        String markerPos = "Left";
-
-        markerPos = scanSaved();
-        myOpMode.telemetry.addData("Marker Pos", markerPos);
-        myOpMode.telemetry.update();
-
-        /*
-        myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE THAT CLEARS THE WALL, "Backward", driveSpeed);
-        myOpMode.sleep(sleepTime);
-        while (getHeading() < 180){
-            myRobot.rotateCCW(rotateSpeed);
-        }
-        myOpMode.sleep(sleepTime);
-        myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE AT THE FIRST 2 SPIKES LEVEL, "Forward", driveSpeed);
-        myOpMode.sleep(sleepTime);
-
-        if (markerPos.equals("Right")){
-            myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE TO HOVER OVER THE SPIKE/AVOID THE METAL BARS, "Right", driveSpeed);
-            myOpMode.sleep(sleepTime);
-            WHICHEVERSERVO.OPENLEFT/RIGHTGRABBER();
-            myOpMode.sleep(sleepTime);
-        }
-        else if (markerPos.equals("Middle")){
-            myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE, "Forward", driveSpeed);
-            myOpMode.sleep(sleepTime);
-            WHICHEVERSERVO.OPENLEFT/RIGHTGRABBER();
-            myOpMode.sleep(sleepTime);
-        }
-        else { //when markerPos.equals("Left") or we can't/don't detect the prop
-            myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE TO HOVER OVER THE SPIKE/AVOID THE METAL BARS, "Left", driveSpeed);
-            myOpMode.sleep(sleepTime);
-            WHICHEVERSERVO.OPENLEFT/RIGHTGRABBER();
-            myOpMode.sleep(sleepTime);
-        }
-         */
-    }
-
     public void placePark(String color, String side){
         //The base method to place a purple pixel on the spike it's supposed to be on and park
         // THE ROBOT MUST BE FACING BACKWARDS AT START
@@ -326,7 +286,10 @@ public class CenterstageAuto {
         int sleepTime = 300;
         String markerPos = "Left";
 
-        markerPos = scanSaved();
+        if (color.equals("Red"))
+            markerPos = scanSavedRed();
+        else if (color.equals("Blue"))
+            markerPos = scanSavedBlue();
         myOpMode.telemetry.addData("Marker Pos", markerPos);
         myOpMode.telemetry.update();
 
@@ -389,70 +352,24 @@ public class CenterstageAuto {
          */
     }
 
-    public boolean scan(String side, String color){
-        // Scanner scan = new Scanner(System.in);
-
-        float gain = 5;
-        final float[] hsvValues = new float[3];
-        boolean result = false;
-
-        if (side.equals("right")){
-            // Turns the light on if it's not on already.
-            if (myRobot.colorSensor1 instanceof SwitchableLight) {
-                ((SwitchableLight) myRobot.colorSensor1).enableLight(true);
-            }
-
-            myRobot.colorSensor1.setGain(gain);
-
-            // Actually gets the colors from the sensor
-            NormalizedRGBA colors = myRobot.colorSensor1.getNormalizedColors();
-
-            Color.colorToHSV(colors.toColor(), hsvValues);
-
-            if (colors.red > colors.blue && colors.red > colors.green && color.equals("Red")){
-                result = true;
-            }
-            else if (colors.blue > colors.red && colors.blue > colors.green && color.equals("Blue")){
-                result = true;
-            }
-            else
-                result = false;
-        }
-        else if (side.equals("left")){
-            // Turns the light on if it's not on already.
-            if (myRobot.colorSensor2 instanceof SwitchableLight) {
-                ((SwitchableLight) myRobot.colorSensor2).enableLight(true);
-            }
-
-            myRobot.colorSensor2.setGain(gain);
-
-            // Actually gets the colors from the sensor
-            NormalizedRGBA colors = myRobot.colorSensor2.getNormalizedColors();
-
-            Color.colorToHSV(colors.toColor(), hsvValues);
-
-            if (colors.red > colors.blue && colors.red > colors.green && color.equals("Red")){
-                result = true;
-            }
-            else if (colors.blue > colors.red && colors.blue > colors.green && color.equals("Blue")){
-                result = true;
-            }
-            else
-                result = false;
-        }
-        else
-            result = false;
-        return result;
-    }
-
-    public void initCV() {
+    public void initCV(String color) {
         // Documentation omitted for brevity - please see ocvWebcamExample.java for documentation
         HardwareMap hardwareMap = myHardwareMap;
         webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
         int cameraMonitorViewId = myHardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", myHardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(myRobot.webcamName, cameraMonitorViewId);
-        pipeline = new TSEDeterminationPipeline();
-        webcam.setPipeline(pipeline);
+        if (color.equals("Red")){
+            pipeline = new TSEDeterminationPipeline();
+            webcam.setPipeline(pipeline);
+        }
+        else if (color.equals("Blue")) {
+            pipelineOther = new TSEDeterminationPipelineWithSide();
+            webcam.setPipeline(pipelineOther);
+        }
+        else{
+            pipeline = new TSEDeterminationPipeline();
+            webcam.setPipeline(pipeline);
+        }
 
         webcam.setMillisecondsPermissionTimeout(2500); // Timeout for obtaining permission is configurable. Set before opening.
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -486,15 +403,34 @@ public class CenterstageAuto {
         webcam.closeCameraDevice();
     }
 
-    public void snapshotCV() {
-        savedAnalysis = pipeline.getAnalysis();
+    public void snapshotCV(String color) {
+        if (color.equals("Red"))
+            savedAnalysis = pipeline.getAnalysis();
+        else if (color.equals("Blue"))
+            savedAnalysis1 = pipelineOther.getAnalysis();
+        else
+            savedAnalysis = pipeline.getAnalysis();
     }
 
     /*
     This is broken into its own method in case we want to
     save the snapshot and analyze it at different times.
      */
-    public String scanSaved() {
+
+    public String scanSavedBlue(){
+        switch (savedAnalysis1){
+            case LEFT: {
+                return "Left";
+            } case RIGHT: {
+                return "Right";
+            } case CENTER: {
+                return "Middle";
+            }
+        }
+        return "Left";
+    }
+
+    public String scanSavedRed() {
 //        myOpMode.telemetry.addData("CV Analysis", savedAnalysis);
 //        myOpMode.telemetry.update();
         switch (savedAnalysis) {
@@ -509,9 +445,13 @@ public class CenterstageAuto {
         return "Left";
     }
 
-    public String scanPropCV() {
-        snapshotCV();
-        return scanSaved();
+    public String scanPropCV(String color) {
+        snapshotCV(color);
+        if (color.equals("Red"))
+            return scanSavedRed();
+        if (color.equals("Blue"))
+            return scanSavedBlue();
+        return scanSavedRed();
     }
 
 
@@ -846,7 +786,11 @@ public class CenterstageAuto {
         //Volatile since accessed by OpMode thread w/o synchronization
         private volatile TSEPosition position = TSEPosition.LEFT;
 
-        //Convert from BGR to HSV
+        //HSV threshold bounds
+        public Scalar lower = new Scalar(0, 0, 0);
+        public Scalar upper = new Scalar(255, 255, 255);
+
+        //Convert from RGB to HSV
         void inputToHSV(Mat input){
             Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_RGB2HSV);
             Core.inRange(hsvMat, lower, upper, binaryMat);
@@ -880,11 +824,16 @@ public class CenterstageAuto {
                 REGION3_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
                 REGION3_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
 
-        //HSV threshold bounds
-        public Scalar lower = new Scalar(0, 0, 0);
-        public Scalar upper = new Scalar(0, 0, 255);
+        public TSEDeterminationPipelineWithSide(){
+
+        }
 
         //process the pixel value for each rectangle
+
+        @Override
+        public void init(Mat firstFrame){
+            inputToHSV(firstFrame);
+        }
 
         @Override
         public Mat processFrame(Mat input) {
@@ -893,38 +842,51 @@ public class CenterstageAuto {
                 how many pixels meet the threshold value, indicated
                 by the color blue in the binary image.
              */
+            inputToHSV(input);
+
             double b1 = 0, b2 = 0, b3 = 0;
-            for (int i = (int) region1_pointA.x; i <= region1_pointB.x; i++){
-                for (int j = (int) region1_pointA.y; i <= region1_pointB.y; i++){
-                    if (binaryMat.get(i, j)[2] == 255)
+            for (int i = (int) region1_pointA.x; i < region1_pointB.x; i++){
+                for (int j = (int) region1_pointA.y; i < region1_pointB.y; i++){
+                    if (binaryMat.get(i, j)[0] == 255)
                         b1++;
                 }
             }
-            for (int i = (int) region2_pointA.x; i <= region2_pointB.x; i++){
-                for (int j = (int) region2_pointA.y; j <= region2_pointB.y; j++){
-                    if (binaryMat.get(i, j)[2] == 255)
+            for (int i = (int) region2_pointA.x; i < region2_pointB.x; i++){
+                for (int j = (int) region2_pointA.y; j < region2_pointB.y; j++){
+                    if (binaryMat.get(i, j)[0] == 255)
                         b2++;
                 }
             }
 
-            for (int i = (int) region3_pointA.x; i<= region3_pointB.x; i++){
-                for (int j = (int) region3_pointA.y; j<= region3_pointB.y; j++){
-                    if (binaryMat.get(i, j)[2] == 255)
+            for (int i = (int) region3_pointA.x; i < region3_pointB.x; i++){
+                for (int j = (int) region3_pointA.y; j < region3_pointB.y; j++){
+                    if (binaryMat.get(i, j)[0] == 255)
                         b3++;
                 }
             }
 
+            Imgproc.rectangle(input, region1_pointA, region1_pointB, BLUE, 2);
+            Imgproc.rectangle(input, region2_pointA, region2_pointB, BLUE, 2);
+            Imgproc.rectangle(input, region3_pointA, region3_pointB, BLUE, 2);
+
             //Determine object location
             if (b1 > b2 && b1 > b3) {
                 position = TSEPosition.LEFT;
+                Imgproc.rectangle(input, region1_pointA, region1_pointB, GREEN, -1);
             }
             else if (b2 > b1 && b2 > b3) {
                 position = TSEPosition.CENTER;
+                Imgproc.rectangle(input, region2_pointA, region2_pointB, GREEN, -1);
             }
             else if (b3 > b1 && b3 > b2) {
                 position = TSEPosition.RIGHT;
+                Imgproc.rectangle(input, region3_pointA, region3_pointB, GREEN, -1);
             }
             return input;
+        }
+
+        public TSEPosition getAnalysis(){
+            return position;
         }
     }
 
