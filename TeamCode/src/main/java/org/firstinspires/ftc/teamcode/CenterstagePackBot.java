@@ -68,15 +68,16 @@ public class CenterstagePackBot {
     public DcMotor dcMotor4 = null; //four drive motors
     public DcMotor dcMotor5 = null; //slide articulation
     public DcMotor dcMotor6 = null; //string movement
-    public DcMotor dcMotor7 = null;
+    public DcMotor dcMotor7 = null; //grabber motor
 
     public VoltageSensor vs;
 
     // public RevBlinkinLedDriver blinkin = null;
 
     public DistanceSensor frontDistSensor, leftDistSensor, rightDistSensor;
-    public NormalizedColorSensor colorSensor1;
-    public NormalizedColorSensor colorSensor2;
+
+    //Not deleted to demonstrate how color sensors work
+    //public NormalizedColorSensor colorSensor1;
 
     public DigitalChannel led1R;
     public DigitalChannel led1G;
@@ -89,27 +90,16 @@ public class CenterstagePackBot {
 
     public RevBlinkinLedDriver blinkinLedDriver;
 
-//    public double wg_left_closed = 0.275;
-//    public double wg_right_closed = 0.725;
-//    public double wg_left_open = 0;
-//    public double wg_right_open = 1;
-
 //    public AnalogInput pot = null;
 //    public double potLowerVoltage = 0.607, potUpperVoltage = 1.575;
 //    private double targetPos = potLowerVoltage;
 //    private double wgCoeff = 0.3; // 1/3.3; 3.3 is the max voltage of the potentiometer
 
 //not deleted to demonstrate CR Servos
-//    public CRServo intakeServoFL = null;
-//    public CRServo intakeServoBL = null;
-//    public CRServo intakeServoFR = null;
 //    public CRServo intakeServoBR = null;
-
-    //public Servo  = null;
 
     public Servo leftClaw = null;
     public Servo rightClaw = null;
-    //public CRServo swivel = null;
 
     public BNO055IMU imu;
     Orientation angles; //not sure if we need this
@@ -144,18 +134,15 @@ public class CenterstagePackBot {
     public CenterstagePackBot() {
     }
 
-    // public PowerPlayVobot() {}
-
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap ahwMap) {
         // save reference to HW Map
         hwMap = ahwMap;
 
 
-//        RevBlinkinLedDriver.BlinkinPattern pattern;
+        //RevBlinkinLedDriver.BlinkinPattern pattern;
         // blinkinLedDriver = hwMap.get(RevBlinkinLedDriver.class, "blinkin");
 
-        //
         // Define and Initialize Motors
         dcMotor1 = hwMap.get(DcMotor.class, "motor_1");
         dcMotor2 = hwMap.get(DcMotor.class, "motor_2");
@@ -165,10 +152,8 @@ public class CenterstagePackBot {
         dcMotor6 = hwMap.get(DcMotor.class, "motor_string");
         dcMotor7 = hwMap.get(DcMotor.class, "motor_grabber");
 
-        // This is what lets us be an omnidirectional bot
-        //dcMotor1.setDirection(DcMotor.Direction.REVERSE);
-        //dcMotor3.setDirection(DcMotor.Direction.REVERSE);
-//        dcMotor7.setDirection(DcMotor.Direction.REVERSE);
+        // This is what lets us be an omnidirectional bot, changed from previous years to allow us
+        // to use vertical motors
 
         dcMotor2.setDirection(DcMotor.Direction.REVERSE);
         dcMotor3.setDirection(DcMotor.Direction.REVERSE);
@@ -179,6 +164,9 @@ public class CenterstagePackBot {
         dcMotor2.setPower(0);
         dcMotor3.setPower(0);
         dcMotor4.setPower(0);
+        dcMotor5.setPower(0);
+        dcMotor6.setPower(0);
+        dcMotor7.setPower(0);
 
 //        pot = hwMap.get(AnalogInput.class, "pot");
 
@@ -202,16 +190,11 @@ public class CenterstagePackBot {
         dcMotor7.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Define and initialize installed servos.
-
         leftClaw = hwMap.get(Servo.class, "leftClaw");
         rightClaw = hwMap.get(Servo.class, "rightClaw");
-        //swivel = hwMap.get(CRServo.class, "swivel");
-
-
 
         // blinkin = hwMap.get(RevBlinkinLedDriver.class, "blinkin");
         //colorSensor1 = hwMap.get(NormalizedColorSensor.class, "colorSensor1");
-        //colorSensor2 = hwMap.get(NormalizedColorSensor.class, "colorSensor2");
 
         /*
         led1R = hwMap.get(DigitalChannel.class, "l1r");
@@ -237,14 +220,6 @@ public class CenterstagePackBot {
 
 //        not deleted for demonstrative purposes
 //        intakeServoFL = hwMap.get(CRServo.class, "intakeServoFL");
-//        intakeServoBL = hwMap.get(CRServo.class, "intakeServoBL");
-//        intakeServoFR = hwMap.get(CRServo.class, "intakeServoFR");
-//        intakeServoBR = hwMap.get(CRServo.class, "intakeServoBR");
-
-
-        //Bot_CS = hwMap.get(ColorSensor.class, "Bot_CS");
-        // OBSS_CS = hwMap.get(ColorSensor.class, "OBSS_CS");
-
 
         imu = hwMap.get(BNO055IMU.class, "imu");
 
@@ -286,6 +261,38 @@ public class CenterstagePackBot {
         return dcMotor7.getCurrentPosition();
     }
     */
+
+    public void openLeftClaw(){
+        leftClaw.setPosition(leftClawOpen);
+    }
+
+    public void openRightClaw(){
+        rightClaw.setPosition(rightClawOpen);
+    }
+
+    public void openClaw(LinearOpMode opMode){
+        leftClaw.setPosition(leftClawOpen);
+        opMode.sleep(300);
+        rightClaw.setPosition(rightClawOpen);
+    }
+
+    public void moveEntireLift(LinearOpMode opMode, double targetCt, double speed){
+        int posCurrent = -(dcMotor5.getCurrentPosition());
+        while (!opMode.isStopRequested() && posCurrent < targetCt){
+            dcMotor5.setPower(speed);
+            posCurrent = -(dcMotor5.getCurrentPosition());
+        }
+        dcMotor5.setPower(0);
+    }
+
+    public void moveGrabber(LinearOpMode opMode, double targetCt, double speed){
+        int posCurrent = -(dcMotor7.getCurrentPosition());
+        while (!opMode.isStopRequested() && posCurrent < targetCt){
+            dcMotor7.setPower(speed);
+            posCurrent = -(dcMotor7.getCurrentPosition());
+        }
+        dcMotor7.setPower(0);
+    }
 
     public void moveLiftUp(LinearOpMode opMode, double targetCt, double speed) {
         int posCurrent = -(dcMotor6.getCurrentPosition());

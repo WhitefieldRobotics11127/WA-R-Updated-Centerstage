@@ -91,27 +91,19 @@ public class CenterstageAuto {
     private LinearOpMode myOpMode;       // Access to the OpMode object
     private CenterstagePackBot myRobot;        // Access to the Robot hardware
     private HardwareMap myHardwareMap;
-    //private VuforiaTrackables   targets = this.vuforia.loadTrackablesFromAsset("Skystone");        // List of active targets
     /**
      * This is the webcam we are to use. As with other hardware devices such as motors and
      * servos, this device is identified using the robot configuration tool in the FTC application.
      */
     WebcamName webcamName = null;
-    //private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-
-    boolean PHONE_IS_PORTRAIT = false;
-    //String VUFORIA_KEY =
-    //        "Adg0Y9v/////AAABmergYcIrxEPZmeeflCjLz7pIqlTKWre7SqTXe94Qzd8Mdv2CWJzL6Dl8jsSNRH7XEzhINohMrWO0MY4Z0Sm9UYg/lPNTYbfXQSXmTAG2623GHGCogvStqInHKbTqICTPgNJYbe4iGRmcJmvCN1oo+N0+0KzZRaCTHXjqZbUPo430TQNUYELOmdMx5+uT2O1jTx75XZ2MMGcanX0aSMXpzE47V6PMAtXAD11h1CaNB4/dYE+CgkqWTEN/PBKvTYJdCMhNUH6PuENY8q6wkv5aTql0q5ZFNamLN6Vl1PxSgiChwBFMZC53ASMbo606s4TzFgcAD3+AiUZHFk2LmYx088Xj5XkvW1s1DN9KhDR4EYn1";
 
     // We will define some constants and conversions here
     private static final float mmPerInch = 25.4f;
-    private static final float mmTargetHeight = (6) * mmPerInch;          // the height of the center of the target image above the floor
+    private static final float mmTargetHeight = (6) * mmPerInch; // the height of the center of the target image above the floor
 
 
     // Class Members
     private OpenGLMatrix location = null;
-    //private VuforiaLocalizer vuforia = null;
-    private TFObjectDetector tfod;
 
     private final int rows = 640;
     private final int cols = 480;
@@ -125,79 +117,23 @@ public class CenterstageAuto {
     public TSEDeterminationPipelineWithSide.TSEPosition savedAnalysis1 =
             TSEDeterminationPipelineWithSide.TSEPosition.LEFT;
 
-    private double t, tInit;
+    //Encoder constants for the claw and entire lift
+    double clawStart = 0;
+    double clawFlat = 0;
+    double clawAngled = 0;
+    double floorHeight = 0;
+    double backboardHeight = 0;
 
     public CenterstageAuto(LinearOpMode theOpMode, CenterstagePackBot theRobot, HardwareMap theHwMap) {
         myOpMode = theOpMode;
         myRobot = theRobot;
         myHardwareMap = theHwMap;
     }
-
-
-    /**
-     * Initialize the Vuforia localization engine. Must be done to init TFOD.
-     */
-    /*
-    public void initVuforia() {
-        HardwareMap hardwareMap = myHardwareMap;
-        /*
-         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
-         */
-            /*
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
-
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
-    }
-
-
-    /**
-     * Initialize the TensorFlow Object Detection engine.
-     */
-    /*
-    public void initTfod() {
-        HardwareMap hardwareMap = myHardwareMap;
-        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.8f;
-        tfodParameters.isModelTensorFlow2 = true;
-        tfodParameters.inputSize = 1080;
-        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-//        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
-
-        if (tfod != null) {
-            tfod.activate();
-            tfod.setZoom(1.3, 10.0 / 3.0);
-        }
-    }
-
-    public void shutdownTFOD() {
-        tfod.shutdown();
-    }
-*/
+//-1367 to 184 is the approximate range of the claw
 
     public double getHeading() {
         return myRobot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
-
-    /*
-    public void openGrabber(){
-        myRobot.rotisserie.setPosition(PowerPlayPackBot.rotisserieOpen);
-        myRobot.chicken.setPosition(PowerPlayPackBot.chickenOpen);
-    }
-
-    public void closeGrabber(){
-        myRobot.rotisserie.setPosition(PowerPlayPackBot.rotisserieClosed);
-        myRobot.chicken.setPosition(PowerPlayPackBot.chickenClosed);
-    }
-
-     */
 
     public void placeParkColorSensor(String color, String side){
         //The base method to place a purple pixel on the spike it's supposed to be on and park,
@@ -218,7 +154,7 @@ public class CenterstageAuto {
             myOpMode.telemetry.addData("Marker Pos", markerPos);
             myOpMode.telemetry.update();
             myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE RIGHT ON SPIKE, "Right", driveSpeed);
-            WHICHEVERSERVO.OPENLEFT/RIGHTGRABBER();
+            myRobot.openRightGrabber();
             myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE TO CENTER, "Left", driveSpeed);
             myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE FORWARD, "Forward", driveSpeed);
         }
@@ -230,7 +166,7 @@ public class CenterstageAuto {
                 myOpMode.telemetry.addData("Marker Pos", markerPos);
                 myOpMode.telemetry.update();
                 myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE LEFT ON SPIKE, "Left", driveSpeed);
-                WHICHEVERSERVO.OPENLEFT/RIGHTGRABBER();
+                myRobot.openRightGrabber();
                 myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE TO CENTER, "Right", driveSpeed);
                 myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE FORWARD, "Forward", driveSpeed);
             }
@@ -240,7 +176,7 @@ public class CenterstageAuto {
             myOpMode.telemetry.update();
             myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE TO CENTER PERHAPS DEPENDENT ON DRIVEDIRECTION, driveDirection, driveSpeed);
             myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE FORWARD, "Forward", driveSpeed);
-            WHICHEVERSERVO.OPENLEFT/RIGHTGRABBER();
+            myRobot.openRightGrabber();
             myRobot.advancedEncoderDrive(myOpMode, SOME REMAINING DISTANCE FORWARD, "Forward", driveSpeed);
         }
 
@@ -252,6 +188,8 @@ public class CenterstageAuto {
             myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE TO PARK BASED ON COLOR EXPRESSION LIKE TO THE LEFT, (color.equals("Red") ? "Right" : "Left"), driveSpeed);
             myOpMode.sleep(sleepTime);
         }
+
+        myRobot.openLeftGrabber();
          */
     }
 
@@ -285,6 +223,7 @@ public class CenterstageAuto {
         // THE ROBOT MUST BE FACING FORWARDS AT START
         double driveSpeed = 0.4;
         double rotateSpeed = 0.4;
+        double liftSpeed = 0.3;
         int sleepTime = 300;
         String markerPos = "Left";
 
@@ -299,22 +238,31 @@ public class CenterstageAuto {
         myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE THAT CLEARS THE WALL, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
+        myRobot.moveGrabber(myOpMode, clawFlat, liftSpeed);
+        myOpMode.sleep(sleepTime);
+
         if (markerPos.equals("Right")){
             myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE TO HOVER OVER THE SPIKE/AVOID THE METAL BARS, "Right", driveSpeed);
             myOpMode.sleep(sleepTime);
-            WHICHEVERSERVO.OPENLEFT/RIGHTGRABBER();
+            myRobot.moveEntireLift(floorHeight);
+            myOpMode.sleep(sleepTime);
+            myRobot.openRightGrabber();
             myOpMode.sleep(sleepTime);
         }
         else if (markerPos.equals("Middle")){
             myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE, "Forward", driveSpeed);
             myOpMode.sleep(sleepTime);
-            WHICHEVERSERVO.OPENLEFT/RIGHTGRABBER();
+            myRobot.moveEntireLift(floorHeight);
+            myOpMode.sleep(sleepTime);
+            myRobot.openRightGrabber();
             myOpMode.sleep(sleepTime);
         }
         else { //when markerPos.equals("Left") or we can't/don't detect the prop
             myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE TO HOVER OVER THE SPIKE/AVOID THE METAL BARS, "Left", driveSpeed);
             myOpMode.sleep(sleepTime);
-            WHICHEVERSERVO.OPENLEFT/RIGHTGRABBER();
+            myRobot.moveEntireLift(floorHeight);
+            myOpMode.sleep(sleepTime);
+            myRobot.openRightGrabber();
             myOpMode.sleep(sleepTime);
         }
 
@@ -344,7 +292,14 @@ public class CenterstageAuto {
             myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE TO PARK BASED ON BOOLEAN STATEMENT AT RIGHT, (color.equals("Red") ? "Right" : "Left"), driveSpeed);
             myOpMode.sleep(sleepTime);
         }
+
+        myRobot.openLeftGrabber();
+        myOpMode.sleep(sleepTime);
          */
+    }
+
+    public void placePurpleYellow(String color, String side){
+
     }
 
     public void initCV(String color) {
@@ -464,20 +419,19 @@ public class CenterstageAuto {
 
     /**
      * What follows is the OpenCV Pipeline for processing the images from the webcam
-     * and extracting the position of our TSE. This code, and the rest of the OpenCV
-     * code, was adapted from skystone example code found at https://github.com/OpenFTC/EasyOpenCV.
+     * and extracting the position of our prop. This code, and the rest of the OpenCV
+     * code, was originally adapted from skystone example code found at
+     * https://github.com/OpenFTC/EasyOpenCV.
      *
      * I really don't know why the pipeline class exists inside another class, but this
      * seems to be the convention.
      *
-     * The method getAnalysis() will return an enum of the TSE's position
+     * The method getAnalysis() will return an enum of the prop's position
      */
 
     public static class TSEDeterminationPipeline extends OpenCvPipeline
     {
-        /*
-         * An enum to define the skystone position
-         */
+        //An enum to define the prop position
         public enum TSEPosition
         {
             LEFT,
@@ -485,9 +439,7 @@ public class CenterstageAuto {
             RIGHT
         }
 
-        /*
-         * Some color constants
-         */
+        //Color constants
         static final Scalar BLUE = new Scalar(0, 0, 255);
         static final Scalar GREEN = new Scalar(0, 255, 0);
 
@@ -537,14 +489,10 @@ public class CenterstageAuto {
                 REGION3_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
                 REGION3_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
 
-        /*
-         * Working variables
-         */
-        Mat region1_Cb, region2_Cb, region3_Cb; //TODO: May need to change to Cr instead of Cb to better detect TSE
-        //Mat region1_Cr, region2_Cr, region3_Cr;
+        //Working variables
+        Mat region1_Cb, region2_Cb, region3_Cb;
         Mat YCrCb = new Mat();
         Mat Cb = new Mat();
-        //Mat Cr = new Mat();
         int avg1, avg2, avg3;
 
         // Volatile since accessed by OpMode thread w/o synchronization
@@ -559,13 +507,6 @@ public class CenterstageAuto {
             Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
             Core.extractChannel(YCrCb, Cb, 1); //TODO: Change coi to 1 to change to Cr?
         }
-
-        /*
-        void inputToCr(Mat input) {
-            Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
-            Core.extractChannel(YCrCb, Cr, 1);
-        }
-        */
 
         @Override
         public void init(Mat firstFrame)
@@ -589,10 +530,6 @@ public class CenterstageAuto {
             region1_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
             region2_Cb = Cb.submat(new Rect(region2_pointA, region2_pointB));
             region3_Cb = Cb.submat(new Rect(region3_pointA, region3_pointB));
-
-            //region1_Cr = Cr.submat(new Rect(region1_pointA, region1_pointB));
-            //region2_Cr = Cr.submat(new Rect(region2_pointA, region2_pointB));
-            //region3_Cr = Cr.submat(new Rect(region3_pointA, region3_pointB));
         }
 
         @Override
@@ -637,9 +574,7 @@ public class CenterstageAuto {
              * surroundings.
              */
 
-            /*
-             * Get the Cb channel of the input frame after conversion to YCrCb
-             */
+            //Get the Cb channel of the input frame after conversion to YCrCb
             inputToCb(input);
 
             /*
@@ -686,10 +621,7 @@ public class CenterstageAuto {
                     BLUE, // The color the rectangle is drawn in
                     2); // Thickness of the rectangle lines
 
-
-            /*
-             * Find the max of the 3 averages
-             */
+            //Find the max of the three averages
             int maxOneTwo = Math.max(avg1, avg2);
             int max = Math.max(maxOneTwo, avg3);
 
@@ -751,9 +683,7 @@ public class CenterstageAuto {
             return input;
         }
 
-        /*
-         * Call this from the OpMode thread to obtain the latest analysis
-         */
+        //Call this from the OpMode thread to obtain the latest analysis
         public TSEPosition getAnalysis()
         {
             return position;
@@ -801,10 +731,8 @@ public class CenterstageAuto {
                 REGION3_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
 
         Mat region1_Cb, region2_Cb, region3_Cb; //TODO: May need to change to Cr instead of Cb to better detect TSE
-        //Mat region1_Cr, region2_Cr, region3_Cr;
         Mat YCrCb = new Mat();
         Mat Cb = new Mat();
-        //Mat Cr = new Mat();
         int avg1, avg2, avg3;
 
         // Volatile since accessed by OpMode thread w/o synchronization
@@ -815,21 +743,14 @@ public class CenterstageAuto {
             Core.extractChannel(YCrCb, Cb, 1); //TODO: Change coi to 1 to change to Cr?
         }
 
-
-
         @Override
         public void init(Mat firstFrame) {
 
             inputToCb(firstFrame);
 
-
             region1_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
             region2_Cb = Cb.submat(new Rect(region2_pointA, region2_pointB));
             region3_Cb = Cb.submat(new Rect(region3_pointA, region3_pointB));
-
-            //region1_Cr = Cr.submat(new Rect(region1_pointA, region1_pointB));
-            //region2_Cr = Cr.submat(new Rect(region2_pointA, region2_pointB));
-            //region3_Cr = Cr.submat(new Rect(region3_pointA, region3_pointB));
         }
 
         @Override
@@ -837,11 +758,9 @@ public class CenterstageAuto {
 
             inputToCb(input);
 
-
             avg1 = (int) Core.mean(region1_Cb).val[0];
             avg2 = (int) Core.mean(region2_Cb).val[0];
             avg3 = (int) Core.mean(region3_Cb).val[0];
-
 
             Imgproc.rectangle(
                     input, // Buffer to draw on
@@ -850,14 +769,12 @@ public class CenterstageAuto {
                     BLUE, // The color the rectangle is drawn in
                     2); // Thickness of the rectangle lines
 
-
             Imgproc.rectangle(
                     input, // Buffer to draw on
                     region2_pointA, // First point which defines the rectangle
                     region2_pointB, // Second point which defines the rectangle
                     BLUE, // The color the rectangle is drawn in
                     2); // Thickness of the rectangle lines
-
 
             Imgproc.rectangle(
                     input, // Buffer to draw on
@@ -866,15 +783,12 @@ public class CenterstageAuto {
                     BLUE, // The color the rectangle is drawn in
                     2); // Thickness of the rectangle lines
 
-
             int minOneTwo = Math.min(avg1, avg2);
             int min = Math.min(minOneTwo, avg3);
-
 
             if (min == avg1) // Was it from region 1?
             {
                 position = TSEDeterminationPipelineWithSide.TSEPosition.LEFT; // Record our analysis
-
 
                 Imgproc.rectangle(
                         input, // Buffer to draw on
@@ -886,7 +800,6 @@ public class CenterstageAuto {
             {
                 position = TSEDeterminationPipelineWithSide.TSEPosition.CENTER; // Record our analysis
 
-
                 Imgproc.rectangle(
                         input, // Buffer to draw on
                         region2_pointA, // First point which defines the rectangle
@@ -897,7 +810,6 @@ public class CenterstageAuto {
             {
                 position = TSEDeterminationPipelineWithSide.TSEPosition.RIGHT; // Record our analysis
 
-
                 Imgproc.rectangle(
                         input, // Buffer to draw on
                         region3_pointA, // First point which defines the rectangle
@@ -906,15 +818,10 @@ public class CenterstageAuto {
                         -1); // Negative thickness means solid fill
             }
 
-
             return input;
         }
 
         public TSEDeterminationPipelineWithSide.TSEPosition getAnalysis() {
             return position;
         }
-
     }}
-
-//remove color sensor test, scan park, lift test, and scan barcode test
-//remove ocvAutoInitDetectexample, ocvwebcam example, pwryplayrover, color sensor
