@@ -37,7 +37,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 //@Disabled
 public class RedReadPlaceParkRight extends LinearOpMode {
 
-
     CenterstagePackBot robot = new CenterstagePackBot();
 
     @Override public void runOpMode() {
@@ -46,16 +45,12 @@ public class RedReadPlaceParkRight extends LinearOpMode {
 
         CenterstageAuto autoClass = new CenterstageAuto(this, robot, hardwareMap);
 
-
-//        autoClass.initVuforia();
-//        autoClass.initTfod();
         autoClass.initCV("Red");
 
         telemetry.addData("Ready", "");
         telemetry.update();
 
 //        waitForStart();
-//        autoClass.initTfod();
         while (!isStarted() && !isStopRequested()) //replaces waitForStart()
         {
             telemetry.addData("Realtime analysis", autoClass.scanPropCV("Red"));
@@ -68,14 +63,10 @@ public class RedReadPlaceParkRight extends LinearOpMode {
 
             autoClass.placePark("Red", "Right");
 
-
             while (!isStopRequested())
                 sleep(1);
         }
 
     }
-
-
-
 
 }

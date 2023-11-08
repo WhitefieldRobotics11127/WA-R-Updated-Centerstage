@@ -45,14 +45,11 @@ public class DriveForward extends LinearOpMode {
         robot.init(hardwareMap);
 
         PowerPlayAuto autoClass = new PowerPlayAuto(this, robot, hardwareMap);
-//        autoClass.initVuforia();
-//        autoClass.initTfod();
 
         telemetry.addData("Ready", "");
         telemetry.update();
 
         waitForStart();
-//        autoClass.initTfod();
 
         while (!isStopRequested()) {
             telemetry.addData("Starting Method", "");
@@ -68,8 +65,5 @@ public class DriveForward extends LinearOpMode {
         }
 
     }
-
-
-
 
 }

@@ -46,16 +46,10 @@ public class RedPark extends LinearOpMode {
 
         CenterstageAuto autoClass = new CenterstageAuto(this, robot, hardwareMap);
 
-
-//        autoClass.initVuforia();
-//        autoClass.initTfod();
-        //autoClass.initCV();
-
         telemetry.addData("Ready", "");
         telemetry.update();
 
 //        waitForStart();
-//        autoClass.initTfod();
         while (!isStarted() && !isStopRequested()) //replaces waitForStart()
         {
             //telemetry.addData("Realtime analysis", autoClass.scanPropCV());
@@ -68,14 +62,10 @@ public class RedPark extends LinearOpMode {
 
             autoClass.park("Red");
 
-
             while (!isStopRequested())
                 sleep(1);
         }
 
     }
-
-
-
 
 }

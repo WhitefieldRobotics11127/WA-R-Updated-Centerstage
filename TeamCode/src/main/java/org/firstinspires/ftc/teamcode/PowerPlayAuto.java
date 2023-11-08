@@ -51,19 +51,17 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
  *
  */
 
-
 public class PowerPlayAuto {
 
     private LinearOpMode myOpMode;       // Access to the OpMode object
     private PowerPlayPackBot myRobot;        // Access to the Robot hardware
     private HardwareMap myHardwareMap;
-    //private VuforiaTrackables   targets = this.vuforia.loadTrackablesFromAsset("Skystone");        // List of active targets
+
     /**
      * This is the webcam we are to use. As with other hardware devices such as motors and
      * servos, this device is identified using the robot configuration tool in the FTC application.
      */
     WebcamName webcamName = null;
-    //private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
 
     boolean PHONE_IS_PORTRAIT = false;
     String VUFORIA_KEY =

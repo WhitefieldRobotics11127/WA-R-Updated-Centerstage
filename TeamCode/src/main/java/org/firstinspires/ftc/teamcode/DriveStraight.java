@@ -37,7 +37,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 //@Disabled
 public class DriveStraight extends LinearOpMode {
 
-
     FreightFrenzyPackBot robot = new FreightFrenzyPackBot();
 
     @Override public void runOpMode() {
@@ -46,15 +45,10 @@ public class DriveStraight extends LinearOpMode {
 
         FreightFrenzyAuto autoClass = new FreightFrenzyAuto(this, robot, hardwareMap);
 
-
-//        autoClass.initVuforia();
-//        autoClass.initTfod();
-
         telemetry.addData("Ready", "");
         telemetry.update();
 
         waitForStart();
-
 
         while (!isStopRequested()) {
             telemetry.addData("Starting Method", "");
@@ -64,14 +58,10 @@ public class DriveStraight extends LinearOpMode {
             robot.advancedEncoderDrive(this, 50, "Forward", 0.5);
 //            robot.advancedEncoderDrive(this, 48, "Right", .4);
 
-
             while (!isStopRequested())
                 sleep(1);
         }
 
     }
-
-
-
 
 }
