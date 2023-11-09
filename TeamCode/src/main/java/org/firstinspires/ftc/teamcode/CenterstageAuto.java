@@ -135,7 +135,7 @@ public class CenterstageAuto {
         return myRobot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
 
-    public void placeParkColorSensor(String color, String side){
+    public void placeParkColorSensor(String color, String side) {
         //The base method to place a purple pixel on the spike it's supposed to be on and park,
         //using color sensors
         //THE ROBOT MUST BE FACING FORWARD AT START
@@ -195,7 +195,7 @@ public class CenterstageAuto {
 
 
     //temporary for meet one, nothing was working here
-    public void park(String color){
+    public void park(String color) {
         double driveSpeed = 0.4;
         double rotateSpeed = 0.4;
         int sleepTime = 300;
@@ -218,7 +218,7 @@ public class CenterstageAuto {
         myOpMode.sleep(sleepTime);
     }
 
-    public void placePark(String color, String side){
+    public void placePark(String color, String side) {
         //The base method to place a purple pixel on the spike it's supposed to be on and park
         // THE ROBOT MUST BE FACING FORWARDS AT START
         double driveSpeed = 0.4;
@@ -234,68 +234,74 @@ public class CenterstageAuto {
         myOpMode.telemetry.addData("Marker Pos", markerPos);
         myOpMode.telemetry.update();
 
-        /*
-        myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE THAT CLEARS THE WALL, "Forward", driveSpeed);
+
+        myRobot.advancedEncoderDrive(myOpMode, 36, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
         myRobot.moveGrabber(myOpMode, clawFlat, liftSpeed);
         myOpMode.sleep(sleepTime);
 
-        if (markerPos.equals("Right")){
-            myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE TO HOVER OVER THE SPIKE/AVOID THE METAL BARS, "Right", driveSpeed);
+        if (markerPos.equals("Right")) {
+            myRobot.advancedEncoderDrive(myOpMode, 12, "Right", driveSpeed);
             myOpMode.sleep(sleepTime);
-            myRobot.moveEntireLift(floorHeight);
+            myRobot.moveEntireLift(myOpMode, floorHeight, liftSpeed);
             myOpMode.sleep(sleepTime);
-            myRobot.openRightGrabber();
+            myRobot.openRightClaw();
             myOpMode.sleep(sleepTime);
-        }
-        else if (markerPos.equals("Middle")){
-            myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE, "Forward", driveSpeed);
+        } else if (markerPos.equals("Middle")) {
+            myRobot.advancedEncoderDrive(myOpMode, 12, "Forward", driveSpeed);
             myOpMode.sleep(sleepTime);
-            myRobot.moveEntireLift(floorHeight);
+            myRobot.moveEntireLift(myOpMode, floorHeight, liftSpeed);
             myOpMode.sleep(sleepTime);
-            myRobot.openRightGrabber();
+            myRobot.openRightClaw();
             myOpMode.sleep(sleepTime);
-        }
-        else { //when markerPos.equals("Left") or we can't/don't detect the prop
-            myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE TO HOVER OVER THE SPIKE/AVOID THE METAL BARS, "Left", driveSpeed);
+        } else { //when markerPos.equals("Left") or we can't/don't detect the prop
+            myRobot.advancedEncoderDrive(myOpMode, 12, "Left", driveSpeed);
             myOpMode.sleep(sleepTime);
-            myRobot.moveEntireLift(floorHeight);
+            myRobot.moveEntireLift(myOpMode, floorHeight, liftSpeed);
             myOpMode.sleep(sleepTime);
-            myRobot.openRightGrabber();
+            myRobot.openRightClaw();
             myOpMode.sleep(sleepTime);
         }
 
-        if (!markerPos.equals("Middle")){
-            if (markerPos.equals("Right")){
-                myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE, "Left", driveSpeed);
+        if (!markerPos.equals("Middle")) {
+            if (markerPos.equals("Right")) {
+                myRobot.advancedEncoderDrive(myOpMode, 12, "Left", driveSpeed);
                 myOpMode.sleep(sleepTime);
             }
-            if (markerPos.equals("Left")){
-                myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE, "Right", driveSpeed);
+            if (markerPos.equals("Left")) {
+                myRobot.advancedEncoderDrive(myOpMode, 12, "Right", driveSpeed);
                 myOpMode.sleep(sleepTime);
             }
-            myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE, "Forward", driveSpeed);
-                myOpMode.sleep(sleepTime);
-        }
-        else{
-            myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE, "Forward", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, 48, "Forward", driveSpeed);
             myOpMode.sleep(sleepTime);
-            }
-        }
-
-        if (side.equals("Left")){
-            myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE TO PARK BASED ON BOOLEAN STATEMENT AT RIGHT, (color.equals("Red") ? "Right" : "Left"), driveSpeed);
-            myOpMode.sleep(sleepTime);
-            }
-        else {
-            myRobot.advancedEncoderDrive(myOpMode, SOME DISTANCE TO PARK BASED ON BOOLEAN STATEMENT AT RIGHT, (color.equals("Red") ? "Right" : "Left"), driveSpeed);
+        } else {
+            myRobot.advancedEncoderDrive(myOpMode, 12, "Forward", driveSpeed);
             myOpMode.sleep(sleepTime);
         }
 
-        myRobot.openLeftGrabber();
+        if(side.equals("Left")) {
+        myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 96 : 48, color.equals("Red") ? "Right" : "Left", driveSpeed);
         myOpMode.sleep(sleepTime);
-         */
+        }
+        else {
+        myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 48 : 96, (color.equals("Red") ? "Right" : "Left"), driveSpeed);
+        myOpMode.sleep(sleepTime);
+        }
+
+        if (color.equals("Red")){
+            while (getHeading() < 180)
+                myRobot.rotateCCW(driveSpeed);
+        }
+
+        if (color.equals("Blue")){
+            while (getHeading() < 180)
+                myRobot.rotateCW(driveSpeed);
+        }
+
+        myRobot.openLeftClaw();
+        myOpMode.sleep(sleepTime);
+
     }
 
     public void placePurpleYellow(String color, String side){

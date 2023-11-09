@@ -175,6 +175,8 @@ public class CenterstageRover extends OpMode {
         telemetry.update();
         telemetry.addData("Articulation encoder value: ", robot.dcMotor5.getCurrentPosition());
         telemetry.update();
+        telemetry.addData("Slide encoder value: ", robot.dcMotor6.getCurrentPosition());
+        telemetry.update();
 
         //Left stick pushes the slide up/down
         robot.dcMotor6.setPower(-gamepad2.right_stick_y);
