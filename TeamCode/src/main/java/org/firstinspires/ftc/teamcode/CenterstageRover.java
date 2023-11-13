@@ -186,42 +186,17 @@ public class CenterstageRover extends OpMode {
         robot.dcMotor5.setPower(-gamepad2.right_trigger);
 
         //Right stick moves the grabber back and forth (not opening it)
-            robot.dcMotor7.setPower(-(gamepad2.left_stick_y) * 0.15);
+            robot.dcMotor7.setPower(-(gamepad2.left_stick_y) * 0.3);
             if (gamepad2.dpad_down)
                 robot.dcMotor7.setPower(0);
 
-        //Left and right bumper toggles the respective side of the grabber open/closed
-        if (gamepad2.start) {
-            leftClawClosed = true;
-            rightClawClosed = true;
-        }
-
-        if (gamepad2.left_bumper && !leftClawClosed) {
-            robot.leftClaw.setPosition(CenterstagePackBot.leftClawClosed);
-            leftClawClosed = true;
-        }
-        else if (gamepad2.left_bumper && leftClawClosed){
+        if (gamepad2.dpad_left)
             robot.leftClaw.setPosition(CenterstagePackBot.leftClawOpen);
-            leftClawClosed = false;
-            }
-
-        if (gamepad2.right_bumper && !rightClawClosed) {
-            robot.rightClaw.setPosition(CenterstagePackBot.rightClawClosed);
-            rightClawClosed = true;
-        }
-        else if (gamepad2.right_bumper && rightClawClosed){
-            robot.rightClaw.setPosition(CenterstagePackBot.rightClawOpen);
-            rightClawClosed = false;
-        }
-
-        //Buttons to open/close the sides of the grabber individually
-        if(gamepad2.y) //left closed
+        if (gamepad2.dpad_right)
             robot.leftClaw.setPosition(CenterstagePackBot.leftClawClosed);
-        if (gamepad2.x) //left open
-            robot.leftClaw.setPosition(CenterstagePackBot.leftClawOpen);
-        if (gamepad2.b) //right closed
+        if (gamepad2.x)
             robot.rightClaw.setPosition(CenterstagePackBot.rightClawClosed);
-        if (gamepad2.a) //right open
+        if (gamepad2.b)
             robot.rightClaw.setPosition(CenterstagePackBot.rightClawOpen);
 
         /*
