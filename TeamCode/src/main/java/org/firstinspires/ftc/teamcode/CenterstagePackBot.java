@@ -155,9 +155,10 @@ public class CenterstagePackBot {
         // This is what lets us be an omnidirectional bot, changed from previous years to allow us
         // to use vertical motors
 
-        dcMotor2.setDirection(DcMotor.Direction.REVERSE);
-        dcMotor3.setDirection(DcMotor.Direction.REVERSE);
-        dcMotor4.setDirection(DcMotor.Direction.REVERSE);
+        dcMotor1.setDirection(DcMotor.Direction.REVERSE);
+        //dcMotor2.setDirection(DcMotor.Direction.REVERSE);
+        //dcMotor3.setDirection(DcMotor.Direction.REVERSE);
+        //dcMotor4.setDirection(DcMotor.Direction.REVERSE);
 
         // Set all motors to zero power
         dcMotor1.setPower(0);

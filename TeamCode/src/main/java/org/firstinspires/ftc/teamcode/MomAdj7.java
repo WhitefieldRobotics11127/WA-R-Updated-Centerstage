@@ -37,13 +37,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 //@Disabled
 public class MomAdj7 extends LinearOpMode {
 
-    PowerPlayPackBot robot = new PowerPlayPackBot();
+    CenterstagePackBot robot = new CenterstagePackBot();
 
     @Override public void runOpMode() {
 
         robot.init(hardwareMap);
 
-        PowerPlayAuto autoClass = new PowerPlayAuto(this, robot, hardwareMap);
+        CenterstageAuto autoClass = new CenterstageAuto(this, robot, hardwareMap);
 
         telemetry.addData("Ready", "");
         telemetry.update();

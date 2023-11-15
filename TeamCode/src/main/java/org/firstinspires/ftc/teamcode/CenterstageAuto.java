@@ -315,6 +315,9 @@ public class CenterstageAuto {
 
     public void placePurpleYellow(String color, String side){
         // THE ROBOT MUST BE FACING FORWARDS AT START
+        // Red right: the tip of the odometer wheel axle should be about 1/2 an inch away from the metal bar
+        // Red left: the chain is in line with the among us
+        //
         double driveSpeed = 0.4;
         double rotateSpeed = 0.4;
         double liftSpeed = 0.3;
@@ -562,11 +565,14 @@ public class CenterstageAuto {
          * The core values which define the location and size of the sample regions
          * TODO: Check these points w/ our camera position and redefine them based on prop location
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(90,200);
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(300,200);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(490,200);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(115,200);
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(270,200);
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(437,200);
         static final int REGION_WIDTH = 50;
         static final int REGION_HEIGHT = 50;
+
+        //375 cm wide
+        //52.5 cm = 90 pixels
 
         /*
          * Points which actually define the sample region rectangles, derived from above values
@@ -820,9 +826,9 @@ public class CenterstageAuto {
          * The core values which define the location and size of the sample regions
          * TODO: Check these points w/ our camera position and redefine them based on prop location
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(90, 200);
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(300, 200);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(490, 200);
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(115, 200);
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(270, 200);
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(437, 200);
         static final int REGION_WIDTH = 50;
         static final int REGION_HEIGHT = 50;
 
