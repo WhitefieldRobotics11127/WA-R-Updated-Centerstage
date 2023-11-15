@@ -446,7 +446,7 @@ public class CenterstagePackBot {
      * @param direction possible directions: "Forward", "Backward", "Left", "Right"
      */
     public void advancedEncoderDrive(LinearOpMode opMode, double distance, String direction, double speed) {
-        double targetCt = distance * COUNTS_PER_INCH;
+        double targetCt = distance * COUNTS_PER_INCH * (-.242 * speed + .905);
         //double targetCt = distance * COUNTS_PER_INCH * (-.23 * speed + .471); // * (-.647 * speed + 1.048);
         /*
             y = mx + b where m = -.647 and b = 1.048

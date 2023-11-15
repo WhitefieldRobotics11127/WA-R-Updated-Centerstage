@@ -344,7 +344,7 @@ public class CenterstageAuto {
 
         if (markerPos.equals("Right")) {
             while (myRobot.getHeading() < 45)
-            myRobot.rotateCW(driveSpeed);
+                myRobot.rotateCW(driveSpeed);
             myRobot.openRightClaw();
             myOpMode.sleep(sleepTime);
             while (myRobot.getHeading() < 45)
