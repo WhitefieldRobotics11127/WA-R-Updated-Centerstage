@@ -54,7 +54,8 @@ public class CenterstageRover extends OpMode {
     //variables
     double heading;
 
-    double forward, rotate, strafe, direction = -1; //direction: 1 is normal, -1 is reversed
+    double forward, strafe, direction = 1; //direction: 1 is normal, -1 is reversed
+    double rotate = 1;
     double gear = .5;
 
     double currStrafeCt, currStraightCt;
@@ -130,13 +131,14 @@ public class CenterstageRover extends OpMode {
 
         forward = gear * gamepad1.left_stick_y;
         strafe = gear * -gamepad1.left_stick_x;
-        rotate = gear * gamepad1.right_stick_x;
+        rotate = gear * -gamepad1.right_stick_x;
         //rotate = -gear * -gamepad1.right_stick_x;
 
         front_left = direction * forward + rotate + (direction * strafe);
         front_right = direction * forward - rotate - (direction * strafe);
         rear_left = direction * forward + rotate - (direction * strafe);
         rear_right = direction * forward - rotate + (direction * strafe);
+
 
 
         //thunder = struck;
