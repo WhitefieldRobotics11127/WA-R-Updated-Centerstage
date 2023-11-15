@@ -117,7 +117,7 @@ public class CenterstagePackBot {
     public static final double leftClawOpen = .6;
     public static final double leftClawClosed = .4;
     public static final double rightClawOpen = .4;
-    public static final double rightClawClosed = .56;
+    public static final double rightClawClosed = 0.57;
 
 
 
@@ -274,6 +274,12 @@ public class CenterstagePackBot {
         leftClaw.setPosition(leftClawOpen);
         opMode.sleep(300);
         rightClaw.setPosition(rightClawOpen);
+    }
+
+    public void closeClaw(LinearOpMode opMode){
+        leftClaw.setPosition(leftClawClosed);
+        opMode.sleep(300);
+        rightClaw.setPosition(rightClawClosed);
     }
 
     public void moveEntireLift(LinearOpMode opMode, double targetCt, double speed){
@@ -439,7 +445,8 @@ public class CenterstagePackBot {
      * @param direction possible directions: "Forward", "Backward", "Left", "Right"
      */
     public void advancedEncoderDrive(LinearOpMode opMode, double distance, String direction, double speed) {
-        double targetCt = distance * COUNTS_PER_INCH * (-.23 * speed + .471); // * (-.647 * speed + 1.048);
+        double targetCt = distance * COUNTS_PER_INCH;
+        //double targetCt = distance * COUNTS_PER_INCH * (-.23 * speed + .471); // * (-.647 * speed + 1.048);
         /*
             y = mx + b where m = -.647 and b = 1.048
             To recalibrate:

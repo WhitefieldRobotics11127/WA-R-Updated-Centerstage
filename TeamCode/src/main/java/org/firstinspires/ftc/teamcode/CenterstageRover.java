@@ -54,7 +54,7 @@ public class CenterstageRover extends OpMode {
     //variables
     double heading;
 
-    double forward, rotate, strafe, direction = 1; //direction: 1 is normal, -1 is reversed
+    double forward, rotate, strafe, direction = -1; //direction: 1 is normal, -1 is reversed
     double gear = .5;
 
     double currStrafeCt, currStraightCt;
@@ -110,7 +110,7 @@ public class CenterstageRover extends OpMode {
         telemetry.update();
 
         if (gamepad1.a)
-            gear = .7;
+            gear = .75;
         if (gamepad1.b)
             gear = 1;
         if (gamepad1.x)
@@ -183,7 +183,7 @@ public class CenterstageRover extends OpMode {
 
         //Right trigger articulates the entire slide back/forth, was originally on right stick
         robot.dcMotor5.setPower(gamepad2.left_trigger);
-        robot.dcMotor5.setPower(-gamepad2.right_trigger);
+        robot.dcMotor5.setPower(-gamepad2.right_trigger * 8.0);
 
         //Right stick moves the grabber back and forth (not opening it)
             robot.dcMotor7.setPower(-(gamepad2.left_stick_y) * 0.3);
