@@ -55,6 +55,7 @@ public class PYBlueLeft extends LinearOpMode {
         {
             telemetry.addData("Realtime analysis", autoClass.scanPropCV("Blue"));
             telemetry.update();
+            //robot.closeClaw(this);
         }
 
         while (!isStopRequested()) {

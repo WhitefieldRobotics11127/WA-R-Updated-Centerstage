@@ -114,10 +114,10 @@ public class CenterstagePackBot {
     public static final double     COUNTS_PER_LIFT_INCH         = (537.7) / (1.75 * 3.1415);
 
 
-    public static final double leftClawOpen = .6;
-    public static final double leftClawClosed = .4;
-    public static final double rightClawOpen = .4;
-    public static final double rightClawClosed = 0.57;
+    public static final double leftClawOpen = .1;
+    public static final double leftClawClosed = .41;
+    public static final double rightClawClosed = .36;
+    public static final double rightClawOpen = 0.57;
 
 
 
@@ -284,19 +284,19 @@ public class CenterstagePackBot {
     }
 
     public void moveEntireLift(LinearOpMode opMode, double targetCt, double speed){
-        int posCurrent = -(dcMotor5.getCurrentPosition());
+        int posCurrent = (dcMotor5.getCurrentPosition());
         while (!opMode.isStopRequested() && posCurrent < targetCt){
             dcMotor5.setPower(speed);
-            posCurrent = -(dcMotor5.getCurrentPosition());
+            posCurrent = (dcMotor5.getCurrentPosition());
         }
         dcMotor5.setPower(0);
     }
 
     public void moveGrabber(LinearOpMode opMode, double targetCt, double speed){
-        int posCurrent = -(dcMotor7.getCurrentPosition());
+        int posCurrent = (dcMotor7.getCurrentPosition());
         while (!opMode.isStopRequested() && posCurrent < targetCt){
             dcMotor7.setPower(speed);
-            posCurrent = -(dcMotor7.getCurrentPosition());
+            posCurrent = (dcMotor7.getCurrentPosition());
         }
         dcMotor7.setPower(0);
     }

@@ -56,6 +56,7 @@ public class PYRedLeft extends LinearOpMode {
         {
             telemetry.addData("Realtime analysis", autoClass.scanPropCV("Red"));
             telemetry.update();
+            //robot.closeClaw(this);
         }
 
         while (!isStopRequested()) {
