@@ -34,6 +34,7 @@ package org.firstinspires.ftc.teamcode;
 import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
@@ -123,7 +124,7 @@ public class CenterstageAuto {
     double clawAngled = 5;
 
     //Encoder constants for the entire lift
-    final double floorHeight = 1481;
+    final double floorHeight = 2030;
     double backboardHeight = 0;
 
     //Encoder constants to extend the lift
@@ -243,7 +244,6 @@ public class CenterstageAuto {
         myOpMode.telemetry.addData("Marker Pos", markerPos);
         myOpMode.telemetry.update();
 
-
         myRobot.advancedEncoderDrive(myOpMode, 36, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
@@ -313,13 +313,13 @@ public class CenterstageAuto {
 
     }
 
-    public void placePurpleYellow(String color, String side){
+    public void placePurpleYellow(String color, String side) {
         // THE ROBOT MUST BE FACING FORWARDS AT START
         // Red right: the tip of the odometer wheel axle should be about 1/2 an inch away from the metal bar
         // Red left: the chain is in line with the among us
         //
         double driveSpeed = 0.4;
-        double rotateSpeed = 0.4;
+        double rotateSpeed = 0.2;
         double liftSpeed = 0.3;
         int sleepTime = 300;
         String markerPos = "Left";
@@ -334,7 +334,7 @@ public class CenterstageAuto {
         myOpMode.telemetry.addData("Marker Pos", markerPos);
         myOpMode.telemetry.update();
 
-        myRobot.advancedEncoderDrive(myOpMode, 9.5, "Forward", driveSpeed);
+        myRobot.advancedEncoderDrive(myOpMode, 21, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
         myRobot.moveGrabber(myOpMode, clawFlat, liftSpeed);
@@ -343,63 +343,60 @@ public class CenterstageAuto {
         myOpMode.sleep(sleepTime);
 
         if (markerPos.equals("Right")) {
-            while (myRobot.getHeading() > 45)
-                myRobot.rotateCW(driveSpeed);
+            while (myRobot.getHeading() > -52)
+                myRobot.rotateCCW(rotateSpeed);
+            myRobot.driveStop();
             myRobot.openRightClaw();
             myOpMode.sleep(sleepTime);
-            while (myRobot.getHeading() < 45)
-                myRobot.rotateCCW(driveSpeed);
+            while (myRobot.getHeading() < -5)
+                myRobot.rotateCW(rotateSpeed);
+            myRobot.driveStop();
             myOpMode.sleep(sleepTime);
         } else if (markerPos.equals("Middle")) {
-            myRobot.advancedEncoderDrive(myOpMode, 16.5, "Forward", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, 3, "Left", driveSpeed);
             myOpMode.sleep(sleepTime);
             myRobot.openRightClaw();
+            myOpMode.sleep(sleepTime);
+            myRobot.advancedEncoderDrive(myOpMode, 3, "Right", driveSpeed);
             myOpMode.sleep(sleepTime);
         } else { //when markerPos.equals("Left") or we can't/don't detect the prop
-            while (myRobot.getHeading() > 45)
-                myRobot.rotateCCW(driveSpeed);
+            while (myRobot.getHeading() < 56)
+                myRobot.rotateCW(rotateSpeed);
+            myRobot.driveStop();
             myOpMode.sleep(sleepTime);
             myRobot.openRightClaw();
             myOpMode.sleep(sleepTime);
-            while (myRobot.getHeading() > 45)
-                myRobot.rotateCW(driveSpeed);
+            while (myRobot.getHeading() > 5)
+                myRobot.rotateCCW(rotateSpeed);
+            myRobot.driveStop();
         }
 
-        myRobot.moveGrabber(myOpMode, clawStart, liftSpeed);
+        myRobot.advancedEncoderDrive(myOpMode, 24.5, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
-        if (markerPos.equals("Middle")) {
-            myRobot.advancedEncoderDrive(myOpMode, 30.5, "Forward", driveSpeed);
+        if (side.equals("Left")) {
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 90 : 29, color.equals("Red") ? "Right" : "Left", driveSpeed);
             myOpMode.sleep(sleepTime);
-        }
-        else{
-            myRobot.advancedEncoderDrive(myOpMode, 42.5, "Forward", driveSpeed);
-            myOpMode.sleep(sleepTime);
-        }
-
-        if(side.equals("Left")) {
-            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 95 : 47, color.equals("Red") ? "Right" : "Left", driveSpeed);
-            myOpMode.sleep(sleepTime);
-        }
-        else {
-            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 47 : 95, (color.equals("Red") ? "Right" : "Left"), driveSpeed);
+        } else if (side.equals("Right")){
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 29 : 90, (color.equals("Red") ? "Right" : "Left"), driveSpeed);
             myOpMode.sleep(sleepTime);
         }
 
-        myRobot.moveEntireLift(myOpMode, backboardLevel, liftSpeed);
+        if (color.equals("Red")) {
+            while (getHeading() > -110)
+                myRobot.rotateCCW(rotateSpeed);
+        }
+
+        if (color.equals("Blue")) {
+            while (getHeading() < 100)
+                myRobot.rotateCW(rotateSpeed);
+        }
+        myRobot.driveStop();
+
+        myRobot.openLeftClaw();
         myOpMode.sleep(sleepTime);
-        myRobot.moveGrabber(myOpMode, clawAngled, liftSpeed);
 
-        if (color.equals("Red")){
-            while (getHeading() < 90)
-                myRobot.rotateCW(driveSpeed);
-        }
-
-        if (color.equals("Blue")){
-            while (getHeading() < 90)
-                myRobot.rotateCCW(driveSpeed);
-        }
-
+        /*
         if (markerPos.equals("Right"))
             myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 30 : 18, color.equals("Red") ? "Right" : "Left", driveSpeed);
         if (markerPos.equals("Middle"))
@@ -418,6 +415,8 @@ public class CenterstageAuto {
 
         myRobot.advancedEncoderDrive(myOpMode, 12, color.equals("Red") ? "Right" : "Left", driveSpeed);
         myOpMode.sleep(sleepTime);
+    }
+    */
     }
 
     public void initCV(String color) {
@@ -568,8 +567,8 @@ public class CenterstageAuto {
         static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(115,200);
         static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(270,200);
         static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(437,200);
-        static final int REGION_WIDTH = 50;
-        static final int REGION_HEIGHT = 50;
+        static final int REGION_WIDTH = 51;
+        static final int REGION_HEIGHT = 51;
 
         //375 cm wide
         //52.5 cm = 90 pixels
@@ -829,8 +828,8 @@ public class CenterstageAuto {
         static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(115, 200);
         static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(270, 200);
         static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(437, 200);
-        static final int REGION_WIDTH = 50;
-        static final int REGION_HEIGHT = 50;
+        static final int REGION_WIDTH = 51;
+        static final int REGION_HEIGHT = 51;
 
         Point region1_pointA = new Point(
                 REGION1_TOPLEFT_ANCHOR_POINT.x,
