@@ -34,30 +34,37 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
-@Autonomous(name="Drive Straight", group ="adhoc")
-@Disabled
-public class DriveStraight extends LinearOpMode {
+@Autonomous(name="RED - Purple Pixel Left", group ="Red")
+//@Disabled
+public class RedPurplePixelLeft extends LinearOpMode {
 
-    FreightFrenzyPackBot robot = new FreightFrenzyPackBot();
+
+    CenterstagePackBot robot = new CenterstagePackBot();
 
     @Override public void runOpMode() {
 
         robot.init(hardwareMap);
 
-        FreightFrenzyAuto autoClass = new FreightFrenzyAuto(this, robot, hardwareMap);
+        CenterstageAuto autoClass = new CenterstageAuto(this, robot, hardwareMap);
+
+        autoClass.initCV("Red");
 
         telemetry.addData("Ready", "");
         telemetry.update();
 
-        waitForStart();
+//        waitForStart();
+        while (!isStarted() && !isStopRequested()) //replaces waitForStart()
+        {
+            telemetry.addData("Realtime analysis", autoClass.scanPropCV("Red"));
+            telemetry.update();
+            //robot.closeClaw(this);
+        }
 
         while (!isStopRequested()) {
             telemetry.addData("Starting Method", "");
             telemetry.update();
 
-//            autoClass.shipDuckParkWarehouse("Blue");
-            robot.advancedEncoderDrive(this, 50, "Forward", 0.5);
-//            robot.advancedEncoderDrive(this, 48, "Right", .4);
+            autoClass.placePurplePixel("Red");
 
             while (!isStopRequested())
                 sleep(1);

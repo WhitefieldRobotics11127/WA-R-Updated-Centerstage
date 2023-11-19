@@ -124,7 +124,7 @@ public class CenterstageAuto {
     double clawAngled = 5;
 
     //Encoder constants for the entire lift
-    final double floorHeight = 2030;
+    final double floorHeight = 1880;
     double backboardHeight = 0;
 
     //Encoder constants to extend the lift
@@ -313,6 +313,63 @@ public class CenterstageAuto {
 
     }
 
+    //TODO: put this in all other autonomous methods
+    public void placePurplePixel(String color){
+        double driveSpeed = 0.4;
+        double rotateSpeed = 0.2;
+        double liftSpeed = 0.3;
+        int sleepTime = 300;
+        String markerPos = "Left";
+
+        myRobot.closeClaw(myOpMode);
+        myOpMode.sleep(sleepTime);
+
+        if (color.equals("Red"))
+            markerPos = scanSavedRed();
+        else if (color.equals("Blue"))
+            markerPos = scanSavedBlue();
+        myOpMode.telemetry.addData("Marker Pos", markerPos);
+        myOpMode.telemetry.update();
+
+        myRobot.advancedEncoderDrive(myOpMode, 21, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.moveGrabber(myOpMode, clawFlat, liftSpeed);
+        myOpMode.sleep(sleepTime);
+        if (markerPos.equals("Middle"))
+            myRobot.moveEntireLift(myOpMode, 1480, liftSpeed);
+        else
+            myRobot.moveEntireLift(myOpMode, floorHeight, liftSpeed);
+        myOpMode.sleep(sleepTime);
+
+        if (markerPos.equals("Right")) {
+            while (myRobot.getHeading() > -52)
+                myRobot.rotateCCW(rotateSpeed);
+            myRobot.driveStop();
+            myRobot.openRightClaw();
+            myOpMode.sleep(sleepTime);
+            while (myRobot.getHeading() < -5)
+                myRobot.rotateCW(rotateSpeed);
+            myRobot.driveStop();
+            myOpMode.sleep(sleepTime);
+        } else if (markerPos.equals("Middle")) {
+            myRobot.advancedEncoderDrive(myOpMode, 3.5, "Right", driveSpeed);
+            myOpMode.sleep(sleepTime);
+            myRobot.openRightClaw();
+            myOpMode.sleep(sleepTime);
+        } else { //when markerPos.equals("Left") or we can't/don't detect the prop
+            while (myRobot.getHeading() < 56)
+                myRobot.rotateCW(rotateSpeed);
+            myRobot.driveStop();
+            myOpMode.sleep(sleepTime);
+            myRobot.openRightClaw();
+            myOpMode.sleep(sleepTime);
+            while (myRobot.getHeading() > 5)
+                myRobot.rotateCCW(rotateSpeed);
+            myRobot.driveStop();
+        }
+    }
+
     public void placePurpleYellow(String color, String side) {
         // THE ROBOT MUST BE FACING FORWARDS AT START
         // Red right: the tip of the odometer wheel axle should be about 1/2 an inch away from the metal bar
@@ -339,7 +396,10 @@ public class CenterstageAuto {
 
         myRobot.moveGrabber(myOpMode, clawFlat, liftSpeed);
         myOpMode.sleep(sleepTime);
-        myRobot.moveEntireLift(myOpMode, floorHeight, liftSpeed);
+        if (markerPos.equals("Middle"))
+            myRobot.moveEntireLift(myOpMode, 1480, liftSpeed);
+        else
+            myRobot.moveEntireLift(myOpMode, floorHeight, liftSpeed);
         myOpMode.sleep(sleepTime);
 
         if (markerPos.equals("Right")) {
@@ -353,11 +413,9 @@ public class CenterstageAuto {
             myRobot.driveStop();
             myOpMode.sleep(sleepTime);
         } else if (markerPos.equals("Middle")) {
-            myRobot.advancedEncoderDrive(myOpMode, 3, "Left", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, 3.5, "Right", driveSpeed);
             myOpMode.sleep(sleepTime);
             myRobot.openRightClaw();
-            myOpMode.sleep(sleepTime);
-            myRobot.advancedEncoderDrive(myOpMode, 3, "Right", driveSpeed);
             myOpMode.sleep(sleepTime);
         } else { //when markerPos.equals("Left") or we can't/don't detect the prop
             while (myRobot.getHeading() < 56)
