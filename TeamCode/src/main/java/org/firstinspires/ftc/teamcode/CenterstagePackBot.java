@@ -115,8 +115,8 @@ public class CenterstagePackBot {
 
 
     public static final double leftClawOpen = .1;
-    public static final double leftClawClosed = .41;
-    public static final double rightClawClosed = .36;
+    public static final double leftClawClosed = .42;
+    public static final double rightClawClosed = .35;
     public static final double rightClawOpen = 0.57;
 
 
@@ -283,7 +283,7 @@ public class CenterstagePackBot {
         rightClaw.setPosition(rightClawClosed);
     }
 
-    public void moveEntireLift(LinearOpMode opMode, double targetCt, double speed){
+    public void moveEntireLiftOut(LinearOpMode opMode, double targetCt, double speed){
         int posCurrent = (dcMotor5.getCurrentPosition());
         while (!opMode.isStopRequested() && posCurrent < targetCt){
             dcMotor5.setPower(speed);
@@ -292,10 +292,28 @@ public class CenterstagePackBot {
         dcMotor5.setPower(0);
     }
 
-    public void moveGrabber(LinearOpMode opMode, double targetCt, double speed){
+    public void moveEntireLiftIn(LinearOpMode opMode, double targetCt, double speed){
+        int posCurrent = (dcMotor5.getCurrentPosition());
+        while (!opMode.isStopRequested() && posCurrent > targetCt){
+            dcMotor5.setPower(-speed);
+            posCurrent = (dcMotor5.getCurrentPosition());
+        }
+        dcMotor5.setPower(0);
+    }
+
+    public void moveGrabberOut(LinearOpMode opMode, double targetCt, double speed){
         int posCurrent = (dcMotor7.getCurrentPosition());
         while (!opMode.isStopRequested() && posCurrent < targetCt){
             dcMotor7.setPower(speed);
+            posCurrent = (dcMotor7.getCurrentPosition());
+        }
+        dcMotor7.setPower(0);
+    }
+
+    public void moveGrabberIn(LinearOpMode opMode, double targetCt, double speed){
+        int posCurrent = (dcMotor7.getCurrentPosition());
+        while (!opMode.isStopRequested() && posCurrent > targetCt){
+            dcMotor7.setPower(-speed);
             posCurrent = (dcMotor7.getCurrentPosition());
         }
         dcMotor7.setPower(0);

@@ -121,11 +121,11 @@ public class CenterstageAuto {
     //Encoder constants for the claw
     final double clawStart = 0;
     double clawFlat = 1010;
-    double clawAngled = 5;
+    double clawAngled = 705;
 
     //Encoder constants for the entire lift
     final double floorHeight = 1880;
-    double backboardHeight = 0;
+    double backboardHeight = 940;
 
     //Encoder constants to extend the lift
     final double baseHeight = 0;
@@ -247,27 +247,27 @@ public class CenterstageAuto {
         myRobot.advancedEncoderDrive(myOpMode, 36, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
-        myRobot.moveGrabber(myOpMode, clawFlat, liftSpeed);
+        myRobot.moveGrabberOut(myOpMode, clawFlat, liftSpeed);
         myOpMode.sleep(sleepTime);
 
         if (markerPos.equals("Right")) {
             myRobot.advancedEncoderDrive(myOpMode, 12, "Right", driveSpeed);
             myOpMode.sleep(sleepTime);
-            myRobot.moveEntireLift(myOpMode, floorHeight, liftSpeed);
+            myRobot.moveEntireLiftOut(myOpMode, floorHeight, liftSpeed);
             myOpMode.sleep(sleepTime);
             myRobot.openRightClaw();
             myOpMode.sleep(sleepTime);
         } else if (markerPos.equals("Middle")) {
             myRobot.advancedEncoderDrive(myOpMode, 12, "Forward", driveSpeed);
             myOpMode.sleep(sleepTime);
-            myRobot.moveEntireLift(myOpMode, floorHeight, liftSpeed);
+            myRobot.moveEntireLiftOut(myOpMode, floorHeight, liftSpeed);
             myOpMode.sleep(sleepTime);
             myRobot.openRightClaw();
             myOpMode.sleep(sleepTime);
         } else { //when markerPos.equals("Left") or we can't/don't detect the prop
             myRobot.advancedEncoderDrive(myOpMode, 12, "Left", driveSpeed);
             myOpMode.sleep(sleepTime);
-            myRobot.moveEntireLift(myOpMode, floorHeight, liftSpeed);
+            myRobot.moveEntireLiftOut(myOpMode, floorHeight, liftSpeed);
             myOpMode.sleep(sleepTime);
             myRobot.openRightClaw();
             myOpMode.sleep(sleepTime);
@@ -334,12 +334,12 @@ public class CenterstageAuto {
         myRobot.advancedEncoderDrive(myOpMode, 21, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
-        myRobot.moveGrabber(myOpMode, clawFlat, liftSpeed);
+        myRobot.moveGrabberOut(myOpMode, clawFlat, liftSpeed);
         myOpMode.sleep(sleepTime);
         if (markerPos.equals("Middle"))
-            myRobot.moveEntireLift(myOpMode, 1480, liftSpeed);
+            myRobot.moveEntireLiftOut(myOpMode, 1480, liftSpeed);
         else
-            myRobot.moveEntireLift(myOpMode, floorHeight, liftSpeed);
+            myRobot.moveEntireLiftOut(myOpMode, floorHeight, liftSpeed);
         myOpMode.sleep(sleepTime);
 
         if (markerPos.equals("Right")) {
@@ -394,12 +394,12 @@ public class CenterstageAuto {
         myRobot.advancedEncoderDrive(myOpMode, 21, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
-        myRobot.moveGrabber(myOpMode, clawFlat, liftSpeed);
+        myRobot.moveGrabberOut(myOpMode, clawFlat, liftSpeed);
         myOpMode.sleep(sleepTime);
         if (markerPos.equals("Middle"))
-            myRobot.moveEntireLift(myOpMode, 1480, liftSpeed);
+            myRobot.moveEntireLiftOut(myOpMode, 1480, liftSpeed);
         else
-            myRobot.moveEntireLift(myOpMode, floorHeight, liftSpeed);
+            myRobot.moveEntireLiftOut(myOpMode, floorHeight, liftSpeed);
         myOpMode.sleep(sleepTime);
 
         if (markerPos.equals("Right")) {
@@ -428,8 +428,9 @@ public class CenterstageAuto {
                 myRobot.rotateCCW(rotateSpeed);
             myRobot.driveStop();
         }
+        myOpMode.sleep(sleepTime);
 
-        myRobot.advancedEncoderDrive(myOpMode, 24.5, "Forward", driveSpeed);
+        myRobot.advancedEncoderDrive(myOpMode, 23.5, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
         if (side.equals("Left")) {
@@ -441,7 +442,7 @@ public class CenterstageAuto {
         }
 
         if (color.equals("Red")) {
-            while (getHeading() > -110)
+            while (getHeading() > -87)
                 myRobot.rotateCCW(rotateSpeed);
         }
 
@@ -449,22 +450,24 @@ public class CenterstageAuto {
             while (getHeading() < 100)
                 myRobot.rotateCW(rotateSpeed);
         }
-        myRobot.driveStop();
 
-        myRobot.openLeftClaw();
-        myOpMode.sleep(sleepTime);
-
-        /*
         if (markerPos.equals("Right"))
-            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 30 : 18, color.equals("Red") ? "Right" : "Left", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 35 : 22, color.equals("Red") ? "Right" : "Left", driveSpeed);
         if (markerPos.equals("Middle"))
-            myRobot.advancedEncoderDrive(myOpMode, 24, color.equals("Red") ? "Right" : "Left", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, 29, color.equals("Red") ? "Right" : "Left", driveSpeed);
         if (markerPos.equals("Left"))
-            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 18 : 30, color.equals("Red") ? "Right" : "Left", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 23 : 34, color.equals("Red") ? "Right" : "Left", driveSpeed);
         myOpMode.sleep(sleepTime);
 
-        myRobot.advancedEncoderDrive(myOpMode, 6, "Forward", driveSpeed);
+        myRobot.moveEntireLiftIn(myOpMode, backboardHeight, liftSpeed);
         myOpMode.sleep(sleepTime);
+
+        myRobot.moveGrabberIn(myOpMode, clawAngled, liftSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 11.5, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
         myRobot.openLeftClaw();
         myOpMode.sleep(sleepTime);
 
@@ -473,8 +476,6 @@ public class CenterstageAuto {
 
         myRobot.advancedEncoderDrive(myOpMode, 12, color.equals("Red") ? "Right" : "Left", driveSpeed);
         myOpMode.sleep(sleepTime);
-    }
-    */
     }
 
     public void initCV(String color) {
