@@ -397,9 +397,14 @@ public class CenterstageAuto {
         myRobot.moveGrabberOut(myOpMode, clawFlat, liftSpeed);
         myOpMode.sleep(sleepTime);
         if (markerPos.equals("Middle")) {
-            myRobot.advancedEncoderDrive(myOpMode, 3, "Right", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, 4.5, "Right", driveSpeed);
             myOpMode.sleep(sleepTime);
-            myRobot.moveEntireLiftOut(myOpMode, 1180, liftSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, .5, "Forward", driveSpeed);
+            myOpMode.sleep(sleepTime);
+            myRobot.moveEntireLiftOut(myOpMode, floorHeight, liftSpeed);
+            myOpMode.sleep(sleepTime);
+            myRobot.advancedEncoderDrive(myOpMode, 4.5, "Left", driveSpeed);
+            myOpMode.sleep(sleepTime);
         }
         else
             myRobot.moveEntireLiftOut(myOpMode, floorHeight, liftSpeed);
@@ -418,7 +423,7 @@ public class CenterstageAuto {
         } else if (markerPos.equals("Middle")) {
             myRobot.openRightClaw();
             myOpMode.sleep(sleepTime);
-                myRobot.advancedEncoderDrive(myOpMode, 11, side.equals("Left") ? "Left" : "Right", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, 12, "Right", driveSpeed);
             myOpMode.sleep(sleepTime);
         } else { //when markerPos.equals("Left") or we can't/don't detect the prop
             while (myRobot.getHeading() < 56)
@@ -462,7 +467,7 @@ public class CenterstageAuto {
         if (markerPos.equals("Right"))
             myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 36 : 23, color.equals("Red") ? "Right" : "Left", driveSpeed);
         if (markerPos.equals("Middle"))
-            myRobot.advancedEncoderDrive(myOpMode, 31.5, color.equals("Red") ? "Right" : "Left", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, 30.5, color.equals("Red") ? "Right" : "Left", driveSpeed);
         if (markerPos.equals("Left"))
             myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 24 : 35, color.equals("Red") ? "Right" : "Left", driveSpeed);
         myOpMode.sleep(sleepTime);
