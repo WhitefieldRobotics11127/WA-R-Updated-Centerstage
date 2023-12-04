@@ -125,7 +125,7 @@ public class CenterstageAuto {
 
     //Encoder constants for the entire lift
     final double floorHeight = 1780;
-    double backboardHeight = 1740;
+    double backboardHeight = 1140;
 
     //Encoder constants to extend the lift
     final double baseHeight = 0;
@@ -473,7 +473,7 @@ public class CenterstageAuto {
         myOpMode.sleep(sleepTime);
 
         if (markerPos.equals("Middle"))
-            myRobot.moveEntireLiftIn(myOpMode, backboardHeight - 600, liftSpeed);
+            myRobot.moveEntireLiftIn(myOpMode, backboardHeight, liftSpeed);
         else
             myRobot.moveEntireLiftIn(myOpMode, backboardHeight, liftSpeed);
         myOpMode.sleep(sleepTime);
