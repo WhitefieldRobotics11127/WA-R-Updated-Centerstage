@@ -397,11 +397,11 @@ public class CenterstageAuto {
         myRobot.moveGrabberOut(myOpMode, clawFlat, liftSpeed);
         myOpMode.sleep(sleepTime);
         if (markerPos.equals("Middle")) {
-            myRobot.advancedEncoderDrive(myOpMode, 4.5, "Right", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, 4.5, side.equals("Right") ? "Right" : "Left", driveSpeed);
             myOpMode.sleep(sleepTime);
             myRobot.moveEntireLiftOut(myOpMode, floorHeight, liftSpeed);
             myOpMode.sleep(sleepTime);
-            myRobot.advancedEncoderDrive(myOpMode, 4.5, "Left", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, 4.5, side.equals("Right") ? "Left" : "Right", driveSpeed);
             myOpMode.sleep(sleepTime);
         }
         else
@@ -409,22 +409,22 @@ public class CenterstageAuto {
         myOpMode.sleep(sleepTime);
 
         if (markerPos.equals("Right")) {
-            while (myRobot.getHeading() > -52)
+            while (myRobot.getHeading() > -49)
                 myRobot.rotateCCW(rotateSpeed);
             myRobot.driveStop();
             myRobot.openRightClaw();
             myOpMode.sleep(sleepTime);
-            while (myRobot.getHeading() < -5)
+            while (myRobot.getHeading() < -2)
                 myRobot.rotateCW(rotateSpeed);
             myRobot.driveStop();
             myOpMode.sleep(sleepTime);
         } else if (markerPos.equals("Middle")) {
             myRobot.openRightClaw();
             myOpMode.sleep(sleepTime);
-            myRobot.advancedEncoderDrive(myOpMode, 12, "Right", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, 12, side.equals("Right") ? "Right" : "Left", driveSpeed);
             myOpMode.sleep(sleepTime);
         } else { //when markerPos.equals("Left") or we can't/don't detect the prop
-            while (myRobot.getHeading() < 56)
+            while (myRobot.getHeading() < 57)
                 myRobot.rotateCW(rotateSpeed);
             myRobot.driveStop();
             myOpMode.sleep(sleepTime);
@@ -448,7 +448,7 @@ public class CenterstageAuto {
 
         if (markerPos.equals("Middle")) {
             if (side.equals("Left")) {
-                myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 102 : 17, color.equals("Red") ? "Right" : "Left", driveSpeed);
+                myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 114 : 5, color.equals("Red") ? "Right" : "Left", driveSpeed);
                 myOpMode.sleep(sleepTime);
             } else if (side.equals("Right")){
                 myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 17 : 102, (color.equals("Red") ? "Right" : "Left"), driveSpeed);
@@ -466,7 +466,7 @@ public class CenterstageAuto {
         }
 
         if (color.equals("Red")) {
-            while (getHeading() > -87)
+            while (getHeading() > -88)
                 myRobot.rotateCCW(rotateSpeed);
         }
 
@@ -476,27 +476,27 @@ public class CenterstageAuto {
         }
 
         if (markerPos.equals("Right"))
-            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 40 : 23, color.equals("Red") ? "Right" : "Left", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 40 : 24, color.equals("Red") ? "Right" : "Left", driveSpeed);
         if (markerPos.equals("Middle"))
             myRobot.advancedEncoderDrive(myOpMode, 31, color.equals("Red") ? "Right" : "Left", driveSpeed);
         if (markerPos.equals("Left"))
-            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 24 : 35, color.equals("Red") ? "Right" : "Left", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 24 : 40, color.equals("Red") ? "Right" : "Left", driveSpeed);
         myOpMode.sleep(sleepTime);
 
         if (markerPos.equals("Middle"))
             myRobot.moveEntireLiftIn(myOpMode, backboardHeight, liftSpeed);
         else
-            myRobot.moveEntireLiftIn(myOpMode, backboardHeight - 200, liftSpeed);
+            myRobot.moveEntireLiftIn(myOpMode, backboardHeight, liftSpeed);
         myOpMode.sleep(sleepTime);
 
         myRobot.moveGrabberIn(myOpMode, clawAngled, liftSpeed);
         myOpMode.sleep(sleepTime);
 
-        myRobot.advancedEncoderDrive(myOpMode, 11.5, "Forward", driveSpeed);
-        myOpMode.sleep(sleepTime);
+        myRobot.advancedEncoderDrive(myOpMode, 11.75, "Forward", driveSpeed);
+        myOpMode.sleep(400);
 
         myRobot.openLeftClaw();
-        myOpMode.sleep(sleepTime);
+        myOpMode.sleep(400);
 
         myRobot.advancedEncoderDrive(myOpMode, 1, "Backward", driveSpeed);
         myOpMode.sleep(sleepTime);
