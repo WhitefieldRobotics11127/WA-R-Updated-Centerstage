@@ -124,7 +124,7 @@ public class CenterstageAuto {
     double clawAngled = 700;
 
     //Encoder constants for the entire lift
-    final double floorHeight = 1680;
+    final double floorHeight = 1730;
     double backboardHeight = 1240;
 
     //Encoder constants to extend the lift
@@ -424,7 +424,7 @@ public class CenterstageAuto {
             myRobot.advancedEncoderDrive(myOpMode, 12, side.equals("Right") ? "Right" : "Left", driveSpeed);
             myOpMode.sleep(sleepTime);
         } else { //when markerPos.equals("Left") or we can't/don't detect the prop
-            while (myRobot.getHeading() < 57)
+            while (myRobot.getHeading() < 56.5)
                 myRobot.rotateCW(rotateSpeed);
             myRobot.driveStop();
             myOpMode.sleep(sleepTime);
@@ -439,16 +439,9 @@ public class CenterstageAuto {
         myRobot.advancedEncoderDrive(myOpMode, 23.5, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
-        /*
-        if (markerPos.equals("Middle")) {
-            myRobot.advancedEncoderDrive(myOpMode, 11, side.equals("Left") ? "Right" : "Left", driveSpeed);
-            myOpMode.sleep(sleepTime);
-        }
-         */
-
         if (markerPos.equals("Middle")) {
             if (side.equals("Left")) {
-                myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 114 : 5, color.equals("Red") ? "Right" : "Left", driveSpeed);
+                myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 114 : 13, color.equals("Red") ? "Right" : "Left", driveSpeed);
                 myOpMode.sleep(sleepTime);
             } else if (side.equals("Right")){
                 myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 17 : 102, (color.equals("Red") ? "Right" : "Left"), driveSpeed);
@@ -471,7 +464,7 @@ public class CenterstageAuto {
         }
 
         if (color.equals("Blue")) {
-            while (getHeading() < 100)
+            while (getHeading() < 93.5)
                 myRobot.rotateCW(rotateSpeed);
         }
 
@@ -480,29 +473,29 @@ public class CenterstageAuto {
         if (markerPos.equals("Middle"))
             myRobot.advancedEncoderDrive(myOpMode, 31, color.equals("Red") ? "Right" : "Left", driveSpeed);
         if (markerPos.equals("Left"))
-            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 24 : 40, color.equals("Red") ? "Right" : "Left", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 24 : 36.5, color.equals("Red") ? "Right" : "Left", driveSpeed);
         myOpMode.sleep(sleepTime);
 
-        if (markerPos.equals("Middle"))
-            myRobot.moveEntireLiftIn(myOpMode, backboardHeight, liftSpeed);
-        else
-            myRobot.moveEntireLiftIn(myOpMode, backboardHeight, liftSpeed);
+        myRobot.moveEntireLiftIn(myOpMode, backboardHeight, liftSpeed);
         myOpMode.sleep(sleepTime);
 
         myRobot.moveGrabberIn(myOpMode, clawAngled, liftSpeed);
         myOpMode.sleep(sleepTime);
 
-        myRobot.advancedEncoderDrive(myOpMode, 11.75, "Forward", driveSpeed);
-        myOpMode.sleep(400);
+        if (color.equals("Red"))
+            myRobot.advancedEncoderDrive(myOpMode, 11.5, "Forward", driveSpeed);
+        if (color.equals("Blue"))
+            myRobot.advancedEncoderDrive(myOpMode, 10, "Forward", driveSpeed);
+        myOpMode.sleep(500);
 
         myRobot.openLeftClaw();
-        myOpMode.sleep(400);
+        myOpMode.sleep(500);
 
-        myRobot.advancedEncoderDrive(myOpMode, 1, "Backward", driveSpeed);
+        myRobot.advancedEncoderDrive(myOpMode, 1.5, "Backward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
         if (markerPos.equals("Left"))
-            myRobot.advancedEncoderDrive(myOpMode, 28, color.equals("Red") ? "Right" : "Left", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, 24, color.equals("Red") ? "Right" : "Left", driveSpeed);
         else if (markerPos.equals("Middle"))
             myRobot.advancedEncoderDrive(myOpMode, 23, color.equals("Red") ? "Right" : "Left", driveSpeed);
         else if (markerPos.equals("Right"))
