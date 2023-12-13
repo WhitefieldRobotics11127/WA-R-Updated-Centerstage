@@ -35,7 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
 @Autonomous(name="RED - Purple Pixel Left", group ="Red")
-//@Disabled
+@Disabled
 public class RedPurplePixelLeft extends LinearOpMode {
 
 

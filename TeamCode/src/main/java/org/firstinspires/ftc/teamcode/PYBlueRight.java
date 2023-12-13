@@ -35,7 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
 @Autonomous(name="PY Blue Right", group ="Blue")
-@Disabled
+//@Disabled
 public class PYBlueRight extends LinearOpMode {
 
     CenterstagePackBot robot = new CenterstagePackBot();

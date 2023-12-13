@@ -35,7 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
 @Autonomous(name="BLUE - Purple Pixel Right", group ="Blue")
-//@Disabled
+@Disabled
 public class BluePurplePixelRight extends LinearOpMode {
 
     CenterstagePackBot robot = new CenterstagePackBot();

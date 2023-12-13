@@ -114,7 +114,7 @@ public class CenterstagePackBot {
     public static final double     COUNTS_PER_LIFT_INCH         = (537.7) / (1.75 * 3.1415);
 
 
-    public static final double leftClawOpen = .1;
+    public static final double leftClawOpen = .15;
     public static final double leftClawClosed = .42;
     public static final double rightClawClosed = .35;
     public static final double rightClawOpen = 0.57;
