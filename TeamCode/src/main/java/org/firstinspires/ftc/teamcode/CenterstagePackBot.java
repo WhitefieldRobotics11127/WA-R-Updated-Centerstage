@@ -100,6 +100,7 @@ public class CenterstagePackBot {
 
     public Servo leftClaw = null;
     public Servo rightClaw = null;
+    //public Servo launcher = null;
 
     public BNO055IMU imu;
     Orientation angles; //not sure if we need this
@@ -193,6 +194,7 @@ public class CenterstagePackBot {
         // Define and initialize installed servos.
         leftClaw = hwMap.get(Servo.class, "leftClaw");
         rightClaw = hwMap.get(Servo.class, "rightClaw");
+        //launcher = hwMap.get(Servo.class, "launcher");
 
         // blinkin = hwMap.get(RevBlinkinLedDriver.class, "blinkin");
         //colorSensor1 = hwMap.get(NormalizedColorSensor.class, "colorSensor1");

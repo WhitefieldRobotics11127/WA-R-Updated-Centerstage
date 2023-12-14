@@ -139,7 +139,13 @@ public class CenterstageRover extends OpMode {
         rear_left = direction * forward + rotate - (direction * strafe);
         rear_right = direction * forward - rotate + (direction * strafe);
 
+        /*
+        if (gamepad1.back)
+            robot.launcher.setPosition(0);
+        if (gamepad1.start)
+            robot.launcher.setPosition(1);
 
+*/
 
         //thunder = struck;
 
