@@ -33,7 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
-@Autonomous(name="PY Blue Left", group ="Blue")
+@Autonomous(name="PY Blue Left", group ="Blue", preselectTeleOp = "Centerstage_Rover")
 //@Disabled
 public class PYBlueLeft extends LinearOpMode {
 

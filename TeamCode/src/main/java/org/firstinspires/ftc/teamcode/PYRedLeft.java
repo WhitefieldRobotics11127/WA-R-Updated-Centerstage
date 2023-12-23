@@ -34,8 +34,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
-@Autonomous(name="PY Red Left", group ="Red")
-//@Disabled
+@Autonomous(name="PY Red Left", group ="Red", preselectTeleOp = "Centerstage_Rover")
+@Disabled
 public class PYRedLeft extends LinearOpMode {
 
 

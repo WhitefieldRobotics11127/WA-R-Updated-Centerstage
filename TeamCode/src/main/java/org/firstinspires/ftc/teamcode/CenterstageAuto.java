@@ -314,8 +314,8 @@ public class CenterstageAuto {
     }
 
     //TODO: put this in all other autonomous methods
-    public void placePurplePixel(String color){
-        double driveSpeed = 0.4;
+    public void placePurplePixel(String color, String side){
+        double driveSpeed = 0.35;
         double rotateSpeed = 0.2;
         double liftSpeed = 0.3;
         int sleepTime = 300;
@@ -324,6 +324,8 @@ public class CenterstageAuto {
         myRobot.closeClaw(myOpMode);
         myOpMode.sleep(sleepTime);
 
+        //myRobot.launcher.setPosition(1);
+
         if (color.equals("Red"))
             markerPos = scanSavedRed();
         else if (color.equals("Blue"))
@@ -331,34 +333,39 @@ public class CenterstageAuto {
         myOpMode.telemetry.addData("Marker Pos", markerPos);
         myOpMode.telemetry.update();
 
-        myRobot.advancedEncoderDrive(myOpMode, 21, "Forward", driveSpeed);
+        myRobot.advancedEncoderDrive(myOpMode, 21.5, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
         myRobot.moveGrabberOut(myOpMode, clawFlat, liftSpeed);
         myOpMode.sleep(sleepTime);
-        if (markerPos.equals("Middle"))
-            myRobot.moveEntireLiftOut(myOpMode, 1480, liftSpeed);
+        if (markerPos.equals("Middle")) {
+            myRobot.advancedEncoderDrive(myOpMode, 4.5, side.equals("Right") ? "Right" : "Left", driveSpeed);
+            myOpMode.sleep(sleepTime);
+            myRobot.moveEntireLiftOut(myOpMode, floorHeight, liftSpeed);
+            myOpMode.sleep(sleepTime);
+            myRobot.advancedEncoderDrive(myOpMode, 4.5, side.equals("Right") ? "Left" : "Right", driveSpeed);
+        }
         else
             myRobot.moveEntireLiftOut(myOpMode, floorHeight, liftSpeed);
         myOpMode.sleep(sleepTime);
 
         if (markerPos.equals("Right")) {
-            while (myRobot.getHeading() > -52)
+            while (myRobot.getHeading() > -49)
                 myRobot.rotateCCW(rotateSpeed);
             myRobot.driveStop();
             myRobot.openRightClaw();
             myOpMode.sleep(sleepTime);
-            while (myRobot.getHeading() < -5)
+            while (myRobot.getHeading() < -2)
                 myRobot.rotateCW(rotateSpeed);
             myRobot.driveStop();
             myOpMode.sleep(sleepTime);
         } else if (markerPos.equals("Middle")) {
-            myRobot.advancedEncoderDrive(myOpMode, 3.5, "Right", driveSpeed);
-            myOpMode.sleep(sleepTime);
             myRobot.openRightClaw();
             myOpMode.sleep(sleepTime);
+            myRobot.advancedEncoderDrive(myOpMode, 12, side.equals("Right") ? "Right" : "Left", driveSpeed);
+            myOpMode.sleep(sleepTime);
         } else { //when markerPos.equals("Left") or we can't/don't detect the prop
-            while (myRobot.getHeading() < 56)
+            while (myRobot.getHeading() < 58)
                 myRobot.rotateCW(rotateSpeed);
             myRobot.driveStop();
             myOpMode.sleep(sleepTime);
@@ -368,6 +375,7 @@ public class CenterstageAuto {
                 myRobot.rotateCCW(rotateSpeed);
             myRobot.driveStop();
         }
+        myOpMode.sleep(sleepTime);
     }
 
     public void placePurpleYellow(String color, String side) {
@@ -426,7 +434,7 @@ public class CenterstageAuto {
             myRobot.advancedEncoderDrive(myOpMode, 12, side.equals("Right") ? "Right" : "Left", driveSpeed);
             myOpMode.sleep(sleepTime);
         } else { //when markerPos.equals("Left") or we can't/don't detect the prop
-            while (myRobot.getHeading() < 57)
+            while (myRobot.getHeading() < 58)
                 myRobot.rotateCW(rotateSpeed);
             myRobot.driveStop();
             myOpMode.sleep(sleepTime);

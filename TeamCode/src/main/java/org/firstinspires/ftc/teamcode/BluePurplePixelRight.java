@@ -34,8 +34,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
-@Autonomous(name="BLUE - Purple Pixel Right", group ="Blue")
-@Disabled
+@Autonomous(name="BLUE - Purple Pixel Right", group ="Blue", preselectTeleOp = "Centerstage_Rover")
+//@Disabled
 public class BluePurplePixelRight extends LinearOpMode {
 
     CenterstagePackBot robot = new CenterstagePackBot();
@@ -63,7 +63,7 @@ public class BluePurplePixelRight extends LinearOpMode {
             telemetry.addData("Starting Method", "");
             telemetry.update();
 
-            autoClass.placePurplePixel("Blue");
+            autoClass.placePurplePixel("Blue", "Right");
 
             while (!isStopRequested())
                 sleep(1);
