@@ -179,8 +179,8 @@ public class CenterstageRover extends OpMode {
 
         /** GAMEPAD 2 */
 
-        telemetry.addData("Grabber encoder value: ", robot.dcMotor7.getCurrentPosition());
-        telemetry.update();
+        //PAST telemetry.addData("Grabber encoder value: ", robot.dcMotor7.getCurrentPosition());
+        //PAST telemetry.update();
         telemetry.addData("Articulation encoder value: ", robot.dcMotor5.getCurrentPosition());
         telemetry.update();
         telemetry.addData("Slide encoder value: ", robot.dcMotor6.getCurrentPosition());
@@ -191,13 +191,25 @@ public class CenterstageRover extends OpMode {
 
         //Right trigger articulates the entire slide back/forth, was originally on right stick
         robot.dcMotor5.setPower(gamepad2.left_trigger);
-        robot.dcMotor5.setPower(-gamepad2.right_trigger * 8.0);
+        robot.dcMotor5.setPower(-gamepad2.right_trigger);
 
         //Right stick moves the grabber back and forth (not opening it)
             robot.dcMotor7.setPower(-(gamepad2.left_stick_y) * 0.3);
             if (gamepad2.dpad_down)
                 robot.dcMotor7.setPower(0);
+            robot.dcMotor8.setPower(-(gamepad2.left_stick_y) * 0.3);
 
+        if (gamepad2.dpad_left)
+            robot.leftBucket.setPosition(CenterstagePackBot.leftBucketOpen);
+        if (gamepad2.dpad_right)
+            robot.leftBucket.setPosition(CenterstagePackBot.leftBucketClosed);
+        if (gamepad2.x)
+            robot.rightBucket.setPosition(CenterstagePackBot.rightBucketClosed);
+        if (gamepad2.b)
+            robot.rightBucket.setPosition(CenterstagePackBot.rightBucketOpen);
+
+        //PAST
+        /*
         if (gamepad2.dpad_left)
             robot.leftClaw.setPosition(CenterstagePackBot.leftClawOpen);
         if (gamepad2.dpad_right)
@@ -206,6 +218,7 @@ public class CenterstageRover extends OpMode {
             robot.rightClaw.setPosition(CenterstagePackBot.rightClawClosed);
         if (gamepad2.b)
             robot.rightClaw.setPosition(CenterstagePackBot.rightClawOpen);
+        */
 
         /*
         if (gamepad2.back){ //retract the odometer wheels
@@ -256,3 +269,7 @@ public class CenterstageRover extends OpMode {
     public void stop() {
         }
 }
+/*
+
+
+ */

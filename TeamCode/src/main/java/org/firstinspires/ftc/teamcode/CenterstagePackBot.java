@@ -66,9 +66,15 @@ public class CenterstagePackBot {
     public DcMotor dcMotor2 = null;
     public DcMotor dcMotor3 = null;
     public DcMotor dcMotor4 = null; //four drive motors
-    public DcMotor dcMotor5 = null; //slide articulation
-    public DcMotor dcMotor6 = null; //string movement
-    public DcMotor dcMotor7 = null; //grabber motor
+    //NEW
+    public DcMotor dcMotor5 = null; //intake roller motor
+    public DcMotor dcMotor6 = null; //slide/string movement
+    public DcMotor dcMotor7 = null; //bucket articulation 1
+    public DcMotor dcMotor8 = null; //bucket articulation 2
+
+    //PAST public DcMotor dcMotor5 = null; //slide articulation
+    //PAST public DcMotor dcMotor6 = null; //string movement
+    //PAST public DcMotor dcMotor7 = null; //grabber motor
 
     public VoltageSensor vs;
 
@@ -98,8 +104,12 @@ public class CenterstagePackBot {
 //not deleted to demonstrate CR Servos
 //    public CRServo intakeServoBR = null;
 
-    public Servo leftClaw = null;
-    public Servo rightClaw = null;
+
+    //NEW
+    public Servo leftBucket = null;
+    public Servo rightBucket = null;
+    //PAST public Servo leftClaw = null;
+    //PAST public Servo rightClaw = null;
     //public Servo launcher = null;
 
     public BNO055IMU imu;
@@ -114,11 +124,21 @@ public class CenterstagePackBot {
     public static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV) / (WHEEL_DIAMETER_INCHES * 3.1415);
     public static final double     COUNTS_PER_LIFT_INCH         = (537.7) / (1.75 * 3.1415);
 
+//NEW
+    public static final double leftBucketOpen = .15;
+    public static final double leftBucketClosed = .42;
+    public static final double rightBucketClosed = .35;
+    public static final double rightBucketOpen = 0.57;
 
+
+    //PAST
+    /*
     public static final double leftClawOpen = .15;
     public static final double leftClawClosed = .42;
     public static final double rightClawClosed = .35;
     public static final double rightClawOpen = 0.57;
+
+     */
 
 
 
@@ -149,9 +169,15 @@ public class CenterstagePackBot {
         dcMotor2 = hwMap.get(DcMotor.class, "motor_2");
         dcMotor3 = hwMap.get(DcMotor.class, "motor_3");
         dcMotor4 = hwMap.get(DcMotor.class, "motor_4");
-        dcMotor5 = hwMap.get(DcMotor.class, "motor_articulate");
-        dcMotor6 = hwMap.get(DcMotor.class, "motor_string");
-        dcMotor7 = hwMap.get(DcMotor.class, "motor_grabber");
+        //NEW
+        dcMotor5 = hwMap.get(DcMotor.class, "motor_intake");
+        dcMotor6 = hwMap.get(DcMotor.class, "motor_slide");
+        dcMotor7 = hwMap.get(DcMotor.class, "motor_bucket_1");
+        dcMotor8 = hwMap.get(DcMotor.class, "motor_bucket_2");
+
+        //PAST dcMotor5 = hwMap.get(DcMotor.class, "motor_articulate");
+        //PAST dcMotor6 = hwMap.get(DcMotor.class, "motor_string");
+        //PAST dcMotor7 = hwMap.get(DcMotor.class, "motor_grabber");
 
         // This is what lets us be an omnidirectional bot, changed from previous years to allow us
         // to use vertical motors
@@ -182,6 +208,8 @@ public class CenterstagePackBot {
         dcMotor5.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcMotor6.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcMotor7.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //NEW
+        dcMotor8.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         dcMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         dcMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -190,10 +218,16 @@ public class CenterstagePackBot {
         dcMotor5.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         dcMotor6.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         dcMotor7.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //NEW
+        dcMotor8.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Define and initialize installed servos.
-        leftClaw = hwMap.get(Servo.class, "leftClaw");
-        rightClaw = hwMap.get(Servo.class, "rightClaw");
+        //NEW
+        leftBucket = hwMap.get(Servo.class, "left_bucket");
+        rightBucket = hwMap.get(Servo.class, "right_bucket");
+
+        //PAST leftClaw = hwMap.get(Servo.class, "leftClaw");
+        //PAST rightClaw = hwMap.get(Servo.class, "rightClaw");
         //launcher = hwMap.get(Servo.class, "launcher");
 
         // blinkin = hwMap.get(RevBlinkinLedDriver.class, "blinkin");
@@ -265,25 +299,37 @@ public class CenterstagePackBot {
     }
     */
 
-    public void openLeftClaw(){
-        leftClaw.setPosition(leftClawOpen);
+    //NEW
+    public void openLeftBucket() {leftBucket.setPosition(leftBucketOpen);}
+    //PAST public void openLeftClaw(){ leftClaw.setPosition(leftClawOpen);}
+
+    //NEW
+    public void openRightBucket() {rightBucket.setPosition(rightBucketOpen);}
+    //PAST public void openRightClaw(){ rightClaw.setPosition(rightClawOpen); }
+
+    //NEW
+    public void closeBucket(LinearOpMode opMode){
+        leftBucket.setPosition(leftBucketClosed);
+        opMode.sleep(150);
+        rightBucket.setPosition(rightBucketClosed);
     }
 
-    public void openRightClaw(){
-        rightClaw.setPosition(rightClawOpen);
-    }
-
+    //PAST
+    /*
     public void openClaw(LinearOpMode opMode){
         leftClaw.setPosition(leftClawOpen);
         opMode.sleep(300);
         rightClaw.setPosition(rightClawOpen);
     }
-
+    //PAST
+    /*
     public void closeClaw(LinearOpMode opMode){
         leftClaw.setPosition(leftClawClosed);
         opMode.sleep(300);
         rightClaw.setPosition(rightClawClosed);
     }
+
+     */
 
     public void moveEntireLiftOut(LinearOpMode opMode, double targetCt, double speed){
         int posCurrent = (dcMotor5.getCurrentPosition());
@@ -303,6 +349,27 @@ public class CenterstagePackBot {
         dcMotor5.setPower(0);
     }
 
+    //NEW
+    public void moveBucketOut(LinearOpMode opMode, double targetCt, double speed){
+        int posCurrent = (dcMotor7.getCurrentPosition());
+        while (!opMode.isStopRequested() && posCurrent < targetCt){
+            dcMotor7.setPower(speed);
+            posCurrent = (dcMotor7.getCurrentPosition());
+        }
+        dcMotor7.setPower(0);
+    }
+
+    public void moveBucketIn(LinearOpMode opMode, double targetCt, double speed){
+        int posCurrent = (dcMotor7.getCurrentPosition());
+        while (!opMode.isStopRequested() && posCurrent > targetCt){
+            dcMotor7.setPower(-speed);
+            posCurrent = (dcMotor7.getCurrentPosition());
+        }
+        dcMotor7.setPower(0);
+    }
+
+    //PAST
+    /*
     public void moveGrabberOut(LinearOpMode opMode, double targetCt, double speed){
         int posCurrent = (dcMotor7.getCurrentPosition());
         while (!opMode.isStopRequested() && posCurrent < targetCt){
@@ -320,6 +387,7 @@ public class CenterstagePackBot {
         }
         dcMotor7.setPower(0);
     }
+     */
 
     public void moveLiftUp(LinearOpMode opMode, double targetCt, double speed) {
         int posCurrent = -(dcMotor6.getCurrentPosition());

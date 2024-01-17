@@ -119,9 +119,16 @@ public class CenterstageAuto {
             TSEDeterminationPipelineWithSide.TSEPosition.LEFT;
 
     //Encoder constants for the claw
+    //NEW
+    final double bucketStart = 0;
+    double bucketDeploy = 1010;
+    double bucketDrop = 655;
+    //PAST
+    /*
     final double clawStart = 0;
     double clawFlat = 1010;
     double clawAngled = 655;
+     */
 
     //Encoder constants for the entire lift
     final double floorHeight = 1705;
@@ -202,6 +209,7 @@ public class CenterstageAuto {
 
 
     //temporary for meet one, nothing was working here
+    /*
     public void park(String color) {
         double driveSpeed = 0.4;
         double rotateSpeed = 0.4;
@@ -224,7 +232,9 @@ public class CenterstageAuto {
         myRobot.rightClaw.setPosition(CenterstagePackBot.rightClawOpen);
         myOpMode.sleep(sleepTime);
     }
+    */
 
+    /*
     public void placePark(String color, String side) {
         //The base method to place a purple pixel on the spike it's supposed to be on and park
         // THE ROBOT MUST BE FACING FORWARDS AT START
@@ -312,7 +322,9 @@ public class CenterstageAuto {
         myOpMode.sleep(sleepTime);
 
     }
+     */
 
+    /*
     //TODO: put this in all other autonomous methods
     public void placePurplePixel(String color, String side){
         double driveSpeed = 0.35;
@@ -377,7 +389,9 @@ public class CenterstageAuto {
         }
         myOpMode.sleep(sleepTime);
     }
+     */
 
+    /*
     public void placePurpleYellow(String color, String side) {
         // THE ROBOT MUST BE FACING FORWARDS AT START
         // Red right: the tip of the odometer wheel axle should be about 1/2 an inch away from the metal bar
@@ -502,6 +516,117 @@ public class CenterstageAuto {
         myOpMode.sleep(500);
 
         myRobot.advancedEncoderDrive(myOpMode, 1.5, "Backward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        if (markerPos.equals("Left"))
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 30 : 27, color.equals("Red") ? "Right" : "Left", driveSpeed);
+        else if (markerPos.equals("Middle"))
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 22 : 30, color.equals("Red") ? "Right" : "Left", driveSpeed);
+        else if (markerPos.equals("Right"))
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 12 : 39, color.equals("Red") ? "Right" : "Left", driveSpeed);
+        myOpMode.sleep(sleepTime);
+    }
+     */
+
+    //NEW
+    /*
+    Read
+    Drive forward
+        If left, rotate left and place, then re-center
+        If right, rotate right and place, then re-center
+        If center, drive straight and place, then re-center
+    Drive backwards
+    Rotate right 90 degrees
+    Drive forwards to reach backdrop
+    Drive left dependent on the placement
+    Drive back right to park
+     */
+    public void placePurpleYellow(String color, String side) {
+        //The robot must be facing intake forwards at the start
+        double driveSpeed = 0.35;
+        double rotateSpeed = 0.2;
+        double liftSpeed = 0.3;
+        int sleepTime = 300;
+        String markerPos = "Left";
+
+        myRobot.closeBucket(myOpMode);
+        myOpMode.sleep(sleepTime);
+
+        if (color.equals("Red"))
+            markerPos = scanSavedRed();
+        else if (color.equals("Blue"))
+            markerPos = scanSavedBlue();
+        myOpMode.telemetry.addData("Marker Pos", markerPos);
+        myOpMode.telemetry.update();
+
+        myRobot.advancedEncoderDrive(myOpMode, 21.5, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.moveBucketOut(myOpMode, bucketDeploy, liftSpeed);
+        myOpMode.sleep(sleepTime);
+        if (markerPos.equals("Left")){
+            while (myRobot.getHeading() < 58)
+                myRobot.rotateCW(rotateSpeed);
+            myRobot.driveStop();
+            myRobot.openRightBucket(); //maybe move the bucket back up?
+            myOpMode.sleep(sleepTime);
+            while (myRobot.getHeading() > 5)
+                myRobot.rotateCCW(rotateSpeed);
+            myRobot.driveStop();
+        }
+        else if (markerPos.equals("Middle")) {
+            myRobot.openRightBucket();
+        }
+        else { //when markerPos.equals("Right") or we can't/don't detect the prop
+            while (myRobot.getHeading() > -49)
+                myRobot.rotateCCW(rotateSpeed);
+            myRobot.driveStop();
+            myRobot.openRightBucket();
+            myOpMode.sleep(sleepTime);
+            while (myRobot.getHeading() < -2)
+                myRobot.rotateCW(rotateSpeed);
+            myRobot.driveStop();
+            myOpMode.sleep(sleepTime);
+        }
+        myOpMode.sleep(sleepTime);
+        myRobot.closeBucket(myOpMode);
+        myOpMode.sleep(sleepTime);
+        myRobot.moveBucketIn(myOpMode, bucketDrop, liftSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 15, "Backward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        if (color.equals("Red")) {
+            while (getHeading() > -90)
+                myRobot.rotateCCW(rotateSpeed);
+        }
+        if (color.equals("Blue")) {
+            while (getHeading() < 91.5)
+                myRobot.rotateCW(rotateSpeed);
+        }
+
+        myRobot.advancedEncoderDrive(myOpMode, 29, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        if (markerPos.equals("Left"))
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 40 : 10, color.equals("Red") ? "Left" : "Right", driveSpeed);
+        if (markerPos.equals("Middle"))
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 31 : 21.5, color.equals("Red") ? "Left" : "Right", driveSpeed);
+        if (markerPos.equals("Right"))
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 22 : 28.5, color.equals("Red") ? "Left" : "Right", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.moveEntireLiftOut(myOpMode, backboardHeight, liftSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 10, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.openRightBucket();
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 2, "Backward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
         if (markerPos.equals("Left"))
