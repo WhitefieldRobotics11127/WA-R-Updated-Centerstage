@@ -61,7 +61,7 @@ public class BluePark extends LinearOpMode {
             telemetry.addData("Starting Method", "");
             telemetry.update();
 
-            autoClass.park("Blue");
+            //autoClass.park("Blue");
 
 
             while (!isStopRequested())

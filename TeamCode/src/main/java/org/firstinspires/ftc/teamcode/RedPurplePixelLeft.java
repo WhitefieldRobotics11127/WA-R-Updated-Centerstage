@@ -64,7 +64,7 @@ public class RedPurplePixelLeft extends LinearOpMode {
             telemetry.addData("Starting Method", "");
             telemetry.update();
 
-            autoClass.placePurplePixel("Red", "Left");
+            //autoClass.placePurplePixel("Red", "Left");
 
             while (!isStopRequested())
                 sleep(1);

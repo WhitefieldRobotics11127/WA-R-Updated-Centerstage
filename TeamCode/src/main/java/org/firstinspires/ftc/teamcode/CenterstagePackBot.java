@@ -172,7 +172,7 @@ public class CenterstagePackBot {
         //NEW
         dcMotor5 = hwMap.get(DcMotor.class, "motor_intake");
         dcMotor6 = hwMap.get(DcMotor.class, "motor_slide");
-        dcMotor7 = hwMap.get(DcMotor.class, "motor_bucket_1");
+        dcMotor7 = hwMap.get(DcMotor.class, "motor_bucket");
         //dcMotor8 = hwMap.get(DcMotor.class, "motor_bucket_2");
 
         //PAST dcMotor5 = hwMap.get(DcMotor.class, "motor_articulate");

@@ -62,7 +62,7 @@ public class RedReadPlaceParkRight extends LinearOpMode {
             telemetry.addData("Starting Method", "");
             telemetry.update();
 
-            autoClass.placePark("Red", "Right");
+            //autoClass.placePark("Red", "Right");
 
             while (!isStopRequested())
                 sleep(1);
