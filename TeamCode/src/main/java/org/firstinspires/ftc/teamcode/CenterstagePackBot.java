@@ -70,7 +70,7 @@ public class CenterstagePackBot {
     public DcMotor dcMotor5 = null; //intake roller motor
     public DcMotor dcMotor6 = null; //slide/string movement
     public DcMotor dcMotor7 = null; //bucket articulation 1
-    public DcMotor dcMotor8 = null; //bucket articulation 2
+    //public DcMotor dcMotor8 = null; //bucket articulation 2
 
     //PAST public DcMotor dcMotor5 = null; //slide articulation
     //PAST public DcMotor dcMotor6 = null; //string movement
@@ -173,7 +173,7 @@ public class CenterstagePackBot {
         dcMotor5 = hwMap.get(DcMotor.class, "motor_intake");
         dcMotor6 = hwMap.get(DcMotor.class, "motor_slide");
         dcMotor7 = hwMap.get(DcMotor.class, "motor_bucket_1");
-        dcMotor8 = hwMap.get(DcMotor.class, "motor_bucket_2");
+        //dcMotor8 = hwMap.get(DcMotor.class, "motor_bucket_2");
 
         //PAST dcMotor5 = hwMap.get(DcMotor.class, "motor_articulate");
         //PAST dcMotor6 = hwMap.get(DcMotor.class, "motor_string");
@@ -209,7 +209,7 @@ public class CenterstagePackBot {
         dcMotor6.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcMotor7.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         //NEW
-        dcMotor8.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //dcMotor8.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         dcMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         dcMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -219,7 +219,7 @@ public class CenterstagePackBot {
         dcMotor6.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         dcMotor7.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //NEW
-        dcMotor8.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //dcMotor8.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Define and initialize installed servos.
         //NEW

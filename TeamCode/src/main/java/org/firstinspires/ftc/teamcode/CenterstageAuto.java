@@ -121,8 +121,9 @@ public class CenterstageAuto {
     //Encoder constants for the claw
     //NEW
     final double bucketStart = 0;
-    double bucketDeploy = 1010;
-    double bucketDrop = 655;
+    public static double bucketDeploy = 1010;
+    public static double bucketDrop = 655; //bucket drop also needs to be changed in the bucket position
+                                            //function in Centerstage Rover
     //PAST
     /*
     final double clawStart = 0;
@@ -636,6 +637,13 @@ public class CenterstageAuto {
         else if (markerPos.equals("Right"))
             myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 12 : 39, color.equals("Red") ? "Right" : "Left", driveSpeed);
         myOpMode.sleep(sleepTime);
+
+        /*
+        myRobot.moveBucketIn(myOpMode, bucketDeploy + bucketDrop, liftSpeed);
+        myOpMode.sleep(sleepTime);
+        myRobot.moveEntireLiftIn(myOpMode, backboardHeight, liftSpeed);
+        myOpMode.sleep(sleepTime);
+        */
     }
 
     public void initCV(String color) {

@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
@@ -197,7 +198,7 @@ public class CenterstageRover extends OpMode {
             robot.dcMotor7.setPower(-(gamepad2.left_stick_y) * 0.3);
             if (gamepad2.dpad_down)
                 robot.dcMotor7.setPower(0);
-            robot.dcMotor8.setPower(-(gamepad2.left_stick_y) * 0.3);
+            //robot.dcMotor8.setPower(-(gamepad2.left_stick_y) * 0.3);
 
         if (gamepad2.dpad_left)
             robot.leftBucket.setPosition(CenterstagePackBot.leftBucketOpen);
@@ -207,6 +208,32 @@ public class CenterstageRover extends OpMode {
             robot.rightBucket.setPosition(CenterstagePackBot.rightBucketClosed);
         if (gamepad2.b)
             robot.rightBucket.setPosition(CenterstagePackBot.rightBucketOpen);
+
+        if (gamepad2.a){
+            robot.dcMotor7.setTargetPosition(0);
+            robot.dcMotor7.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.dcMotor7.setPower(0.25);
+            while (robot.dcMotor7.isBusy())
+                telemetry.update();
+            robot.dcMotor7.setPower(0);
+
+            robot.dcMotor6.setTargetPosition(0);
+            robot.dcMotor6.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.dcMotor6.setPower(0.25);
+            while (robot.dcMotor6.isBusy())
+                telemetry.update();
+            robot.dcMotor6.setPower(0);
+            //robot.dcMotor8.setTargetPosition(0);
+        }
+
+        if (gamepad2.y){
+            robot.dcMotor7.setTargetPosition(655); //Bucket drop needs to go here
+            robot.dcMotor7.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.dcMotor7.setPower(0.25);
+            while (robot.dcMotor7.isBusy())
+                telemetry.update();
+            robot.dcMotor7.setPower(0);
+        }
 
         //PAST
         /*
