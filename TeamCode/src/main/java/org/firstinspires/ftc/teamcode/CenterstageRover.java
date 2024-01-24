@@ -188,7 +188,7 @@ public class CenterstageRover extends OpMode {
         telemetry.update();
 
         //Left stick pushes the slide up/down
-        robot.dcMotor6.setPower(-gamepad2.right_stick_y);
+        robot.dcMotor6.setPower(gamepad2.right_stick_y);
 
         //Right trigger articulates the entire slide back/forth, was originally on right stick
         robot.dcMotor5.setPower(gamepad2.left_trigger);
@@ -210,19 +210,14 @@ public class CenterstageRover extends OpMode {
             robot.rightBucket.setPosition(CenterstagePackBot.rightBucketOpen);
 
         if (gamepad2.a){
-            robot.dcMotor7.setTargetPosition(0);
+            robot.dcMotor7.setTargetPosition(-50);
             robot.dcMotor7.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.dcMotor7.setPower(0.25);
             while (robot.dcMotor7.isBusy())
                 telemetry.update();
             robot.dcMotor7.setPower(0);
 
-            robot.dcMotor6.setTargetPosition(0);
-            robot.dcMotor6.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.dcMotor6.setPower(0.25);
-            while (robot.dcMotor6.isBusy())
-                telemetry.update();
-            robot.dcMotor6.setPower(0);
+            robot.dcMotor7.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             //robot.dcMotor8.setTargetPosition(0);
         }
 
@@ -260,16 +255,22 @@ public class CenterstageRover extends OpMode {
 
 /*
         // Blinkin for later
-        /*
-        if (gamepad2.dpad_up)
-            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_RED);
-        if (gamepad2.dpad_down)
-            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_RAINBOW_PALETTE);
-        if (gamepad2.dpad_left)
-            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
-        if (gamepad2.dpad_right)
-            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_PARTY_PALETTE);
+
         */
+        if (gamepad1.dpad_up)
+            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_RAINBOW_PALETTE);
+        if (gamepad1.dpad_down)
+            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
+        if (gamepad1.dpad_left)
+            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
+        if (gamepad1.dpad_right)
+            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.FIRE_LARGE);
+
+        if (gamepad2.right_bumper)
+            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
+        if (gamepad2.left_bumper)
+            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
+        //rainbow lava
 
         /** TELEMETRY */
 

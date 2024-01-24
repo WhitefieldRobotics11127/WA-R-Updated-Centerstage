@@ -125,10 +125,10 @@ public class CenterstagePackBot {
     public static final double     COUNTS_PER_LIFT_INCH         = (537.7) / (1.75 * 3.1415);
 
 //NEW
-    public static final double leftBucketOpen = .15;
-    public static final double leftBucketClosed = .42;
-    public static final double rightBucketClosed = .35;
-    public static final double rightBucketOpen = 0.57;
+    public static final double leftBucketClosed = .14;
+    public static final double leftBucketOpen = .52;
+    public static final double rightBucketOpen = .35;
+    public static final double rightBucketClosed = 0.78;
 
 
     //PAST
@@ -161,8 +161,8 @@ public class CenterstagePackBot {
         hwMap = ahwMap;
 
 
-        //RevBlinkinLedDriver.BlinkinPattern pattern;
-        // blinkinLedDriver = hwMap.get(RevBlinkinLedDriver.class, "blinkin");
+        RevBlinkinLedDriver.BlinkinPattern pattern;
+        blinkinLedDriver = hwMap.get(RevBlinkinLedDriver.class, "blinkin");
 
         // Define and Initialize Motors
         dcMotor1 = hwMap.get(DcMotor.class, "motor_1");

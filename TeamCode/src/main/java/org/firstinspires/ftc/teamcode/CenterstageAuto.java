@@ -33,6 +33,7 @@ package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Color;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -553,10 +554,14 @@ public class CenterstageAuto {
         myRobot.closeBucket(myOpMode);
         myOpMode.sleep(sleepTime);
 
-        if (color.equals("Red"))
+        if (color.equals("Red")) {
             markerPos = scanSavedRed();
-        else if (color.equals("Blue"))
+            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
+        }
+        else if (color.equals("Blue")) {
             markerPos = scanSavedBlue();
+            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
+        }
         myOpMode.telemetry.addData("Marker Pos", markerPos);
         myOpMode.telemetry.update();
 
