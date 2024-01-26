@@ -334,22 +334,22 @@ public class CenterstagePackBot {
 
      */
 
-    public void moveEntireLiftOut(LinearOpMode opMode, double targetCt, double speed){
-        int posCurrent = (dcMotor5.getCurrentPosition());
+    public void moveEntireBucketOut(LinearOpMode opMode, double targetCt, double speed){
+        int posCurrent = (dcMotor7.getCurrentPosition());
         while (!opMode.isStopRequested() && posCurrent < targetCt){
-            dcMotor5.setPower(speed);
-            posCurrent = (dcMotor5.getCurrentPosition());
+            dcMotor7.setPower(speed);
+            posCurrent = (dcMotor7.getCurrentPosition());
         }
-        dcMotor5.setPower(0);
+        dcMotor7.setPower(0);
     }
 
-    public void moveEntireLiftIn(LinearOpMode opMode, double targetCt, double speed){
-        int posCurrent = (dcMotor5.getCurrentPosition());
+    public void moveEntireBucketIn(LinearOpMode opMode, double targetCt, double speed){
+        int posCurrent = (dcMotor7.getCurrentPosition());
         while (!opMode.isStopRequested() && posCurrent > targetCt){
-            dcMotor5.setPower(-speed);
-            posCurrent = (dcMotor5.getCurrentPosition());
+            dcMotor7.setPower(-speed);
+            posCurrent = (dcMotor7.getCurrentPosition());
         }
-        dcMotor5.setPower(0);
+        dcMotor7.setPower(0);
     }
 
     //NEW
@@ -533,7 +533,7 @@ public class CenterstagePackBot {
      * @param direction possible directions: "Forward", "Backward", "Left", "Right"
      */
     public void advancedEncoderDrive(LinearOpMode opMode, double distance, String direction, double speed) {
-        double targetCt = distance * COUNTS_PER_INCH; //* (-.242 * speed + .905);
+        double targetCt = distance * COUNTS_PER_INCH * (-.242 * speed + .905);
         //double targetCt = distance * COUNTS_PER_INCH * (-.23 * speed + .471); // * (-.647 * speed + 1.048);
         /*
             y = mx + b where m = -.647 and b = 1.048
@@ -573,6 +573,8 @@ public class CenterstagePackBot {
 //                opMode.telemetry.update();
                 //refresh variables
                 currentHeading = getHeading();
+                opMode.telemetry.addData("Straight Encoder Count", getStraightEncoderCount());
+                opMode.telemetry.update();
                 deltaHeading = currentHeading - targetHeading;
                 currStraightCt = getStraightEncoderCount() - initialStraightCt;
                 currStrafeCt = getHorizontalEncoderCount() - initialStrafeCt;
@@ -583,6 +585,8 @@ public class CenterstagePackBot {
                 driveWithCorrection(direction, deltaHeading, correctionCoefficient, speed); //While not at target, drive
 
                 //refresh variables
+                opMode.telemetry.addData("Straight Encoder Count", getStraightEncoderCount());
+                opMode.telemetry.update();
                 currentHeading = getHeading();
                 deltaHeading = currentHeading - targetHeading;
                 currStraightCt = getStraightEncoderCount() - initialStraightCt;
@@ -599,6 +603,8 @@ public class CenterstagePackBot {
                 deltaHeading = currentHeading - targetHeading;
                 currStraightCt = getStraightEncoderCount() - initialStraightCt;
                 currStrafeCt = getHorizontalEncoderCount() - initialStrafeCt;
+                opMode.telemetry.addData("Horizontal Encoder Count", getHorizontalEncoderCount());
+                opMode.telemetry.update();
             }
             driveStop();
         } else if (direction.equals("Right")) {
@@ -611,6 +617,8 @@ public class CenterstagePackBot {
                 deltaHeading = currentHeading - targetHeading;
                 currStraightCt = getStraightEncoderCount() - initialStraightCt;
                 currStrafeCt = getHorizontalEncoderCount() - initialStrafeCt;
+                opMode.telemetry.addData("Horizontal Encoder Count", getHorizontalEncoderCount());
+                opMode.telemetry.update();
             }
             driveStop();
         }

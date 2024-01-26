@@ -551,23 +551,32 @@ public class CenterstageAuto {
         int sleepTime = 300;
         String markerPos = "Left";
 
-        myRobot.moveLiftUp(myOpMode, 100, liftSpeed);
-        myOpMode.sleep(sleepTime);
+        if (color.equals("Red")){
+            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
+        }
+
+        if (color.equals("Blue")){
+            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
+        }
 
         myRobot.closeBucket(myOpMode);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.moveEntireBucketIn(myOpMode, 100, liftSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.moveLiftUp(myOpMode, 100, liftSpeed);
         myOpMode.sleep(sleepTime);
 
         if (color.equals("Red")) {
             myOpMode.telemetry.addData("Realtime analysis", scanPropCV("Red"));
             myOpMode.telemetry.update();
             markerPos = scanSavedRed();
-            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
         }
         else if (color.equals("Blue")) {
             myOpMode.telemetry.addData("Realtime analysis", scanPropCV("Blue"));
             myOpMode.telemetry.update();
             markerPos = scanSavedBlue();
-            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
         }
         myOpMode.telemetry.addData("Marker Pos", markerPos);
         myOpMode.telemetry.update();
@@ -583,7 +592,9 @@ public class CenterstageAuto {
         myRobot.advancedEncoderDrive(myOpMode, 21.4, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
-        myRobot.moveBucketOut(myOpMode, bucketDeploy, liftSpeed);
+        myRobot.moveLiftDown(myOpMode, 100, liftSpeed);
+        myOpMode.sleep(sleepTime);
+        myRobot.moveEntireBucketOut(myOpMode, 100, liftSpeed);
         myOpMode.sleep(sleepTime);
         if (markerPos.equals("Left")){
             while (myRobot.getHeading() < 58)
