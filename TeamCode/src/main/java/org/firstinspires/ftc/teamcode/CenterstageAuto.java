@@ -546,26 +546,41 @@ public class CenterstageAuto {
     public void placePurpleYellow(String color, String side) {
         //The robot must be facing intake forwards at the start
         double driveSpeed = 0.35;
-        double rotateSpeed = 0.2;
+        double rotateSpeed = 0.3;
         double liftSpeed = 0.3;
         int sleepTime = 300;
         String markerPos = "Left";
+
+        myRobot.moveLiftUp(myOpMode, 100, liftSpeed);
+        myOpMode.sleep(sleepTime);
 
         myRobot.closeBucket(myOpMode);
         myOpMode.sleep(sleepTime);
 
         if (color.equals("Red")) {
+            myOpMode.telemetry.addData("Realtime analysis", scanPropCV("Red"));
+            myOpMode.telemetry.update();
             markerPos = scanSavedRed();
             myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
         }
         else if (color.equals("Blue")) {
+            myOpMode.telemetry.addData("Realtime analysis", scanPropCV("Blue"));
+            myOpMode.telemetry.update();
             markerPos = scanSavedBlue();
             myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
         }
         myOpMode.telemetry.addData("Marker Pos", markerPos);
         myOpMode.telemetry.update();
 
-        myRobot.advancedEncoderDrive(myOpMode, 21.5, "Forward", driveSpeed);
+        /*
+        myRobot.advancedEncoderDrive(myOpMode, .1, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, .5, "Right", driveSpeed);
+        myOpMode.sleep(sleepTime);
+        */
+
+        myRobot.advancedEncoderDrive(myOpMode, 21.4, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
         myRobot.moveBucketOut(myOpMode, bucketDeploy, liftSpeed);
@@ -597,12 +612,19 @@ public class CenterstageAuto {
         myOpMode.sleep(sleepTime);
         myRobot.closeBucket(myOpMode);
         myOpMode.sleep(sleepTime);
-        myRobot.moveBucketIn(myOpMode, bucketDrop, liftSpeed);
-        myOpMode.sleep(sleepTime);
+        //myRobot.moveBucketIn(myOpMode, bucketDrop, liftSpeed);
+        //myOpMode.sleep(sleepTime);
 
         myRobot.advancedEncoderDrive(myOpMode, 15, "Backward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
+        myRobot.advancedEncoderDrive(myOpMode, 29, "Right", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.openRightBucket();
+        myOpMode.sleep(sleepTime);
+
+        /*
         if (color.equals("Red")) {
             while (getHeading() > -90)
                 myRobot.rotateCCW(rotateSpeed);
@@ -676,7 +698,7 @@ public class CenterstageAuto {
             @Override
             public void onOpened()
             {
-                webcam.startStreaming(640, 360, OpenCvCameraRotation.UPRIGHT);
+                webcam.startStreaming(640, 360, OpenCvCameraRotation.UPSIDE_DOWN);
             }
 
             @Override
@@ -796,9 +818,11 @@ public class CenterstageAuto {
          * The core values which define the location and size of the sample regions
          * TODO: Check these points w/ our camera position and redefine them based on prop location
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(115,200);
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(270,200);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(437,200);
+        //every .45 mm is 1 pixel (will depend on monitor size)
+        //center of the pixel bucket lines up with the center black line
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(97,230);
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(295,230);
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(500,230);
         static final int REGION_WIDTH = 51;
         static final int REGION_HEIGHT = 51;
 

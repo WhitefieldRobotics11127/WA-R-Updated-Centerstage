@@ -35,6 +35,7 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -125,10 +126,10 @@ public class CenterstagePackBot {
     public static final double     COUNTS_PER_LIFT_INCH         = (537.7) / (1.75 * 3.1415);
 
 //NEW
-    public static final double leftBucketClosed = .14;
+    public static final double leftBucketClosed = .19;
     public static final double leftBucketOpen = .52;
     public static final double rightBucketOpen = .35;
-    public static final double rightBucketClosed = 0.78;
+    public static final double rightBucketClosed = 0.83;
 
 
     //PAST
@@ -183,6 +184,7 @@ public class CenterstagePackBot {
         // to use vertical motors
 
         dcMotor1.setDirection(DcMotor.Direction.REVERSE);
+        dcMotor6.setDirection(DcMotor.Direction.REVERSE);
         //dcMotor2.setDirection(DcMotor.Direction.REVERSE);
         //dcMotor3.setDirection(DcMotor.Direction.REVERSE);
         //dcMotor4.setDirection(DcMotor.Direction.REVERSE);
@@ -205,6 +207,7 @@ public class CenterstagePackBot {
         dcMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcMotor3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dcMotor4.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcMotor5.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcMotor6.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcMotor7.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -394,11 +397,9 @@ public class CenterstagePackBot {
         // Converts the vertical distance to diagonal distance using trig.
 //        double targetCt = inches * COUNTS_PER_LIFT_INCH /.982; //Math is incorrect. Counts are easy.
         while (!opMode.isStopRequested() && posCurrent < targetCt) {
-            dcMotor5.setPower(speed);
             dcMotor6.setPower(speed);
             posCurrent = -(dcMotor6.getCurrentPosition());
         }
-        dcMotor5.setPower(0);
         dcMotor6.setPower(0);
     }
 
@@ -408,11 +409,9 @@ public class CenterstagePackBot {
         // Converts the vertical distance to diagonal distance using trig.
 //        double targetCt = inches * COUNTS_PER_LIFT_INCH /.982; //see above comment
         while (!opMode.isStopRequested() && posCurrent > targetCt) {
-            dcMotor5.setPower(-speed);
             dcMotor6.setPower(-speed);
             posCurrent = -(dcMotor6.getCurrentPosition());
         }
-        dcMotor5.setPower(0);
         dcMotor6.setPower(0);
     }
     
@@ -534,7 +533,7 @@ public class CenterstagePackBot {
      * @param direction possible directions: "Forward", "Backward", "Left", "Right"
      */
     public void advancedEncoderDrive(LinearOpMode opMode, double distance, String direction, double speed) {
-        double targetCt = distance * COUNTS_PER_INCH * (-.242 * speed + .905);
+        double targetCt = distance * COUNTS_PER_INCH; //* (-.242 * speed + .905);
         //double targetCt = distance * COUNTS_PER_INCH * (-.23 * speed + .471); // * (-.647 * speed + 1.048);
         /*
             y = mx + b where m = -.647 and b = 1.048
@@ -544,7 +543,14 @@ public class CenterstagePackBot {
             inches). Your y value for each will be the target distance divided by the actual distance
             it went.
             Power is x and Drift is y (in inches). Use these to find the slope and y-intercept.
+            target: 24 at 30%
+            actual:
+
+            target: 24 at 70%
+            actual:
         */
+
+
 
         double targetHeading = getHeading();
         double currentHeading = getHeading();

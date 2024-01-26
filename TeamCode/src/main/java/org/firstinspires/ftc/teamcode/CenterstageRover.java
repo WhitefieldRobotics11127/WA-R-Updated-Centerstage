@@ -132,7 +132,7 @@ public class CenterstageRover extends OpMode {
 
         forward = gear * gamepad1.left_stick_y;
         strafe = gear * -gamepad1.left_stick_x;
-        rotate = gear * -gamepad1.right_stick_x;
+        rotate = gear * gamepad1.right_stick_x;
         //rotate = -gear * -gamepad1.right_stick_x;
 
         front_left = direction * forward + rotate + (direction * strafe);
@@ -188,7 +188,7 @@ public class CenterstageRover extends OpMode {
         telemetry.update();
 
         //Left stick pushes the slide up/down
-        robot.dcMotor6.setPower(gamepad2.right_stick_y);
+        robot.dcMotor6.setPower(-gamepad2.right_stick_y);
 
         //Right trigger articulates the entire slide back/forth, was originally on right stick
         robot.dcMotor5.setPower(gamepad2.left_trigger);
@@ -209,6 +209,8 @@ public class CenterstageRover extends OpMode {
         if (gamepad2.b)
             robot.rightBucket.setPosition(CenterstagePackBot.rightBucketOpen);
 
+
+        /*
         if (gamepad2.a){
             robot.dcMotor7.setTargetPosition(-50);
             robot.dcMotor7.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -229,6 +231,7 @@ public class CenterstageRover extends OpMode {
                 telemetry.update();
             robot.dcMotor7.setPower(0);
         }
+         */
 
         //PAST
         /*
@@ -270,7 +273,10 @@ public class CenterstageRover extends OpMode {
             robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
         if (gamepad2.left_bumper)
             robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
-        //rainbow lava
+        if (gamepad2.a)
+            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
+        if (gamepad2.y)
+            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_GREEN);
 
         /** TELEMETRY */
 
