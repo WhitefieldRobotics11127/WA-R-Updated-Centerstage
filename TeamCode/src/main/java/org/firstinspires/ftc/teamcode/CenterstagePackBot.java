@@ -317,6 +317,12 @@ public class CenterstagePackBot {
         rightBucket.setPosition(rightBucketClosed);
     }
 
+    public void openBucket(LinearOpMode opMode){
+        leftBucket.setPosition(leftBucketOpen);
+        opMode.sleep(150);
+        rightBucket.setPosition(rightBucketOpen);
+    }
+
     //PAST
     /*
     public void openClaw(LinearOpMode opMode){
@@ -575,7 +581,8 @@ public class CenterstagePackBot {
                 currentHeading = getHeading();
                 opMode.telemetry.addData("Straight Encoder Count", getStraightEncoderCount());
                 opMode.telemetry.update();
-                deltaHeading = currentHeading - targetHeading;
+                // Changed from: deltaHeading = currentHeading - targetHeading; to line below
+                deltaHeading = targetHeading - currentHeading;
                 currStraightCt = getStraightEncoderCount() - initialStraightCt;
                 currStrafeCt = getHorizontalEncoderCount() - initialStrafeCt;
             }
@@ -588,7 +595,8 @@ public class CenterstagePackBot {
                 opMode.telemetry.addData("Straight Encoder Count", getStraightEncoderCount());
                 opMode.telemetry.update();
                 currentHeading = getHeading();
-                deltaHeading = currentHeading - targetHeading;
+                //Changed from: deltaHeading = currentHeading - targetHeading; to line below
+                deltaHeading = targetHeading - currentHeading;
                 currStraightCt = getStraightEncoderCount() - initialStraightCt;
                 currStrafeCt = getHorizontalEncoderCount() - initialStrafeCt;
             }
@@ -600,7 +608,8 @@ public class CenterstagePackBot {
 
                 //refresh variables
                 currentHeading = getHeading();
-                deltaHeading = currentHeading - targetHeading;
+                //Changed from: deltaHeading = currentHeading - targetHeading; to line below
+                deltaHeading = targetHeading - currentHeading;
                 currStraightCt = getStraightEncoderCount() - initialStraightCt;
                 currStrafeCt = getHorizontalEncoderCount() - initialStrafeCt;
                 opMode.telemetry.addData("Horizontal Encoder Count", getHorizontalEncoderCount());
@@ -614,7 +623,8 @@ public class CenterstagePackBot {
 
                 //refresh variables
                 currentHeading = getHeading();
-                deltaHeading = currentHeading - targetHeading;
+                //Changed from: deltaHeading = currentHeading - targetHeading; to line below
+                deltaHeading = targetHeading - currentHeading;
                 currStraightCt = getStraightEncoderCount() - initialStraightCt;
                 currStrafeCt = getHorizontalEncoderCount() - initialStrafeCt;
                 opMode.telemetry.addData("Horizontal Encoder Count", getHorizontalEncoderCount());

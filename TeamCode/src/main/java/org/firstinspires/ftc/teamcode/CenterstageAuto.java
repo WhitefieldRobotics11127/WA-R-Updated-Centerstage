@@ -684,6 +684,72 @@ public class CenterstageAuto {
         */
     }
 
+    public void leagueAuto(String color){
+        double driveSpeed = 0.35;
+        int sleepTime = 300;
+        double liftSpeed = 0.3;
+
+        if (color.equals("Red")){
+            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
+        }
+
+        if (color.equals("Blue")){
+            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
+        }
+
+        myRobot.closeBucket(myOpMode);
+        myOpMode.sleep(sleepTime);
+    }
+
+    public void parkAndDrop(String color){
+        double driveSpeed = 0.35;
+        int sleepTime = 300;
+        double liftSpeed = 0.3;
+
+        if (color.equals("Red")){
+            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
+        }
+
+        if (color.equals("Blue")){
+            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
+        }
+
+        myRobot.closeBucket(myOpMode);
+        myOpMode.sleep(sleepTime);
+
+        if (color.equals("Red")) {
+            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
+            myRobot.advancedEncoderDrive(myOpMode, 1, "Left", driveSpeed);
+            myOpMode.sleep(sleepTime);
+            myRobot.advancedEncoderDrive(myOpMode, 12, "Forward", driveSpeed);
+            myOpMode.sleep(sleepTime);
+            myRobot.advancedEncoderDrive(myOpMode, 35, "Left", driveSpeed);
+        }
+
+        if (color.equals("Blue")){
+            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
+            myRobot.advancedEncoderDrive(myOpMode, 1, "Right", driveSpeed);
+            myOpMode.sleep(sleepTime);
+            myRobot.advancedEncoderDrive(myOpMode, 12, "Forward", driveSpeed);
+            myOpMode.sleep(sleepTime);
+            myRobot.advancedEncoderDrive(myOpMode, 35, "Right", driveSpeed);
+        }
+
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 19, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.moveLiftUp(myOpMode, 50, liftSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 1, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.openBucket(myOpMode);
+        myOpMode.sleep(sleepTime);
+    }
+
     public void initCV(String color) {
         // Documentation omitted for brevity - please see ocvWebcamExample.java for documentation
         HardwareMap hardwareMap = myHardwareMap;
