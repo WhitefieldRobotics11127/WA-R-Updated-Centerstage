@@ -405,6 +405,8 @@ public class CenterstagePackBot {
         while (!opMode.isStopRequested() && posCurrent < targetCt) {
             dcMotor6.setPower(speed);
             posCurrent = -(dcMotor6.getCurrentPosition());
+            opMode.telemetry.addData("Lift motor encoder count", -dcMotor6.getCurrentPosition());
+            opMode.telemetry.update();
         }
         dcMotor6.setPower(0);
     }

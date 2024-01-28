@@ -701,9 +701,27 @@ public class CenterstageAuto {
         myOpMode.sleep(sleepTime);
     }
 
+    public void purpleDrop(){
+        double driveSpeed = 0.35;
+        int sleepTime = 400;
+        double liftSpeed = 0.3;
+
+        myRobot.closeBucket(myOpMode);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 28, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.openRightBucket();
+        myOpMode.sleep(sleepTime);
+
+        myRobot.moveBucketOut(myOpMode, 10, liftSpeed);
+        myOpMode.sleep(sleepTime);
+    }
+
     public void parkAndDrop(String color){
         double driveSpeed = 0.35;
-        int sleepTime = 300;
+        int sleepTime = 400;
         double liftSpeed = 0.3;
 
         if (color.equals("Red")){
@@ -719,35 +737,47 @@ public class CenterstageAuto {
 
         if (color.equals("Red")) {
             myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
-            myRobot.advancedEncoderDrive(myOpMode, 1, "Left", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, 3, "Left", 0.3);
             myOpMode.sleep(sleepTime);
-            myRobot.advancedEncoderDrive(myOpMode, 12, "Forward", driveSpeed);
-            myOpMode.sleep(sleepTime);
-            myRobot.advancedEncoderDrive(myOpMode, 35, "Left", driveSpeed);
+            //myRobot.advancedEncoderDrive(myOpMode, 12, "Forward", driveSpeed);
+            //myOpMode.sleep(sleepTime);
+            //myRobot.advancedEncoderDrive(myOpMode, 33, "Left", 0.3);
         }
 
         if (color.equals("Blue")){
             myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
-            myRobot.advancedEncoderDrive(myOpMode, 1, "Right", driveSpeed);
+            myRobot.advancedEncoderDrive(myOpMode, 3, "Right", 0.3);
             myOpMode.sleep(sleepTime);
-            myRobot.advancedEncoderDrive(myOpMode, 12, "Forward", driveSpeed);
-            myOpMode.sleep(sleepTime);
-            myRobot.advancedEncoderDrive(myOpMode, 35, "Right", driveSpeed);
+            //myRobot.advancedEncoderDrive(myOpMode, 12, "Forward", driveSpeed);
+            //myOpMode.sleep(sleepTime);
+            //myRobot.advancedEncoderDrive(myOpMode, 33, "Right", 0.3);
         }
 
         myOpMode.sleep(sleepTime);
 
-        myRobot.advancedEncoderDrive(myOpMode, 19, "Forward", driveSpeed);
+        myRobot.advancedEncoderDrive(myOpMode, 28, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
+        /*
         myRobot.moveLiftUp(myOpMode, 50, liftSpeed);
         myOpMode.sleep(sleepTime);
 
         myRobot.advancedEncoderDrive(myOpMode, 1, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
+
+         */
+        //myRobot.moveBucketOut(myOpMode, , liftSpeed);
+        //myOpMode.sleep(sleepTime);
+
         myRobot.openBucket(myOpMode);
         myOpMode.sleep(sleepTime);
+
+        myRobot.moveBucketOut(myOpMode, 10, liftSpeed);
+        myOpMode.sleep(sleepTime);
+
+        //myRobot.advancedEncoderDrive(myOpMode, 1, "Backward", driveSpeed);
+        //myOpMode.sleep(sleepTime);
     }
 
     public void initCV(String color) {
