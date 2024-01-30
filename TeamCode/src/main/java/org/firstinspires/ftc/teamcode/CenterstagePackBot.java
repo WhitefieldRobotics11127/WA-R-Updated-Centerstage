@@ -43,6 +43,7 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
@@ -96,6 +97,8 @@ public class CenterstagePackBot {
     public DigitalChannel led4G;
 
     public RevBlinkinLedDriver blinkinLedDriver;
+
+    public DigitalChannel touchSensor;
 
 //    public AnalogInput pot = null;
 //    public double potLowerVoltage = 0.607, potUpperVoltage = 1.575;
@@ -164,6 +167,8 @@ public class CenterstagePackBot {
 
         RevBlinkinLedDriver.BlinkinPattern pattern;
         blinkinLedDriver = hwMap.get(RevBlinkinLedDriver.class, "blinkin");
+        touchSensor = hwMap.get(DigitalChannel.class, "touch_sensor");
+        touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
         // Define and Initialize Motors
         dcMotor1 = hwMap.get(DcMotor.class, "motor_1");
@@ -481,6 +486,7 @@ public class CenterstagePackBot {
         return (dcMotor1.getCurrentPosition() + dcMotor2.getCurrentPosition()) / 2;
     }
 
+    /** Returns  the two straight odometers*/
     public double getHorizontalEncoderCount() {
         return -dcMotor3.getCurrentPosition();
     }
@@ -492,7 +498,6 @@ public class CenterstagePackBot {
 
     /** @param inchDist must be in inches
      * @param dir possible directions: "Forward", "Backward", "Left", "Right" */
-    // For some reason left/right movement is off by a factor of 2.35? Idk why yet.
     public void encoderDrive(LinearOpMode opMode, double inchDist, String dir, double driveSpeed) {
         //add rampSpeed in instead of driveSpeed
         double targetCt = inchDist * COUNTS_PER_INCH *.9;
@@ -549,13 +554,8 @@ public class CenterstagePackBot {
             Comment out the part in parentheses. Run the bot at 30% speed (x = 0.3) to a certain distance and record the drift (in inches),
             then run the bot at 70% speed (x = 0.7) to the same distance and record the drift (in
             inches). Your y value for each will be the target distance divided by the actual distance
-            it went.
+            it went. (actually I'm not sure about that last sentence)
             Power is x and Drift is y (in inches). Use these to find the slope and y-intercept.
-            target: 24 at 30%
-            actual:
-
-            target: 24 at 70%
-            actual:
         */
 
 

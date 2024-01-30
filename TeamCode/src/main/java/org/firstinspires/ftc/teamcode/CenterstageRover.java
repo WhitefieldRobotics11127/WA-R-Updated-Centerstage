@@ -209,6 +209,17 @@ public class CenterstageRover extends OpMode {
         if (gamepad2.b)
             robot.rightBucket.setPosition(CenterstagePackBot.rightBucketOpen);
 
+        if (gamepad2.a){
+
+        }
+        if (gamepad2.y){
+            while (!robot.touchSensor.getState()){
+                robot.dcMotor6.setPower(-0.5);
+            }
+            if (robot.touchSensor.getState())
+                robot.dcMotor6.setPower(0);
+        }
+
 
         /*
         if (gamepad2.a){
@@ -273,10 +284,7 @@ public class CenterstageRover extends OpMode {
             robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
         if (gamepad2.left_bumper)
             robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
-        if (gamepad2.a)
-            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GOLD);
-        if (gamepad2.y)
-            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_GREEN);
+
 
         /** TELEMETRY */
 
