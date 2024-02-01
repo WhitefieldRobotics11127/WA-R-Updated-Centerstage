@@ -213,6 +213,7 @@ public class CenterstageRover extends OpMode {
 
         }
         if (gamepad2.y){
+            //add a line to put bucket flat first
             while (!robot.touchSensor.getState()){
                 robot.dcMotor6.setPower(-0.5);
             }
