@@ -108,7 +108,7 @@ public class CenterstagePackBot {
 //not deleted to demonstrate CR Servos
 //    public CRServo intakeServoBR = null;
 
-
+    int test = 0;
     //NEW
     public Servo leftBucket = null;
     public Servo rightBucket = null;
