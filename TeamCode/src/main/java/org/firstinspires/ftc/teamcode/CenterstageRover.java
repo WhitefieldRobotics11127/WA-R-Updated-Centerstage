@@ -209,6 +209,8 @@ public class CenterstageRover extends OpMode {
         if (gamepad2.b)
             robot.rightBucket.setPosition(CenterstagePackBot.rightBucketOpen);
 
+        // this is a devious comment
+
         if (gamepad2.a){
 
         }
