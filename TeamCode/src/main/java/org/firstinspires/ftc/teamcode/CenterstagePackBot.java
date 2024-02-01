@@ -121,7 +121,7 @@ public class CenterstagePackBot {
     Acceleration gravity; //not sure if we need this
 
 
-
+    //We should be able to just change the wheel diameter to switch out physical wheels
     //Odometry things
     public static final double     COUNTS_PER_MOTOR_REV    = 8192 ;
     public static final double     WHEEL_DIAMETER_INCHES   = 2.75 ;     // For figuring circumference
