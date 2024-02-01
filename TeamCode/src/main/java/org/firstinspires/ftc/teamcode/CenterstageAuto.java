@@ -112,7 +112,7 @@ public class CenterstageAuto {
 
     private String position = "";
     public OpenCvWebcam webcam;
-    public TSEDeterminationPipeline pipeline;
+    public TSEDeterminationPipeline pipeline; //BEWARE THE PIPELINE
     public TSEDeterminationPipelineWithSide pipelineOther;
     public TSEDeterminationPipeline.TSEPosition savedAnalysis =
             TSEDeterminationPipeline.TSEPosition.LEFT;
