@@ -543,6 +543,7 @@ public class CenterstageAuto {
     Drive left dependent on the placement
     Drive back right to park
      */
+
     public void placePurpleYellow(String color, String side) {
         //The robot must be facing intake forwards at the start
         double driveSpeed = 0.35;
@@ -779,6 +780,7 @@ public class CenterstageAuto {
         //myRobot.advancedEncoderDrive(myOpMode, 1, "Backward", driveSpeed);
         //myOpMode.sleep(sleepTime);
     }
+    */
 
     public void initCV(String color) {
         // Documentation omitted for brevity - please see ocvWebcamExample.java for documentation

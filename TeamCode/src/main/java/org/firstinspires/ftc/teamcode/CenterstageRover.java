@@ -73,6 +73,9 @@ public class CenterstageRover extends OpMode {
     double lifty_speed = 1;
     boolean isHolding = true;
 
+    boolean bucketClosed = true;
+    boolean bucketRetracted = true;
+
     RevBlinkinLedDriver.BlinkinPattern defPattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_RAINBOW_PALETTE;
 
     private final static int GAMEPAD_LOCKOUT = 300;
@@ -182,8 +185,6 @@ public class CenterstageRover extends OpMode {
 
         //PAST telemetry.addData("Grabber encoder value: ", robot.dcMotor7.getCurrentPosition());
         //PAST telemetry.update();
-        telemetry.addData("Articulation encoder value: ", robot.dcMotor5.getCurrentPosition());
-        telemetry.update();
         telemetry.addData("Slide encoder value: ", robot.dcMotor6.getCurrentPosition());
         telemetry.update();
 
@@ -194,20 +195,26 @@ public class CenterstageRover extends OpMode {
         robot.dcMotor5.setPower(gamepad2.left_trigger);
         robot.dcMotor5.setPower(-gamepad2.right_trigger);
 
-        //Right stick moves the grabber back and forth (not opening it)
-            robot.dcMotor7.setPower(-(gamepad2.left_stick_y) * 0.3);
-            if (gamepad2.dpad_down)
-                robot.dcMotor7.setPower(0);
+        //Right stick moves the hang slide up and down
+            robot.dcMotor7.setPower(-(gamepad2.left_stick_y));
             //robot.dcMotor8.setPower(-(gamepad2.left_stick_y) * 0.3);
 
-        if (gamepad2.dpad_left)
-            robot.leftBucket.setPosition(CenterstagePackBot.leftBucketOpen);
-        if (gamepad2.dpad_right)
-            robot.leftBucket.setPosition(CenterstagePackBot.leftBucketClosed);
-        if (gamepad2.x)
-            robot.rightBucket.setPosition(CenterstagePackBot.rightBucketClosed);
-        if (gamepad2.b)
-            robot.rightBucket.setPosition(CenterstagePackBot.rightBucketOpen);
+        //lb moves entire bucket out, rb opens bucket
+        if (gamepad2.left_bumper){
+            if (robot.rotisserie.getPosition() == CenterstagePackBot.rotisserieIn){
+                robot.rotisseriePlace();
+            }
+            else if (robot.rotisserie.getPosition() == CenterstagePackBot.rotisseriePlace){
+                robot.rotisserieReturn();
+            }
+        }
+
+        if (gamepad2.right_bumper){
+            if (robot.bucket.getPosition() == CenterstagePackBot.bucketClosed)
+                robot.openBucket();
+            if (robot.bucket.getPosition() == CenterstagePackBot.bucketOpen)
+                robot.closeBucket();
+        }
 
         // this is a devious comment
 

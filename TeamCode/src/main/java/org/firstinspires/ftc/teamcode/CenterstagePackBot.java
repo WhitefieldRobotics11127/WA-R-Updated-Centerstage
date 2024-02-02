@@ -71,7 +71,7 @@ public class CenterstagePackBot {
     //NEW
     public DcMotor dcMotor5 = null; //intake roller motor
     public DcMotor dcMotor6 = null; //slide/string movement
-    public DcMotor dcMotor7 = null; //bucket articulation 1
+    public DcMotor dcMotor7 = null; // hang motor
     //public DcMotor dcMotor8 = null; //bucket articulation 2
 
     //PAST public DcMotor dcMotor5 = null; //slide articulation
@@ -109,8 +109,9 @@ public class CenterstagePackBot {
 //    public CRServo intakeServoBR = null;
 
     //NEW
-    public Servo leftBucket = null;
-    public Servo rightBucket = null;
+    public Servo rotisserie = null;
+    public Servo bucket = null;
+    public Servo purpleArm = null;
     //PAST public Servo leftClaw = null;
     //PAST public Servo rightClaw = null;
     //public Servo launcher = null;
@@ -128,10 +129,12 @@ public class CenterstagePackBot {
     public static final double     COUNTS_PER_LIFT_INCH         = (537.7) / (1.75 * 3.1415);
 
 //NEW
-    public static final double leftBucketClosed = .19;
-    public static final double leftBucketOpen = .52;
-    public static final double rightBucketOpen = .35;
-    public static final double rightBucketClosed = 0.83;
+    public static final double rotisseriePlace = 0;
+    public static final double rotisserieIn = 1;
+    public static final double bucketOpen = 0;
+    public static final double bucketClosed = 1;
+    public static final double purpleArmOut = 0;
+    public static final double purpleArmIn = 1;
 
 
     //PAST
@@ -177,7 +180,7 @@ public class CenterstagePackBot {
         //NEW
         dcMotor5 = hwMap.get(DcMotor.class, "motor_intake");
         dcMotor6 = hwMap.get(DcMotor.class, "motor_slide");
-        dcMotor7 = hwMap.get(DcMotor.class, "motor_bucket");
+        dcMotor7 = hwMap.get(DcMotor.class, "motor_hang");
         //dcMotor8 = hwMap.get(DcMotor.class, "motor_bucket_2");
 
         //PAST dcMotor5 = hwMap.get(DcMotor.class, "motor_articulate");
@@ -230,8 +233,9 @@ public class CenterstagePackBot {
 
         // Define and initialize installed servos.
         //NEW
-        leftBucket = hwMap.get(Servo.class, "left_bucket");
-        rightBucket = hwMap.get(Servo.class, "right_bucket");
+        rotisserie = hwMap.get(Servo.class, "rotisserie");
+        bucket = hwMap.get(Servo.class, "bucket");
+        purpleArm = hwMap.get(Servo.class, "purple_arm");
 
         //PAST leftClaw = hwMap.get(Servo.class, "leftClaw");
         //PAST rightClaw = hwMap.get(Servo.class, "rightClaw");
@@ -305,28 +309,8 @@ public class CenterstagePackBot {
         return dcMotor7.getCurrentPosition();
     }
     */
-
-    //NEW
-    public void openLeftBucket() {leftBucket.setPosition(leftBucketOpen);}
     //PAST public void openLeftClaw(){ leftClaw.setPosition(leftClawOpen);}
-
-    //NEW
-    public void openRightBucket() {rightBucket.setPosition(rightBucketOpen);}
     //PAST public void openRightClaw(){ rightClaw.setPosition(rightClawOpen); }
-
-    //NEW
-    public void closeBucket(LinearOpMode opMode){
-        leftBucket.setPosition(leftBucketClosed);
-        opMode.sleep(150);
-        rightBucket.setPosition(rightBucketClosed);
-    }
-
-    public void openBucket(LinearOpMode opMode){
-        leftBucket.setPosition(leftBucketOpen);
-        opMode.sleep(150);
-        rightBucket.setPosition(rightBucketOpen);
-    }
-
     //PAST
     /*
     public void openClaw(LinearOpMode opMode){
@@ -344,41 +328,25 @@ public class CenterstagePackBot {
 
      */
 
-    public void moveEntireBucketOut(LinearOpMode opMode, double targetCt, double speed){
-        int posCurrent = (dcMotor7.getCurrentPosition());
-        while (!opMode.isStopRequested() && posCurrent < targetCt){
-            dcMotor7.setPower(speed);
-            posCurrent = (dcMotor7.getCurrentPosition());
-        }
-        dcMotor7.setPower(0);
+    public void rotisseriePlace(){
+        rotisserie.setPosition(rotisseriePlace);
+    }
+    public void rotisserieReturn(){
+        rotisserie.setPosition(rotisserieIn);
     }
 
-    public void moveEntireBucketIn(LinearOpMode opMode, double targetCt, double speed){
-        int posCurrent = (dcMotor7.getCurrentPosition());
-        while (!opMode.isStopRequested() && posCurrent > targetCt){
-            dcMotor7.setPower(-speed);
-            posCurrent = (dcMotor7.getCurrentPosition());
-        }
-        dcMotor7.setPower(0);
+    public void openBucket(){
+        bucket.setPosition(bucketOpen);
+    }
+    public void closeBucket(){
+        bucket.setPosition(bucketClosed);
     }
 
-    //NEW
-    public void moveBucketOut(LinearOpMode opMode, double targetCt, double speed){
-        int posCurrent = (dcMotor7.getCurrentPosition());
-        while (!opMode.isStopRequested() && posCurrent < targetCt){
-            dcMotor7.setPower(speed);
-            posCurrent = (dcMotor7.getCurrentPosition());
-        }
-        dcMotor7.setPower(0);
+    public void deployPurpleArm(){
+        purpleArm.setPosition(purpleArmOut);
     }
-
-    public void moveBucketIn(LinearOpMode opMode, double targetCt, double speed){
-        int posCurrent = (dcMotor7.getCurrentPosition());
-        while (!opMode.isStopRequested() && posCurrent > targetCt){
-            dcMotor7.setPower(-speed);
-            posCurrent = (dcMotor7.getCurrentPosition());
-        }
-        dcMotor7.setPower(0);
+    public void reelInPurple(){
+        purpleArm.setPosition(purpleArmIn);
     }
 
     //PAST
