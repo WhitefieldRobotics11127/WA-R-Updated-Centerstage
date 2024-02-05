@@ -30,11 +30,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
 @Autonomous(name="Blue Parkinson's", group ="Blue", preselectTeleOp = "Centerstage_Rover")
-//@Disabled
+@Disabled
 public class BlueParkNDrop extends LinearOpMode {
 
     CenterstagePackBot robot = new CenterstagePackBot();
@@ -62,7 +63,7 @@ public class BlueParkNDrop extends LinearOpMode {
             telemetry.addData("Starting Method", "");
             telemetry.update();
 
-            autoClass.parkAndDrop("Blue");
+            //autoClass.parkAndDrop("Blue");
 
             while (!isStopRequested())
                 sleep(1);
