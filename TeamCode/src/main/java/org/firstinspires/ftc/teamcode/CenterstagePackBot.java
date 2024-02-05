@@ -61,32 +61,26 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class CenterstagePackBot {
 
-    public WebcamName webcamName = null;
-
     /* Public OpMode members. */
+    public WebcamName webcamName = null; //creates the webcam
     public DcMotor dcMotor1 = null;
     public DcMotor dcMotor2 = null;
     public DcMotor dcMotor3 = null;
     public DcMotor dcMotor4 = null; //four drive motors
-    //NEW
+
     public DcMotor dcMotor5 = null; //intake roller motor
     public DcMotor dcMotor6 = null; //slide/string movement
     public DcMotor dcMotor7 = null; // hang motor
-    //public DcMotor dcMotor8 = null; //bucket articulation 2
-
-    //PAST public DcMotor dcMotor5 = null; //slide articulation
-    //PAST public DcMotor dcMotor6 = null; //string movement
-    //PAST public DcMotor dcMotor7 = null; //grabber motor
 
     public VoltageSensor vs;
 
-    // public RevBlinkinLedDriver blinkin = null;
-
+    //Creates distance sensors
     public DistanceSensor frontDistSensor, leftDistSensor, rightDistSensor;
 
     //Not deleted to demonstrate how color sensors work
     //public NormalizedColorSensor colorSensor1;
 
+    //LED indicator lights for changing the direction of the robot
     public DigitalChannel led1R;
     public DigitalChannel led1G;
     public DigitalChannel led2R;
@@ -96,8 +90,10 @@ public class CenterstagePackBot {
     public DigitalChannel led4R;
     public DigitalChannel led4G;
 
-    public RevBlinkinLedDriver blinkinLedDriver;
+    //Creates the RGB light controller
+    public RevBlinkinLedDriver blinkinLedDriver = null;
 
+    //Creates the touch sensor
     public DigitalChannel touchSensor;
 
 //    public AnalogInput pot = null;
@@ -108,12 +104,9 @@ public class CenterstagePackBot {
 //not deleted to demonstrate CR Servos
 //    public CRServo intakeServoBR = null;
 
-    //NEW
     public Servo rotisserie = null;
     public Servo bucket = null;
     public Servo purpleArm = null;
-    //PAST public Servo leftClaw = null;
-    //PAST public Servo rightClaw = null;
     //public Servo launcher = null;
 
     public BNO055IMU imu;
@@ -128,7 +121,7 @@ public class CenterstagePackBot {
     public static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV) / (WHEEL_DIAMETER_INCHES * 3.1415);
     public static final double     COUNTS_PER_LIFT_INCH         = (537.7) / (1.75 * 3.1415);
 
-//NEW
+    //These need to be updated for the new servos (in a range of 0-1)
     public static final double rotisseriePlace = 0;
     public static final double rotisserieIn = 1;
     public static final double bucketOpen = 0;
@@ -137,22 +130,17 @@ public class CenterstagePackBot {
     public static final double purpleArmIn = 1;
 
 
-    //PAST
+    //From bot 2.0
     /*
     public static final double leftClawOpen = .15;
     public static final double leftClawClosed = .42;
     public static final double rightClawClosed = .35;
     public static final double rightClawOpen = 0.57;
-
      */
-
-
 
     /* Local OpMode members. */
     HardwareMap hwMap = null;
     private ElapsedTime period = new ElapsedTime();
-
-
 
     /* TODO: Make Constructor Params include the bot, opmode, and hwmap and remove such params from the methods
      "opmode" param may be able to be "this", idk abt hwmap, but i think it's in here somewhere
@@ -162,13 +150,16 @@ public class CenterstagePackBot {
     }
 
     /* Initialize standard Hardware interfaces */
+    //This is where we initialize all the public variables that define our hardware
     public void init(HardwareMap ahwMap) {
         // save reference to HW Map
         hwMap = ahwMap;
 
-
-        RevBlinkinLedDriver.BlinkinPattern pattern;
+        //Initializes the RGB light controller
+        RevBlinkinLedDriver.BlinkinPattern pattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_RAINBOW_PALETTE;
         blinkinLedDriver = hwMap.get(RevBlinkinLedDriver.class, "blinkin");
+
+        //Initializes the touch sensor
         touchSensor = hwMap.get(DigitalChannel.class, "touch_sensor");
         touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
@@ -177,26 +168,18 @@ public class CenterstagePackBot {
         dcMotor2 = hwMap.get(DcMotor.class, "motor_2");
         dcMotor3 = hwMap.get(DcMotor.class, "motor_3");
         dcMotor4 = hwMap.get(DcMotor.class, "motor_4");
-        //NEW
         dcMotor5 = hwMap.get(DcMotor.class, "motor_intake");
         dcMotor6 = hwMap.get(DcMotor.class, "motor_slide");
         dcMotor7 = hwMap.get(DcMotor.class, "motor_hang");
-        //dcMotor8 = hwMap.get(DcMotor.class, "motor_bucket_2");
-
-        //PAST dcMotor5 = hwMap.get(DcMotor.class, "motor_articulate");
-        //PAST dcMotor6 = hwMap.get(DcMotor.class, "motor_string");
-        //PAST dcMotor7 = hwMap.get(DcMotor.class, "motor_grabber");
 
         // This is what lets us be an omnidirectional bot, changed from previous years to allow us
         // to use vertical motors
+        //Also how to change the direction of motors if they're spinning the wrong way
 
         dcMotor1.setDirection(DcMotor.Direction.REVERSE);
         dcMotor6.setDirection(DcMotor.Direction.REVERSE);
-        //dcMotor2.setDirection(DcMotor.Direction.REVERSE);
-        //dcMotor3.setDirection(DcMotor.Direction.REVERSE);
-        //dcMotor4.setDirection(DcMotor.Direction.REVERSE);
 
-        // Set all motors to zero power
+        // Set all motors to zero power during initialization
         dcMotor1.setPower(0);
         dcMotor2.setPower(0);
         dcMotor3.setPower(0);
@@ -208,8 +191,8 @@ public class CenterstagePackBot {
 //        pot = hwMap.get(AnalogInput.class, "pot");
 
         //Set motors to run with/without encoders
-        //Motors 1, 2 are left-front, right-front
-        //Motor 3 is horizontal
+        //Motors 1, 2 are left-front, right-front (important for odometry)
+        //Motor 3 is horizontal (important for odometry)
 
         dcMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -218,8 +201,6 @@ public class CenterstagePackBot {
         dcMotor5.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcMotor6.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcMotor7.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        //NEW
-        //dcMotor8.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         dcMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         dcMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -228,22 +209,17 @@ public class CenterstagePackBot {
         dcMotor5.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         dcMotor6.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         dcMotor7.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //NEW
-        //dcMotor8.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Define and initialize installed servos.
-        //NEW
         rotisserie = hwMap.get(Servo.class, "rotisserie");
         bucket = hwMap.get(Servo.class, "bucket");
         purpleArm = hwMap.get(Servo.class, "purple_arm");
-
-        //PAST leftClaw = hwMap.get(Servo.class, "leftClaw");
-        //PAST rightClaw = hwMap.get(Servo.class, "rightClaw");
         //launcher = hwMap.get(Servo.class, "launcher");
 
-        // blinkin = hwMap.get(RevBlinkinLedDriver.class, "blinkin");
+        // How to initialize a color sensor
         //colorSensor1 = hwMap.get(NormalizedColorSensor.class, "colorSensor1");
 
+        //How to initialize and set up LED indicator lights
         /*
         led1R = hwMap.get(DigitalChannel.class, "l1r");
         led1G = hwMap.get(DigitalChannel.class, "l1g");
@@ -269,6 +245,8 @@ public class CenterstagePackBot {
 //        not deleted for demonstrative purposes
 //        intakeServoFL = hwMap.get(CRServo.class, "intakeServoFL");
 
+        //imu code for heading hold
+
         imu = hwMap.get(BNO055IMU.class, "imu");
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -283,6 +261,7 @@ public class CenterstagePackBot {
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); //may not need this
         gravity = imu.getGravity(); //may not need this
 
+        //Initializes the webcam
         webcamName = hwMap.get(WebcamName.class, "Webcam 1");
     }
 
@@ -290,6 +269,7 @@ public class CenterstagePackBot {
         return (val >= target - error && val < target + error);
     }
 
+    //Returns the distance away from something based on a certain distance sensor
     public double getDistance(String sensor) {
         switch (sensor) {
             case "Front":
@@ -309,32 +289,17 @@ public class CenterstagePackBot {
         return dcMotor7.getCurrentPosition();
     }
     */
-    //PAST public void openLeftClaw(){ leftClaw.setPosition(leftClawOpen);}
-    //PAST public void openRightClaw(){ rightClaw.setPosition(rightClawOpen); }
-    //PAST
-    /*
-    public void openClaw(LinearOpMode opMode){
-        leftClaw.setPosition(leftClawOpen);
-        opMode.sleep(300);
-        rightClaw.setPosition(rightClawOpen);
-    }
-    //PAST
-    /*
-    public void closeClaw(LinearOpMode opMode){
-        leftClaw.setPosition(leftClawClosed);
-        opMode.sleep(300);
-        rightClaw.setPosition(rightClawClosed);
-    }
 
-     */
-
+    //Sets the arm that holds the bucket to the placement position (out from the bot)
     public void rotisseriePlace(){
         rotisserie.setPosition(rotisseriePlace);
     }
+    //Sets the arm that holds the bucket to the return position (inside the bot) to pick up pixels
     public void rotisserieReturn(){
         rotisserie.setPosition(rotisserieIn);
     }
 
+    //Opens and closes the bucket that holds the pixels for scoring
     public void openBucket(){
         bucket.setPosition(bucketOpen);
     }
@@ -342,6 +307,7 @@ public class CenterstagePackBot {
         bucket.setPosition(bucketClosed);
     }
 
+    //Moves the arm that holds the purple pixel during autonomous out to place on the floor
     public void deployPurpleArm(){
         purpleArm.setPosition(purpleArmOut);
     }
@@ -349,27 +315,7 @@ public class CenterstagePackBot {
         purpleArm.setPosition(purpleArmIn);
     }
 
-    //PAST
-    /*
-    public void moveGrabberOut(LinearOpMode opMode, double targetCt, double speed){
-        int posCurrent = (dcMotor7.getCurrentPosition());
-        while (!opMode.isStopRequested() && posCurrent < targetCt){
-            dcMotor7.setPower(speed);
-            posCurrent = (dcMotor7.getCurrentPosition());
-        }
-        dcMotor7.setPower(0);
-    }
-
-    public void moveGrabberIn(LinearOpMode opMode, double targetCt, double speed){
-        int posCurrent = (dcMotor7.getCurrentPosition());
-        while (!opMode.isStopRequested() && posCurrent > targetCt){
-            dcMotor7.setPower(-speed);
-            posCurrent = (dcMotor7.getCurrentPosition());
-        }
-        dcMotor7.setPower(0);
-    }
-     */
-
+    //Method that moves the lift up a certain amount of encoder counts during autonomous
     public void moveLiftUp(LinearOpMode opMode, double targetCt, double speed) {
         int posCurrent = -(dcMotor6.getCurrentPosition());
         // Converts the vertical distance to diagonal distance using trig.
@@ -383,7 +329,7 @@ public class CenterstagePackBot {
         dcMotor6.setPower(0);
     }
 
-
+    //Method that moves the lift down a certain amount of encoder counts during autonomous
     public void moveLiftDown(LinearOpMode opMode, double targetCt, double speed) {
         int posCurrent = -(dcMotor6.getCurrentPosition());
         // Converts the vertical distance to diagonal distance using trig.
@@ -394,7 +340,8 @@ public class CenterstagePackBot {
         }
         dcMotor6.setPower(0);
     }
-    
+
+    //Drives to a certain distance in autonomous using input from the distance sensors
     public void driveToDist(LinearOpMode opMode, String sensor, double inchDist, double driveSpeed) {
         double targetHeading = getHeading();
         double correctionCoefficient = 0.06;
@@ -507,7 +454,7 @@ public class CenterstagePackBot {
         }
     }
 
-
+    //the drive method for autonomous
     /** A more advanced version of encoderDrive, with heading hold to stay straight when driving.
      * @param distance must be in inches
      * @param direction possible directions: "Forward", "Backward", "Left", "Right"
@@ -603,6 +550,7 @@ public class CenterstagePackBot {
         }
     }
 
+    //heading hold
     /** Helper method for `advancedEncoderDrive` */
     private void driveWithCorrection(String dir, double headingDelta, double correctionCoefficient, double driveSpeed) {
 

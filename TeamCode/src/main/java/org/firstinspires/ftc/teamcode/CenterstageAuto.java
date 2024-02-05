@@ -560,10 +560,10 @@ public class CenterstageAuto {
             myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
         }
 
-        myRobot.closeBucket(myOpMode);
+        //myRobot.closeBucket(myOpMode);
         myOpMode.sleep(sleepTime);
 
-        myRobot.moveEntireBucketIn(myOpMode, 100, liftSpeed);
+        //myRobot.moveEntireBucketIn(myOpMode, 100, liftSpeed);
         myOpMode.sleep(sleepTime);
 
         myRobot.moveLiftUp(myOpMode, 100, liftSpeed);
@@ -595,26 +595,26 @@ public class CenterstageAuto {
 
         myRobot.moveLiftDown(myOpMode, 100, liftSpeed);
         myOpMode.sleep(sleepTime);
-        myRobot.moveEntireBucketOut(myOpMode, 100, liftSpeed);
+        //myRobot.moveEntireBucketOut(myOpMode, 100, liftSpeed);
         myOpMode.sleep(sleepTime);
         if (markerPos.equals("Left")){
             while (myRobot.getHeading() < 58)
                 myRobot.rotateCW(rotateSpeed);
             myRobot.driveStop();
-            myRobot.openRightBucket(); //maybe move the bucket back up?
+           // myRobot.openRightBucket(); //maybe move the bucket back up?
             myOpMode.sleep(sleepTime);
             while (myRobot.getHeading() > 5)
                 myRobot.rotateCCW(rotateSpeed);
             myRobot.driveStop();
         }
         else if (markerPos.equals("Middle")) {
-            myRobot.openRightBucket();
+        //    myRobot.openRightBucket();
         }
         else { //when markerPos.equals("Right") or we can't/don't detect the prop
             while (myRobot.getHeading() > -49)
                 myRobot.rotateCCW(rotateSpeed);
             myRobot.driveStop();
-            myRobot.openRightBucket();
+        //    myRobot.openRightBucket();
             myOpMode.sleep(sleepTime);
             while (myRobot.getHeading() < -2)
                 myRobot.rotateCW(rotateSpeed);
@@ -622,7 +622,7 @@ public class CenterstageAuto {
             myOpMode.sleep(sleepTime);
         }
         myOpMode.sleep(sleepTime);
-        myRobot.closeBucket(myOpMode);
+       // myRobot.closeBucket(myOpMode);
         myOpMode.sleep(sleepTime);
         //myRobot.moveBucketIn(myOpMode, bucketDrop, liftSpeed);
         //myOpMode.sleep(sleepTime);
@@ -633,7 +633,7 @@ public class CenterstageAuto {
         myRobot.advancedEncoderDrive(myOpMode, 29, "Right", driveSpeed);
         myOpMode.sleep(sleepTime);
 
-        myRobot.openRightBucket();
+       // myRobot.openRightBucket();
         myOpMode.sleep(sleepTime);
 
         /*
@@ -698,7 +698,7 @@ public class CenterstageAuto {
             myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
         }
 
-        myRobot.closeBucket(myOpMode);
+        //myRobot.closeBucket(myOpMode);
         myOpMode.sleep(sleepTime);
     }
 
@@ -707,16 +707,16 @@ public class CenterstageAuto {
         int sleepTime = 400;
         double liftSpeed = 0.3;
 
-        myRobot.closeBucket(myOpMode);
+       // myRobot.closeBucket(myOpMode);
         myOpMode.sleep(sleepTime);
 
         myRobot.advancedEncoderDrive(myOpMode, 28, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
-        myRobot.openRightBucket();
+        //myRobot.openRightBucket();
         myOpMode.sleep(sleepTime);
 
-        myRobot.moveBucketOut(myOpMode, 10, liftSpeed);
+      //  myRobot.moveBucketOut(myOpMode, 10, liftSpeed);
         myOpMode.sleep(sleepTime);
     }
 
@@ -733,7 +733,7 @@ public class CenterstageAuto {
             myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
         }
 
-        myRobot.closeBucket(myOpMode);
+        //myRobot.closeBucket(myOpMode);
         myOpMode.sleep(sleepTime);
 
         if (color.equals("Red")) {
@@ -771,16 +771,15 @@ public class CenterstageAuto {
         //myRobot.moveBucketOut(myOpMode, , liftSpeed);
         //myOpMode.sleep(sleepTime);
 
-        myRobot.openBucket(myOpMode);
+        //myRobot.openBucket(myOpMode);
         myOpMode.sleep(sleepTime);
 
-        myRobot.moveBucketOut(myOpMode, 10, liftSpeed);
+        //myRobot.moveBucketOut(myOpMode, 10, liftSpeed);
         myOpMode.sleep(sleepTime);
 
         //myRobot.advancedEncoderDrive(myOpMode, 1, "Backward", driveSpeed);
         //myOpMode.sleep(sleepTime);
     }
-    */
 
     public void initCV(String color) {
         // Documentation omitted for brevity - please see ocvWebcamExample.java for documentation
