@@ -45,6 +45,11 @@ import java.util.concurrent.TimeUnit;
  Whitefield Robotics Centerstage TeleOp Code
  */
 
+/*This is the header for a typical opmode. The type is at the front, either @TeleOp or
+* @Autonomous. The name is what shows up during opmode selection on the driver hub, and the group
+* is the other opmodes it shows up next to during opmode selection on the driver hub. If
+* @Disabled is commented out, then the opmode will show up on the driver hub.
+*/
 @TeleOp(name="Centerstage_Rover", group="Packbot")
 //@Disabled
 public class CenterstageRover extends OpMode {
@@ -57,7 +62,7 @@ public class CenterstageRover extends OpMode {
 
     double forward, strafe, direction = 1; //direction: 1 is normal, -1 is reversed
     double rotate = 1;
-    double gear = .5;
+    double gear = .5; //speed
 
     double currStrafeCt, currStraightCt;
 
@@ -65,24 +70,13 @@ public class CenterstageRover extends OpMode {
 
     boolean sprinting = false;
 
-    //double leftClawPos = CenterstagePackBot.leftClawOpen;
-    //double rightClawPos = CenterstagePackBot.rightClawOpen;
-
-    double defLiftPwr = 0;
-    double liftHoldPower = .15;
     double lifty_speed = 1;
-    boolean isHolding = true;
-
-    boolean bucketClosed = true;
-    boolean bucketRetracted = true;
 
     RevBlinkinLedDriver.BlinkinPattern defPattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_RAINBOW_PALETTE;
 
     private final static int GAMEPAD_LOCKOUT = 300;
     Deadline gamepadRateLimit;
     private int currentLiftPos;
-
-    boolean leftClawClosed, rightClawClosed;
 
     //Code to run ONCE when the driver hits INIT
     @Override
@@ -110,10 +104,12 @@ public class CenterstageRover extends OpMode {
 
 
         /** GAMEPAD 1 */
+        //This code won't change much over the years
 
         telemetry.addData("Encoder value: ", robot.dcMotor5.getCurrentPosition());
         telemetry.update();
 
+        //Changes the speed of the robot
         if (gamepad1.a)
             gear = .75;
         if (gamepad1.b)
@@ -133,6 +129,7 @@ public class CenterstageRover extends OpMode {
             gamepadRateLimit.reset();
         }
 
+        //Drive code, doesn't need to be changed
         forward = gear * gamepad1.left_stick_y;
         strafe = gear * -gamepad1.left_stick_x;
         rotate = gear * gamepad1.right_stick_x;
@@ -191,15 +188,15 @@ public class CenterstageRover extends OpMode {
         //Left stick pushes the slide up/down
         robot.dcMotor6.setPower(-gamepad2.right_stick_y);
 
-        //Right trigger articulates the entire slide back/forth, was originally on right stick
+        //Right and left trigger power the intake (in and out)
         robot.dcMotor5.setPower(gamepad2.left_trigger);
         robot.dcMotor5.setPower(-gamepad2.right_trigger);
 
         //Right stick moves the hang slide up and down
-            robot.dcMotor7.setPower(-(gamepad2.left_stick_y));
-            //robot.dcMotor8.setPower(-(gamepad2.left_stick_y) * 0.3);
+        robot.dcMotor7.setPower(-(gamepad2.left_stick_y));
+        //robot.dcMotor8.setPower(-(gamepad2.left_stick_y) * 0.3);
 
-        //lb moves entire bucket out, rb opens bucket
+        //lb moves entire bucket in and out (toggle), rb opens and closes bucket (toggle)
         if (gamepad2.left_bumper){
             if (robot.rotisserie.getPosition() == CenterstagePackBot.rotisserieIn){
                 robot.rotisseriePlace();
@@ -218,53 +215,15 @@ public class CenterstageRover extends OpMode {
 
         // this is a devious comment
 
-        if (gamepad2.a){
-
-        }
+        //When driver 2 presses y, the bucket will go into the retracted position & the slide
+        //will move down based on the touch sensor (limit switch)
         if (gamepad2.y){
-            //add a line to put bucket flat first
+            robot.rotisserieReturn();
             while (!robot.touchSensor.getState()){
                 robot.dcMotor6.setPower(-0.5);
             }
-            if (robot.touchSensor.getState())
-                robot.dcMotor6.setPower(0);
+            robot.dcMotor6.setPower(0);
         }
-
-
-        /*
-        if (gamepad2.a){
-            robot.dcMotor7.setTargetPosition(-50);
-            robot.dcMotor7.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.dcMotor7.setPower(0.25);
-            while (robot.dcMotor7.isBusy())
-                telemetry.update();
-            robot.dcMotor7.setPower(0);
-
-            robot.dcMotor7.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            //robot.dcMotor8.setTargetPosition(0);
-        }
-
-        if (gamepad2.y){
-            robot.dcMotor7.setTargetPosition(655); //Bucket drop needs to go here
-            robot.dcMotor7.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.dcMotor7.setPower(0.25);
-            while (robot.dcMotor7.isBusy())
-                telemetry.update();
-            robot.dcMotor7.setPower(0);
-        }
-         */
-
-        //PAST
-        /*
-        if (gamepad2.dpad_left)
-            robot.leftClaw.setPosition(CenterstagePackBot.leftClawOpen);
-        if (gamepad2.dpad_right)
-            robot.leftClaw.setPosition(CenterstagePackBot.leftClawClosed);
-        if (gamepad2.x)
-            robot.rightClaw.setPosition(CenterstagePackBot.rightClawClosed);
-        if (gamepad2.b)
-            robot.rightClaw.setPosition(CenterstagePackBot.rightClawOpen);
-        */
 
         /*
         if (gamepad2.back){ //retract the odometer wheels
@@ -290,9 +249,13 @@ public class CenterstageRover extends OpMode {
         if (gamepad1.dpad_right)
             robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.FIRE_LARGE);
 
-        if (gamepad2.right_bumper)
+        if (gamepad2.dpad_up)
+            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_GRADIENT);
+        if (gamepad2.dpad_down)
+            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_BREATH_SLOW);
+        if (gamepad2.dpad_right)
             robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
-        if (gamepad2.left_bumper)
+        if (gamepad2.dpad_left)
             robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
 // This is my Comment :) //
 
