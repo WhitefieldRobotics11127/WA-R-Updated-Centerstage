@@ -107,6 +107,7 @@ public class CenterstagePackBot {
     public Servo rotisserie = null;
     public Servo bucket = null;
     public Servo purpleArm = null;
+    public Servo intakeServo = null;
     //public Servo launcher = null;
 
     public BNO055IMU imu;
@@ -128,6 +129,8 @@ public class CenterstagePackBot {
     public static final double bucketClosed = 1;
     public static final double purpleArmOut = 0;
     public static final double purpleArmIn = 1;
+    public static final double intakeDown = 0;
+    public static final double intakeUp = 1;
 
 
     //From bot 2.0
@@ -214,6 +217,7 @@ public class CenterstagePackBot {
         rotisserie = hwMap.get(Servo.class, "rotisserie");
         bucket = hwMap.get(Servo.class, "bucket");
         purpleArm = hwMap.get(Servo.class, "purple_arm");
+        intakeServo = hwMap.get(Servo.class, "intake_servo");
         //launcher = hwMap.get(Servo.class, "launcher");
 
         // How to initialize a color sensor
@@ -311,9 +315,12 @@ public class CenterstagePackBot {
     public void deployPurpleArm(){
         purpleArm.setPosition(purpleArmOut);
     }
-    public void reelInPurple(){
+    public void retractPurpleArm(){
         purpleArm.setPosition(purpleArmIn);
     }
+
+    public void intakeUp(){intakeServo.setPosition(intakeUp);}
+    public void intakeDown(){intakeServo.setPosition(intakeDown);}
 
     //Method that moves the lift up a certain amount of encoder counts during autonomous
     public void moveLiftUp(LinearOpMode opMode, double targetCt, double speed) {

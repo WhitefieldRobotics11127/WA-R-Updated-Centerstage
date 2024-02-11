@@ -143,78 +143,13 @@ public class CenterstageAuto {
         return myRobot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
 
-    //A method to place purple on the front side of the field and park in the triangular part
-    public void placePark(String color, String side){
-
-    }
-
     /*
     This method is the method that just places the purple pixel, should be the same for all 4 sides
     //TODO: put this in all other autonomous methods
+    */
     public void placePurplePixel(String color, String side){
-        double driveSpeed = 0.35;
-        double rotateSpeed = 0.2;
-        double liftSpeed = 0.3;
-        int sleepTime = 300;
-        String markerPos = "Left";
 
-        myRobot.closeClaw(myOpMode);
-        myOpMode.sleep(sleepTime);
-
-        //myRobot.launcher.setPosition(1);
-
-        if (color.equals("Red"))
-            markerPos = scanSavedRed();
-        else if (color.equals("Blue"))
-            markerPos = scanSavedBlue();
-        myOpMode.telemetry.addData("Marker Pos", markerPos);
-        myOpMode.telemetry.update();
-
-        myRobot.advancedEncoderDrive(myOpMode, 21.5, "Forward", driveSpeed);
-        myOpMode.sleep(sleepTime);
-
-        myRobot.moveGrabberOut(myOpMode, clawFlat, liftSpeed);
-        myOpMode.sleep(sleepTime);
-        if (markerPos.equals("Middle")) {
-            myRobot.advancedEncoderDrive(myOpMode, 4.5, side.equals("Right") ? "Right" : "Left", driveSpeed);
-            myOpMode.sleep(sleepTime);
-            myRobot.moveEntireLiftOut(myOpMode, floorHeight, liftSpeed);
-            myOpMode.sleep(sleepTime);
-            myRobot.advancedEncoderDrive(myOpMode, 4.5, side.equals("Right") ? "Left" : "Right", driveSpeed);
-        }
-        else
-            myRobot.moveEntireLiftOut(myOpMode, floorHeight, liftSpeed);
-        myOpMode.sleep(sleepTime);
-
-        if (markerPos.equals("Right")) {
-            while (myRobot.getHeading() > -49)
-                myRobot.rotateCCW(rotateSpeed);
-            myRobot.driveStop();
-            myRobot.openRightClaw();
-            myOpMode.sleep(sleepTime);
-            while (myRobot.getHeading() < -2)
-                myRobot.rotateCW(rotateSpeed);
-            myRobot.driveStop();
-            myOpMode.sleep(sleepTime);
-        } else if (markerPos.equals("Middle")) {
-            myRobot.openRightClaw();
-            myOpMode.sleep(sleepTime);
-            myRobot.advancedEncoderDrive(myOpMode, 12, side.equals("Right") ? "Right" : "Left", driveSpeed);
-            myOpMode.sleep(sleepTime);
-        } else { //when markerPos.equals("Left") or we can't/don't detect the prop
-            while (myRobot.getHeading() < 58)
-                myRobot.rotateCW(rotateSpeed);
-            myRobot.driveStop();
-            myOpMode.sleep(sleepTime);
-            myRobot.openRightClaw();
-            myOpMode.sleep(sleepTime);
-            while (myRobot.getHeading() > 5)
-                myRobot.rotateCCW(rotateSpeed);
-            myRobot.driveStop();
-        }
-        myOpMode.sleep(sleepTime);
     }
-     */
 
     /*
     PSEUDOCODE FOR BOT 3.0
@@ -235,15 +170,235 @@ public class CenterstageAuto {
         - Place on board
         - Park in the corner
     */
-    
+
     //This places the purple pixel on the front side and parks in the triangle while dropping the yellow
-    public void frontStagePurplePark(String color, String side){ }
+    public void frontStagePurplePark(String color, String side){
+        double driveSpeed = 0.35;
+        double rotateSpeed = 0.3;
+        double liftSpeed = 0.3;
+        int sleepTime = 300;
+        String markerPos = "Left";
+
+        if (color.equals("Red")){
+            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
+        }
+        if (color.equals("Blue")){
+            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
+        }
+
+        placePurplePixel(color, side);
+
+        myRobot.advancedEncoderDrive(myOpMode, 15, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        if (color.equals("Red")){
+            while (myRobot.getHeading() > 90)
+                myRobot.rotateCCW(rotateSpeed);
+        }
+        if (color.equals("Blue")){
+            while (myRobot.getHeading() < 90)
+                myRobot.rotateCW(rotateSpeed);
+        }
+        myRobot.driveStop();
+
+        myRobot.advancedEncoderDrive(myOpMode, 72, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.rotisseriePlace();
+        myOpMode.sleep(sleepTime);
+
+        myRobot.openBucket();
+        myOpMode.sleep(sleepTime);
+    }
 
     //This places the purple pixel on the front side, places the yellow pixel, and parks in the triangle
-    public void frontStagePurpleYellow(String color, String side){ }
+    public void frontStagePurpleYellow(String color, String side){
+        double driveSpeed = 0.35;
+        double rotateSpeed = 0.3;
+        double liftSpeed = 0.3;
+        int sleepTime = 300;
+        String markerPos = "Left";
+
+        if (color.equals("Red")){
+            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
+        }
+        if (color.equals("Blue")){
+            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
+        }
+
+        //TSE detection might need to change
+        if (color.equals("Red")) {
+            myOpMode.telemetry.addData("Realtime analysis", scanPropCV("Red"));
+            myOpMode.telemetry.update();
+            markerPos = scanSavedRed();
+        }
+        else if (color.equals("Blue")) {
+            myOpMode.telemetry.addData("Realtime analysis", scanPropCV("Blue"));
+            myOpMode.telemetry.update();
+            markerPos = scanSavedBlue();
+        }
+        myOpMode.telemetry.addData("Marker Pos", markerPos);
+        myOpMode.telemetry.update();
+
+        placePurplePixel(color, side);
+
+        myRobot.advancedEncoderDrive(myOpMode, 15, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        if (color.equals("Red")){
+            while (myRobot.getHeading() > 90)
+                myRobot.rotateCCW(rotateSpeed);
+        }
+        if (color.equals("Blue")){
+            while (myRobot.getHeading() < 90)
+                myRobot.rotateCW(rotateSpeed);
+        }
+        myRobot.driveStop();
+
+        myRobot.advancedEncoderDrive(myOpMode, 72, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        if (markerPos.equals("Left"))
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 10 : 40, color.equals("Red") ? "Right" : "Left", driveSpeed);
+        if (markerPos.equals("Middle"))
+            myRobot.advancedEncoderDrive(myOpMode, 21.5, color.equals("Red") ? "Right" : "Left", driveSpeed);
+        if (markerPos.equals("Right"))
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 28.5 : 10, color.equals("Red") ? "Right" : "Left", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.rotisseriePlace();
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 2, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.openBucket();
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 2, "Backward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        if (markerPos.equals("Left"))
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 10 : 40, color.equals("Red") ? "Left" : "Right", driveSpeed);
+        else if (markerPos.equals("Middle"))
+            myRobot.advancedEncoderDrive(myOpMode, 21.5, color.equals("Red") ? "Left" : "Right", driveSpeed);
+        else if (markerPos.equals("Right"))
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 28.5 : 10, color.equals("Red") ? "Left" : "Right", driveSpeed);
+        myOpMode.sleep(sleepTime);
+    }
 
     //This places the purple pixel on the back side, places the yellow pixel, and parks in the triangle
-    public void backStagePurpleYellow(String color, String side){ }
+    public void backStagePurpleYellow(String color, String side){
+        double driveSpeed = 0.35;
+        double rotateSpeed = 0.3;
+        double liftSpeed = 0.3;
+        int sleepTime = 300;
+        String markerPos = "Left";
+
+        if (color.equals("Red")){
+            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
+        }
+        if (color.equals("Blue")){
+            myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
+        }
+
+        myRobot.closeBucket();
+        myOpMode.sleep(sleepTime);
+
+        //TSE detection might need to change
+        if (color.equals("Red")) {
+            myOpMode.telemetry.addData("Realtime analysis", scanPropCV("Red"));
+            myOpMode.telemetry.update();
+            markerPos = scanSavedRed();
+        }
+        else if (color.equals("Blue")) {
+            myOpMode.telemetry.addData("Realtime analysis", scanPropCV("Blue"));
+            myOpMode.telemetry.update();
+            markerPos = scanSavedBlue();
+        }
+        myOpMode.telemetry.addData("Marker Pos", markerPos);
+        myOpMode.telemetry.update();
+
+        myRobot.advancedEncoderDrive(myOpMode, 21.4, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        if (markerPos.equals("Left")){
+            while (myRobot.getHeading() < 58)
+                myRobot.rotateCW(rotateSpeed);
+            myRobot.driveStop();
+            myOpMode.sleep(sleepTime);
+            myRobot.deployPurpleArm();
+            myOpMode.sleep(sleepTime);
+            myRobot.retractPurpleArm();
+            myOpMode.sleep(sleepTime);
+            while (myRobot.getHeading() > 5)
+                myRobot.rotateCCW(rotateSpeed);
+            myRobot.driveStop();
+        }
+        else if (markerPos.equals("Middle")){
+            myRobot.deployPurpleArm();
+            myOpMode.sleep(sleepTime);
+            myRobot.retractPurpleArm();
+        }
+        else {
+            while (myRobot.getHeading() > -49)
+                myRobot.rotateCCW(rotateSpeed);
+            myRobot.driveStop();
+            myOpMode.sleep(sleepTime);
+            myRobot.deployPurpleArm();
+            myOpMode.sleep(sleepTime);
+            myRobot.retractPurpleArm();
+            myOpMode.sleep(sleepTime);
+            while (myRobot.getHeading() < -2)
+                myRobot.rotateCW(rotateSpeed);
+            myRobot.driveStop();
+        }
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 15, "Backward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        if (color.equals("Red")){
+            while (myRobot.getHeading() > 90)
+                myRobot.rotateCCW(rotateSpeed);
+        }
+        if (color.equals("Blue")){
+            while (myRobot.getHeading() < 90)
+                myRobot.rotateCW(rotateSpeed);
+        }
+        myRobot.driveStop();
+
+        myRobot.advancedEncoderDrive(myOpMode, 29, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        if (markerPos.equals("Left"))
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 40 : 10, color.equals("Red") ? "Left" : "Right", driveSpeed);
+        if (markerPos.equals("Middle"))
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 31 : 21.5, color.equals("Red") ? "Left" : "Right", driveSpeed);
+        if (markerPos.equals("Right"))
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 22 : 28.5, color.equals("Red") ? "Left" : "Right", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.rotisseriePlace();
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 2, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.openBucket();
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 2, "Backward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        if (markerPos.equals("Left"))
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 30 : 27, color.equals("Red") ? "Right" : "Left", driveSpeed);
+        else if (markerPos.equals("Middle"))
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 22 : 30, color.equals("Red") ? "Right" : "Left", driveSpeed);
+        else if (markerPos.equals("Right"))
+            myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 12 : 39, color.equals("Red") ? "Right" : "Left", driveSpeed);
+        myOpMode.sleep(sleepTime);
+    }
 
     //auto from bot 2.0
     public void placePurpleYellow(String color, String side) {
