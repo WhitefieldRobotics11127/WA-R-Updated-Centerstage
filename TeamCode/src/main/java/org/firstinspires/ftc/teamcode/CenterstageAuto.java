@@ -188,7 +188,16 @@ public class CenterstageAuto {
 
         placePurplePixel(color, side);
 
-        myRobot.advancedEncoderDrive(myOpMode, 15, "Forward", driveSpeed);
+        myRobot.advancedEncoderDrive(myOpMode, 15, "Backward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 24, "Left", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 48, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 24, "Right", driveSpeed);
         myOpMode.sleep(sleepTime);
 
         if (color.equals("Red")){
@@ -242,7 +251,16 @@ public class CenterstageAuto {
 
         placePurplePixel(color, side);
 
-        myRobot.advancedEncoderDrive(myOpMode, 15, "Forward", driveSpeed);
+        myRobot.advancedEncoderDrive(myOpMode, 15, "Backward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 24, "Left", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 48, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 24, "Right", driveSpeed);
         myOpMode.sleep(sleepTime);
 
         if (color.equals("Red")){
@@ -287,7 +305,7 @@ public class CenterstageAuto {
         myOpMode.sleep(sleepTime);
     }
 
-    //This places the purple pixel on the back side, places the yellow pixel, and parks in the triangle
+    //This places the purple pixel on the back side, places the yellow pixel, and parks in the corner
     public void backStagePurpleYellow(String color, String side){
         double driveSpeed = 0.35;
         double rotateSpeed = 0.3;
@@ -324,37 +342,40 @@ public class CenterstageAuto {
         myRobot.closeBucket();
         myOpMode.sleep(sleepTime);
 
-        myRobot.advancedEncoderDrive(myOpMode, 21.4, "Forward", driveSpeed);
+        myRobot.advancedEncoderDrive(myOpMode, 21.4, "Forward", driveSpeed); //drives to middle tape
         myOpMode.sleep(sleepTime);
 
         if (markerPos.equals("Left")){
-            while (myRobot.getHeading() < 58)
+            while (myRobot.getHeading() < 90)
                 myRobot.rotateCW(rotateSpeed);
             myRobot.driveStop();
             myOpMode.sleep(sleepTime);
+            myRobot.advancedEncoderDrive(myOpMode, 2, "Forward", driveSpeed);
+            myOpMode.sleep(sleepTime);
             myRobot.deployPurpleArm();
             myOpMode.sleep(sleepTime);
-            myRobot.retractPurpleArm();
+            myRobot.advancedEncoderDrive(myOpMode, 2, "Backward", driveSpeed);
             myOpMode.sleep(sleepTime);
-            while (myRobot.getHeading() > 5)
+            while (myRobot.getHeading() > 0)
                 myRobot.rotateCCW(rotateSpeed);
             myRobot.driveStop();
         }
         else if (markerPos.equals("Middle")){
             myRobot.deployPurpleArm();
             myOpMode.sleep(sleepTime);
-            myRobot.retractPurpleArm();
         }
         else {
-            while (myRobot.getHeading() > -49)
+            while (myRobot.getHeading() > -90)
                 myRobot.rotateCCW(rotateSpeed);
             myRobot.driveStop();
             myOpMode.sleep(sleepTime);
+            myRobot.advancedEncoderDrive(myOpMode, 2, "Forward", driveSpeed);
+            myOpMode.sleep(sleepTime);
             myRobot.deployPurpleArm();
             myOpMode.sleep(sleepTime);
-            myRobot.retractPurpleArm();
+            myRobot.advancedEncoderDrive(myOpMode, 2, "Backward", driveSpeed);
             myOpMode.sleep(sleepTime);
-            while (myRobot.getHeading() < -2)
+            while (myRobot.getHeading() < 0)
                 myRobot.rotateCW(rotateSpeed);
             myRobot.driveStop();
         }
