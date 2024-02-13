@@ -302,9 +302,6 @@ public class CenterstageAuto {
             myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
         }
 
-        myRobot.closeBucket();
-        myOpMode.sleep(sleepTime);
-
         //TSE detection might need to change
         if (color.equals("Red")) {
             myOpMode.telemetry.addData("Realtime analysis", scanPropCV("Red"));
@@ -318,6 +315,14 @@ public class CenterstageAuto {
         }
         myOpMode.telemetry.addData("Marker Pos", markerPos);
         myOpMode.telemetry.update();
+
+        //Place purple pixel method starts here
+
+        myRobot.intakeUp();
+        myOpMode.sleep(sleepTime);
+
+        myRobot.closeBucket();
+        myOpMode.sleep(sleepTime);
 
         myRobot.advancedEncoderDrive(myOpMode, 21.4, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);

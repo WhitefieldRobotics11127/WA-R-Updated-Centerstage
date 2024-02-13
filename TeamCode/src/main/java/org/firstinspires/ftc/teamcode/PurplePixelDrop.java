@@ -62,7 +62,7 @@ public class PurplePixelDrop extends LinearOpMode {
             telemetry.addData("Starting Method", "");
             telemetry.update();
 
-            autoClass.purpleDrop();
+            //autoClass.purpleDrop();
 
             while (!isStopRequested())
                 sleep(1);

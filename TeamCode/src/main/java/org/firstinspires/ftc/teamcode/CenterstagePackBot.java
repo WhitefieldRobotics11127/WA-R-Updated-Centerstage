@@ -108,7 +108,7 @@ public class CenterstagePackBot {
     public Servo bucket = null;
     public Servo purpleArm = null;
     public Servo intakeServo = null;
-    //public Servo launcher = null;
+    public Servo launcher = null;
 
     public BNO055IMU imu;
     Orientation angles; //not sure if we need this
@@ -118,7 +118,8 @@ public class CenterstagePackBot {
     //We should be able to just change the wheel diameter to switch out physical wheels
     //Odometry things
     public static final double     COUNTS_PER_MOTOR_REV    = 8192 ;
-    public static final double     WHEEL_DIAMETER_INCHES   = 2.75 ;     // For figuring circumference
+    public static final double     WHEEL_DIAMETER_INCHES   = 1.69 ;     // For figuring circumference
+                                                                        //The diameter of the old wheels was 2.75 in
     public static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV) / (WHEEL_DIAMETER_INCHES * 3.1415);
     public static final double     COUNTS_PER_LIFT_INCH         = (537.7) / (1.75 * 3.1415);
 
@@ -218,7 +219,7 @@ public class CenterstagePackBot {
         bucket = hwMap.get(Servo.class, "bucket");
         purpleArm = hwMap.get(Servo.class, "purple_arm");
         intakeServo = hwMap.get(Servo.class, "intake_servo");
-        //launcher = hwMap.get(Servo.class, "launcher");
+        launcher = hwMap.get(Servo.class, "launcher");
 
         // How to initialize a color sensor
         //colorSensor1 = hwMap.get(NormalizedColorSensor.class, "colorSensor1");
