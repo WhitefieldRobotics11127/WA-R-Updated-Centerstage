@@ -148,7 +148,54 @@ public class CenterstageAuto {
     //TODO: put this in all other autonomous methods
     */
     public void placePurplePixel(String color, String side){
+        double driveSpeed = 0.35;
+        double rotateSpeed = 0.3;
+        double liftSpeed = 0.3;
+        int sleepTime = 300;
+        String markerPos = "Left";
 
+        myRobot.retractPurpleArm();
+        myOpMode.sleep(sleepTime);
+
+        myRobot.closeBucket();
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 21.4, "Forward", driveSpeed); //drives to middle tape
+        myOpMode.sleep(sleepTime);
+
+        if (markerPos.equals("Left")){
+            while (myRobot.getHeading() < 90)
+                myRobot.rotateCW(rotateSpeed);
+            myRobot.driveStop();
+            myOpMode.sleep(sleepTime);
+            myRobot.advancedEncoderDrive(myOpMode, 2, "Forward", driveSpeed);
+            myOpMode.sleep(sleepTime);
+            myRobot.advancedEncoderDrive(myOpMode, 2, "Backward", driveSpeed);
+            myOpMode.sleep(sleepTime);
+            while (myRobot.getHeading() > 0)
+                myRobot.rotateCCW(rotateSpeed);
+            myRobot.driveStop();
+        }
+        else if (markerPos.equals("Middle")){
+            myOpMode.sleep(sleepTime);
+        }
+        else {
+            while (myRobot.getHeading() > -90)
+                myRobot.rotateCCW(rotateSpeed);
+            myRobot.driveStop();
+            myOpMode.sleep(sleepTime);
+            myRobot.advancedEncoderDrive(myOpMode, 2, "Forward", driveSpeed);
+            myOpMode.sleep(sleepTime);
+            myRobot.advancedEncoderDrive(myOpMode, 2, "Backward", driveSpeed);
+            myOpMode.sleep(sleepTime);
+            while (myRobot.getHeading() < 0)
+                myRobot.rotateCW(rotateSpeed);
+            myRobot.driveStop();
+        }
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 15, "Backward", driveSpeed);
+        myOpMode.sleep(sleepTime);
     }
 
     /*
@@ -336,53 +383,7 @@ public class CenterstageAuto {
 
         //Place purple pixel method starts here
 
-        myRobot.intakeUp();
-        myOpMode.sleep(sleepTime);
-
-        myRobot.closeBucket();
-        myOpMode.sleep(sleepTime);
-
-        myRobot.advancedEncoderDrive(myOpMode, 21.4, "Forward", driveSpeed); //drives to middle tape
-        myOpMode.sleep(sleepTime);
-
-        if (markerPos.equals("Left")){
-            while (myRobot.getHeading() < 90)
-                myRobot.rotateCW(rotateSpeed);
-            myRobot.driveStop();
-            myOpMode.sleep(sleepTime);
-            myRobot.advancedEncoderDrive(myOpMode, 2, "Forward", driveSpeed);
-            myOpMode.sleep(sleepTime);
-            myRobot.deployPurpleArm();
-            myOpMode.sleep(sleepTime);
-            myRobot.advancedEncoderDrive(myOpMode, 2, "Backward", driveSpeed);
-            myOpMode.sleep(sleepTime);
-            while (myRobot.getHeading() > 0)
-                myRobot.rotateCCW(rotateSpeed);
-            myRobot.driveStop();
-        }
-        else if (markerPos.equals("Middle")){
-            myRobot.deployPurpleArm();
-            myOpMode.sleep(sleepTime);
-        }
-        else {
-            while (myRobot.getHeading() > -90)
-                myRobot.rotateCCW(rotateSpeed);
-            myRobot.driveStop();
-            myOpMode.sleep(sleepTime);
-            myRobot.advancedEncoderDrive(myOpMode, 2, "Forward", driveSpeed);
-            myOpMode.sleep(sleepTime);
-            myRobot.deployPurpleArm();
-            myOpMode.sleep(sleepTime);
-            myRobot.advancedEncoderDrive(myOpMode, 2, "Backward", driveSpeed);
-            myOpMode.sleep(sleepTime);
-            while (myRobot.getHeading() < 0)
-                myRobot.rotateCW(rotateSpeed);
-            myRobot.driveStop();
-        }
-        myOpMode.sleep(sleepTime);
-
-        myRobot.advancedEncoderDrive(myOpMode, 15, "Backward", driveSpeed);
-        myOpMode.sleep(sleepTime);
+        placePurplePixel(color, side);
 
         if (color.equals("Red")){
             while (myRobot.getHeading() > 90)

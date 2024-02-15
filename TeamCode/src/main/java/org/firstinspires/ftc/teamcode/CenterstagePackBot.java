@@ -71,6 +71,7 @@ public class CenterstagePackBot {
     public DcMotor dcMotor5 = null; //intake roller motor
     public DcMotor dcMotor6 = null; //slide/string movement
     public DcMotor dcMotor7 = null; // hang motor
+    public DcMotor dcMotor8 = null; //moves entire intake for sizing purposes
 
     public VoltageSensor vs;
 
@@ -94,7 +95,8 @@ public class CenterstagePackBot {
     public RevBlinkinLedDriver blinkinLedDriver = null;
 
     //Creates the touch sensor
-    public DigitalChannel touchSensor;
+    public TouchSensor touchSensor;
+
 
 //    public AnalogInput pot = null;
 //    public double potLowerVoltage = 0.607, potUpperVoltage = 1.575;
@@ -107,7 +109,6 @@ public class CenterstagePackBot {
     public Servo rotisserie = null;
     public Servo bucket = null;
     public Servo purpleArm = null;
-    public Servo intakeServo = null;
     public Servo launcher = null;
 
     public BNO055IMU imu;
@@ -124,14 +125,12 @@ public class CenterstagePackBot {
     public static final double     COUNTS_PER_LIFT_INCH         = (537.7) / (1.75 * 3.1415);
 
     //These need to be updated for the new servos (in a range of 0-1)
-    public static final double rotisseriePlace = 0;
-    public static final double rotisserieIn = 1;
+    public static final double rotisseriePlace = 0.04; //(rotisserie in, actually)
+    public static final double rotisserieIn = 0.98; //rotisserie out, actually
     public static final double bucketOpen = 0;
     public static final double bucketClosed = 1;
-    public static final double purpleArmOut = 0;
+    public static final double purpleArmOut = 0.5;
     public static final double purpleArmIn = 1;
-    public static final double intakeDown = 0;
-    public static final double intakeUp = 1;
 
 
     //From bot 2.0
@@ -164,8 +163,7 @@ public class CenterstagePackBot {
         blinkinLedDriver = hwMap.get(RevBlinkinLedDriver.class, "blinkin");
 
         //Initializes the touch sensor
-        touchSensor = hwMap.get(DigitalChannel.class, "touch_sensor");
-        touchSensor.setMode(DigitalChannel.Mode.INPUT);
+        touchSensor = hwMap.get(TouchSensor.class, "touch_sensor");
 
         // Define and Initialize Motors
         dcMotor1 = hwMap.get(DcMotor.class, "motor_1");
@@ -175,12 +173,15 @@ public class CenterstagePackBot {
         dcMotor5 = hwMap.get(DcMotor.class, "motor_intake");
         dcMotor6 = hwMap.get(DcMotor.class, "motor_slide");
         dcMotor7 = hwMap.get(DcMotor.class, "motor_hang");
+        dcMotor8 = hwMap.get(DcMotor.class, "motor_articulate");
 
         // This is what lets us be an omnidirectional bot, changed from previous years to allow us
         // to use vertical motors
         //Also how to change the direction of motors if they're spinning the wrong way
 
-        dcMotor1.setDirection(DcMotor.Direction.REVERSE);
+        //dcMotor1.setDirection(DcMotor.Direction.REVERSE);
+        dcMotor2.setDirection(DcMotor.Direction.REVERSE);
+        dcMotor4.setDirection(DcMotor.Direction.REVERSE);
         dcMotor6.setDirection(DcMotor.Direction.REVERSE);
 
         // Set all motors to zero power during initialization
@@ -191,6 +192,7 @@ public class CenterstagePackBot {
         dcMotor5.setPower(0);
         dcMotor6.setPower(0);
         dcMotor7.setPower(0);
+        dcMotor8.setPower(0);
 
 //        pot = hwMap.get(AnalogInput.class, "pot");
 
@@ -205,6 +207,7 @@ public class CenterstagePackBot {
         dcMotor5.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcMotor6.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcMotor7.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dcMotor8.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         dcMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         dcMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -213,12 +216,12 @@ public class CenterstagePackBot {
         dcMotor5.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         dcMotor6.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         dcMotor7.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        dcMotor8.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Define and initialize installed servos.
         rotisserie = hwMap.get(Servo.class, "rotisserie");
         bucket = hwMap.get(Servo.class, "bucket");
         purpleArm = hwMap.get(Servo.class, "purple_arm");
-        intakeServo = hwMap.get(Servo.class, "intake_servo");
         launcher = hwMap.get(Servo.class, "launcher");
 
         // How to initialize a color sensor
@@ -319,9 +322,6 @@ public class CenterstagePackBot {
     public void retractPurpleArm(){
         purpleArm.setPosition(purpleArmIn);
     }
-
-    public void intakeUp(){intakeServo.setPosition(intakeUp);}
-    public void intakeDown(){intakeServo.setPosition(intakeDown);}
 
     //Method that moves the lift up a certain amount of encoder counts during autonomous
     public void moveLiftUp(LinearOpMode opMode, double targetCt, double speed) {

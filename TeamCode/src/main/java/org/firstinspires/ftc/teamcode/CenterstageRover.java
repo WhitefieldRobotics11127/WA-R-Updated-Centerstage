@@ -141,10 +141,13 @@ public class CenterstageRover extends OpMode {
         rear_right = direction * forward - rotate + (direction * strafe);
 
 
-        if (gamepad1.back)
+        if (gamepad1.back) //reset & hold
             robot.launcher.setPosition(0);
-        if (gamepad1.start)
+        if (gamepad1.start) //release
             robot.launcher.setPosition(1);
+
+        robot.dcMotor7.setPower(gamepad1.right_trigger);
+        robot.dcMotor7.setPower(-gamepad1.left_trigger);
 
         //thunder = struck;
 
@@ -183,32 +186,31 @@ public class CenterstageRover extends OpMode {
         telemetry.addData("Slide encoder value: ", robot.dcMotor6.getCurrentPosition());
         telemetry.update();
 
-        //Left stick pushes the slide up/down
-        robot.dcMotor6.setPower(-gamepad2.right_stick_y);
+        //Right stick pushes the slide up/down
+        robot.dcMotor6.setPower(gamepad2.right_stick_y);
 
-        //Right and left trigger power the intake (in and out)
-        robot.dcMotor5.setPower(gamepad2.left_trigger);
-        robot.dcMotor5.setPower(-gamepad2.right_trigger);
+        //Left stick powers the intake (in and out)
+        robot.dcMotor5.setPower(gamepad2.left_stick_y * 0.5);
 
-        //Right stick moves the hang slide up and down
-        robot.dcMotor7.setPower(-(gamepad2.left_stick_y));
+        robot.dcMotor8.setPower(gamepad2.right_trigger * 0.1);
+
+        //Left stick moves the hang slide up and down
+        //robot.dcMotor7.setPower(-(gamepad2.left_stick_y));
         //robot.dcMotor8.setPower(-(gamepad2.left_stick_y) * 0.3);
 
         //lb moves entire bucket in and out (toggle), rb opens and closes bucket (toggle)
         if (gamepad2.left_bumper){
-            if (robot.rotisserie.getPosition() == CenterstagePackBot.rotisserieIn){
-                robot.rotisseriePlace();
-            }
-            else if (robot.rotisserie.getPosition() == CenterstagePackBot.rotisseriePlace){
-                robot.rotisserieReturn();
-            }
+            robot.rotisseriePlace();
         }
 
         if (gamepad2.right_bumper){
-            if (robot.bucket.getPosition() == CenterstagePackBot.bucketClosed)
-                robot.openBucket();
-            if (robot.bucket.getPosition() == CenterstagePackBot.bucketOpen)
-                robot.closeBucket();
+            robot.rotisserieReturn();
+        }
+
+        if (gamepad2.b)
+            robot.openBucket();
+        if (gamepad2.x){
+            robot.closeBucket();
         }
 
         // this is a devious comment
@@ -217,14 +219,17 @@ public class CenterstageRover extends OpMode {
         //will move down based on the touch sensor (limit switch)
         if (gamepad2.y){
             robot.rotisserieReturn();
-            while (!robot.touchSensor.getState()){
+            while (!(robot.touchSensor.isPressed())){
                 robot.dcMotor6.setPower(-0.5);
             }
             robot.dcMotor6.setPower(0);
         }
 
-        if (gamepad2.a){
-            robot.intakeDown();
+        if (gamepad2.back){
+            robot.retractPurpleArm(); //sets it up to hold the pixel
+        }
+        if (gamepad2.start){
+            robot.deployPurpleArm();
         }
 
         /*
@@ -250,13 +255,6 @@ public class CenterstageRover extends OpMode {
             robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_LAVA_PALETTE);
         if (gamepad1.dpad_right)
             robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.FIRE_LARGE);
-
-        if (gamepad2.dpad_up)
-            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_GRADIENT);
-        if (gamepad2.dpad_down)
-            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_BREATH_SLOW);
-        if (gamepad2.dpad_right)
-            robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CONFETTI);
         if (gamepad2.dpad_left)
             robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
 // This is my Comment :) //
