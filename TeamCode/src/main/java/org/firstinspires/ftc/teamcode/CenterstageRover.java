@@ -141,9 +141,9 @@ public class CenterstageRover extends OpMode {
         rear_right = direction * forward - rotate + (direction * strafe);
 
 
-        if (gamepad1.back) //reset & hold
+        if (gamepad1.start) //reset & hold
             robot.launcher.setPosition(0);
-        if (gamepad1.start) //release
+        if (gamepad1.back) //release
             robot.launcher.setPosition(1);
 
         robot.dcMotor7.setPower(gamepad1.right_trigger);
@@ -193,6 +193,7 @@ public class CenterstageRover extends OpMode {
         robot.dcMotor5.setPower(gamepad2.left_stick_y * 0.5);
 
         robot.dcMotor8.setPower(gamepad2.right_trigger * 0.1);
+        robot.dcMotor8.setPower(gamepad2.left_trigger * -0.7);
 
         //Left stick moves the hang slide up and down
         //robot.dcMotor7.setPower(-(gamepad2.left_stick_y));
@@ -217,18 +218,21 @@ public class CenterstageRover extends OpMode {
 
         //When driver 2 presses y, the bucket will go into the retracted position & the slide
         //will move down based on the touch sensor (limit switch)
+        /*
         if (gamepad2.y){
-            robot.rotisserieReturn();
+            robot.rotisseriePlace(); //rotisserie directions are backwards rn but I don't feel like fixing them
             while (!(robot.touchSensor.isPressed())){
                 robot.dcMotor6.setPower(-0.5);
             }
             robot.dcMotor6.setPower(0);
         }
 
-        if (gamepad2.back){
+         */
+
+        if (gamepad2.start){
             robot.retractPurpleArm(); //sets it up to hold the pixel
         }
-        if (gamepad2.start){
+        if (gamepad2.back){
             robot.deployPurpleArm();
         }
 

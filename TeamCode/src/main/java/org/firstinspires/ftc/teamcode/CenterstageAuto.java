@@ -147,7 +147,7 @@ public class CenterstageAuto {
     This method is the method that just places the purple pixel, should be the same for all 4 sides
     //TODO: put this in all other autonomous methods
     */
-    public void placePurplePixel(String color, String side){
+    public void placePurplePixel(){
         double driveSpeed = 0.35;
         double rotateSpeed = 0.3;
         double liftSpeed = 0.3;
@@ -233,7 +233,7 @@ public class CenterstageAuto {
             myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
         }
 
-        placePurplePixel(color, side);
+        placePurplePixel();
 
         myRobot.advancedEncoderDrive(myOpMode, 15, "Backward", driveSpeed);
         myOpMode.sleep(sleepTime);
@@ -296,7 +296,7 @@ public class CenterstageAuto {
         myOpMode.telemetry.addData("Marker Pos", markerPos);
         myOpMode.telemetry.update();
 
-        placePurplePixel(color, side);
+        placePurplePixel();
 
         myRobot.advancedEncoderDrive(myOpMode, 15, "Backward", driveSpeed);
         myOpMode.sleep(sleepTime);
@@ -383,7 +383,7 @@ public class CenterstageAuto {
 
         //Place purple pixel method starts here
 
-        placePurplePixel(color, side);
+        placePurplePixel();
 
         if (color.equals("Red")){
             while (myRobot.getHeading() > 90)
@@ -424,6 +424,62 @@ public class CenterstageAuto {
             myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 22 : 30, color.equals("Red") ? "Right" : "Left", driveSpeed);
         else if (markerPos.equals("Right"))
             myRobot.advancedEncoderDrive(myOpMode, color.equals("Red") ? 12 : 39, color.equals("Red") ? "Right" : "Left", driveSpeed);
+        myOpMode.sleep(sleepTime);
+    }
+
+    public void stateFrontStage(String color){
+        double driveSpeed = 0.35;
+        double rotateSpeed = 0.3;
+        double liftSpeed = 0.3;
+        int sleepTime = 300;
+        String markerPos = "Left";
+
+        myRobot.retractPurpleArm();
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 48, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 2, "Backward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+    }
+
+    public void stateBackStage(String color){
+        double driveSpeed = 0.35;
+        double rotateSpeed = 0.3;
+        double liftSpeed = 0.3;
+        int sleepTime = 300;
+        String markerPos = "Left";
+
+        myRobot.retractPurpleArm();
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 48, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 2, "Backward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        if (color.equals("Red")){
+            while (myRobot.getHeading() > 90)
+                myRobot.rotateCCW(rotateSpeed);
+        }
+        if (color.equals("Blue")){
+            while (myRobot.getHeading() < 90)
+                myRobot.rotateCW(rotateSpeed);
+        }
+        myRobot.driveStop();
+
+        myRobot.rotisserieReturn();
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 40, "Forward", driveSpeed);
+        myOpMode.sleep(sleepTime);
+
+        myRobot.openBucket();
+        myOpMode.sleep(sleepTime);
+
+        myRobot.advancedEncoderDrive(myOpMode, 1, "Backward", driveSpeed);
         myOpMode.sleep(sleepTime);
     }
 
