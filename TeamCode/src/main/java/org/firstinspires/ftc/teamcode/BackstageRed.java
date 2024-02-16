@@ -34,7 +34,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
-@Autonomous(name="Red Backstage", group ="Red")
+@Autonomous(name="Red Backstage", group ="Red", preselectTeleOp = "Centerstage_Rover")
 //@Disabled
 public class BackstageRed extends LinearOpMode {
 

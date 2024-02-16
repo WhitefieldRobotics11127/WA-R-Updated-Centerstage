@@ -33,7 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
-@Autonomous(name="Place Purple Pixel", group ="", preselectTeleOp = "Centerstage_Rover")
+@Autonomous(name="Place Purple Pixel Blue", group ="", preselectTeleOp = "Centerstage_Rover")
 //@Disabled
 public class PlacePurplePixel extends LinearOpMode {
 
@@ -60,7 +60,7 @@ public class PlacePurplePixel extends LinearOpMode {
             telemetry.addData("Starting Method", "");
             telemetry.update();
 
-            autoClass.placePurplePixel();
+            autoClass.placePurplePixel("Blue");
 
 
             while (!isStopRequested())

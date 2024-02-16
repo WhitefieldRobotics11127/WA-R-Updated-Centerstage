@@ -190,9 +190,9 @@ public class CenterstageRover extends OpMode {
         robot.dcMotor6.setPower(gamepad2.right_stick_y);
 
         //Left stick powers the intake (in and out)
-        robot.dcMotor5.setPower(gamepad2.left_stick_y * 0.5);
+        robot.dcMotor5.setPower(gamepad2.left_stick_y * 0.775);
 
-        robot.dcMotor8.setPower(gamepad2.right_trigger * 0.1);
+        robot.dcMotor8.setPower(gamepad2.right_trigger * 0.4);
         robot.dcMotor8.setPower(gamepad2.left_trigger * -0.7);
 
         //Left stick moves the hang slide up and down

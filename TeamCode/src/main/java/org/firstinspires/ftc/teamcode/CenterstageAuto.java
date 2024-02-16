@@ -147,12 +147,25 @@ public class CenterstageAuto {
     This method is the method that just places the purple pixel, should be the same for all 4 sides
     //TODO: put this in all other autonomous methods
     */
-    public void placePurplePixel(){
+    public void placePurplePixel(String color){
         double driveSpeed = 0.35;
         double rotateSpeed = 0.3;
         double liftSpeed = 0.3;
         int sleepTime = 300;
         String markerPos = "Left";
+
+        if (color.equals("Red")) {
+            myOpMode.telemetry.addData("Realtime analysis", scanPropCV("Red"));
+            myOpMode.telemetry.update();
+            markerPos = scanSavedRed();
+        }
+        else if (color.equals("Blue")) {
+            myOpMode.telemetry.addData("Realtime analysis", scanPropCV("Blue"));
+            myOpMode.telemetry.update();
+            markerPos = scanSavedBlue();
+        }
+        myOpMode.telemetry.addData("Marker Pos", markerPos);
+        myOpMode.telemetry.update();
 
         myRobot.retractPurpleArm();
         myOpMode.sleep(sleepTime);
@@ -233,7 +246,7 @@ public class CenterstageAuto {
             myRobot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
         }
 
-        placePurplePixel();
+        placePurplePixel(color);
 
         myRobot.advancedEncoderDrive(myOpMode, 15, "Backward", driveSpeed);
         myOpMode.sleep(sleepTime);
@@ -296,7 +309,7 @@ public class CenterstageAuto {
         myOpMode.telemetry.addData("Marker Pos", markerPos);
         myOpMode.telemetry.update();
 
-        placePurplePixel();
+        placePurplePixel(color);
 
         myRobot.advancedEncoderDrive(myOpMode, 15, "Backward", driveSpeed);
         myOpMode.sleep(sleepTime);
@@ -357,7 +370,7 @@ public class CenterstageAuto {
         double driveSpeed = 0.35;
         double rotateSpeed = 0.3;
         double liftSpeed = 0.3;
-        int sleepTime = 300;
+        int sleepTime = 299;
         String markerPos = "Left";
 
         if (color.equals("Red")){
@@ -383,7 +396,7 @@ public class CenterstageAuto {
 
         //Place purple pixel method starts here
 
-        placePurplePixel();
+        placePurplePixel(color);
 
         if (color.equals("Red")){
             while (myRobot.getHeading() > 90)
@@ -394,6 +407,11 @@ public class CenterstageAuto {
                 myRobot.rotateCW(rotateSpeed);
         }
         myRobot.driveStop();
+
+        myRobot.dcMotor8.setPower(0.2);
+        myOpMode.sleep(150);
+        myRobot.dcMotor8.setPower(0);
+        myOpMode.sleep(sleepTime);
 
         myRobot.advancedEncoderDrive(myOpMode, 29, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
@@ -427,7 +445,7 @@ public class CenterstageAuto {
         myOpMode.sleep(sleepTime);
     }
 
-    public void stateFrontStage(String color){
+    public void stateFrontStage(){
         double driveSpeed = 0.35;
         double rotateSpeed = 0.3;
         double liftSpeed = 0.3;

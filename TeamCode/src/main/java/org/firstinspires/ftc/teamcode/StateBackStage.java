@@ -30,13 +30,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
-@Autonomous(name="Purple Pixel Drop", group ="Red", preselectTeleOp = "Centerstage_Rover")
-@Disabled
-public class PurplePixelDrop extends LinearOpMode {
+@Autonomous(name="State Backstage Blue", group ="Blue", preselectTeleOp = "Centerstage_Rover")
+//@Disabled
+public class StateBackStage extends LinearOpMode {
+
 
     CenterstagePackBot robot = new CenterstagePackBot();
 
@@ -46,29 +46,26 @@ public class PurplePixelDrop extends LinearOpMode {
 
         CenterstageAuto autoClass = new CenterstageAuto(this, robot, hardwareMap);
 
-        autoClass.initCV("Red");
-
         telemetry.addData("Ready", "");
         telemetry.update();
 
 //        waitForStart();
         while (!isStarted() && !isStopRequested()) //replaces waitForStart()
         {
-            telemetry.addData("Realtime analysis", autoClass.scanPropCV("Red"));
+            telemetry.addData("Realtime analysis", autoClass.scanPropCV("Blue"));
             telemetry.update();
-            //robot.closeClaw(this);
         }
 
         while (!isStopRequested()) {
             telemetry.addData("Starting Method", "");
             telemetry.update();
 
-            //autoClass.purpleDrop();
+            autoClass.stateBackStage("Blue");
+
 
             while (!isStopRequested())
                 sleep(1);
         }
 
     }
-
 }
