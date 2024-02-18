@@ -46,6 +46,8 @@ public class StateBackStageRed extends LinearOpMode {
 
         CenterstageAuto autoClass = new CenterstageAuto(this, robot, hardwareMap);
 
+        autoClass.initCV("Red");
+
         telemetry.addData("Ready", "");
         telemetry.update();
 

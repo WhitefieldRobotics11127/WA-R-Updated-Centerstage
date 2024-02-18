@@ -170,18 +170,16 @@ public class CenterstageAuto {
         myRobot.retractPurpleArm();
         myOpMode.sleep(sleepTime);
 
-        myRobot.closeBucket();
+        myRobot.openBucket();
         myOpMode.sleep(sleepTime);
 
-        myRobot.advancedEncoderDrive(myOpMode, 21.4, "Forward", driveSpeed); //drives to middle tape
+        myRobot.advancedEncoderDrive(myOpMode, 30, "Forward", driveSpeed); //drives to middle tape
         myOpMode.sleep(sleepTime);
 
         if (markerPos.equals("Left")){
             while (myRobot.getHeading() < 90)
                 myRobot.rotateCW(rotateSpeed);
             myRobot.driveStop();
-            myOpMode.sleep(sleepTime);
-            myRobot.advancedEncoderDrive(myOpMode, 2, "Forward", driveSpeed);
             myOpMode.sleep(sleepTime);
             myRobot.advancedEncoderDrive(myOpMode, 2, "Backward", driveSpeed);
             myOpMode.sleep(sleepTime);
@@ -197,8 +195,6 @@ public class CenterstageAuto {
                 myRobot.rotateCCW(rotateSpeed);
             myRobot.driveStop();
             myOpMode.sleep(sleepTime);
-            myRobot.advancedEncoderDrive(myOpMode, 2, "Forward", driveSpeed);
-            myOpMode.sleep(sleepTime);
             myRobot.advancedEncoderDrive(myOpMode, 2, "Backward", driveSpeed);
             myOpMode.sleep(sleepTime);
             while (myRobot.getHeading() < 0)
@@ -207,7 +203,7 @@ public class CenterstageAuto {
         }
         myOpMode.sleep(sleepTime);
 
-        myRobot.advancedEncoderDrive(myOpMode, 15, "Backward", driveSpeed);
+        myRobot.advancedEncoderDrive(myOpMode, 10, "Backward", driveSpeed);
         myOpMode.sleep(sleepTime);
     }
 
@@ -455,7 +451,7 @@ public class CenterstageAuto {
         myRobot.retractPurpleArm();
         myOpMode.sleep(sleepTime);
 
-        myRobot.advancedEncoderDrive(myOpMode, 48, "Forward", driveSpeed);
+        myRobot.advancedEncoderDrive(myOpMode, 30, "Forward", driveSpeed);
         myOpMode.sleep(sleepTime);
 
         myRobot.advancedEncoderDrive(myOpMode, 2, "Backward", driveSpeed);
@@ -668,7 +664,7 @@ public class CenterstageAuto {
             @Override
             public void onOpened()
             {
-                webcam.startStreaming(640, 360, OpenCvCameraRotation.UPSIDE_DOWN);
+                webcam.startStreaming(640, 360, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -791,8 +787,8 @@ public class CenterstageAuto {
         //every .45 mm is 1 pixel (will depend on monitor size)
         //center of the pixel bucket lines up with the center black line
         static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(97,230);
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(295,230);
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(500,230);
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(325,230);
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(550,230);
         static final int REGION_WIDTH = 51;
         static final int REGION_HEIGHT = 51;
 
@@ -1030,10 +1026,7 @@ public class CenterstageAuto {
         }
 
         //Call this from the OpMode thread to obtain the latest analysis
-        public TSEPosition getAnalysis()
-        {
-            return position;
-        }
+        public TSEPosition getAnalysis() {return position;}
     }
 
     public static class TSEDeterminationPipelineWithSide extends OpenCvPipeline {

@@ -132,7 +132,7 @@ public class CenterstageRover extends OpMode {
         //Drive code, doesn't need to be changed
         forward = gear * gamepad1.left_stick_y;
         strafe = gear * -gamepad1.left_stick_x;
-        rotate = gear * gamepad1.right_stick_x;
+        rotate = gear * -gamepad1.right_stick_x;
         //rotate = -gear * -gamepad1.right_stick_x;
 
         front_left = direction * forward + rotate + (direction * strafe);
@@ -192,7 +192,7 @@ public class CenterstageRover extends OpMode {
         //Left stick powers the intake (in and out)
         robot.dcMotor5.setPower(gamepad2.left_stick_y * 0.775);
 
-        robot.dcMotor8.setPower(gamepad2.right_trigger * 0.4);
+        robot.dcMotor8.setPower(gamepad2.right_trigger);
         robot.dcMotor8.setPower(gamepad2.left_trigger * -0.7);
 
         //Left stick moves the hang slide up and down

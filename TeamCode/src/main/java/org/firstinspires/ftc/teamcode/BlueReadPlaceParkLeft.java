@@ -35,7 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
 @Autonomous(name="BLUE (Left) - Read, Place, Park", group ="Blue")
-@Disabled
+//@Disabled
 public class BlueReadPlaceParkLeft extends LinearOpMode {
 
     CenterstagePackBot robot = new CenterstagePackBot();

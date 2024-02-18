@@ -46,14 +46,16 @@ public class StateBackStage extends LinearOpMode {
 
         CenterstageAuto autoClass = new CenterstageAuto(this, robot, hardwareMap);
 
+        autoClass.initCV("Blue");
+
         telemetry.addData("Ready", "");
         telemetry.update();
 
 //        waitForStart();
         while (!isStarted() && !isStopRequested()) //replaces waitForStart()
         {
-            telemetry.addData("Realtime analysis", autoClass.scanPropCV("Blue"));
-            telemetry.update();
+            //telemetry.addData("Realtime analysis", autoClass.scanPropCV("Blue"));
+            //telemetry.update();
         }
 
         while (!isStopRequested()) {

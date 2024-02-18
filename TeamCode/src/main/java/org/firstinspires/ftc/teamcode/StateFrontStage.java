@@ -52,8 +52,8 @@ public class StateFrontStage extends LinearOpMode {
 //        waitForStart();
         while (!isStarted() && !isStopRequested()) //replaces waitForStart()
         {
-            telemetry.addData("Realtime analysis", autoClass.scanPropCV("Blue"));
-            telemetry.update();
+            //telemetry.addData("Realtime analysis", autoClass.scanPropCV("Blue"));
+            //telemetry.update();
         }
 
         while (!isStopRequested()) {

@@ -126,10 +126,10 @@ public class CenterstagePackBot {
 
     //These need to be updated for the new servos (in a range of 0-1)
     public static final double rotisseriePlace = 0.04; //(rotisserie in, actually)
-    public static final double rotisserieIn = 0.98; //rotisserie out, actually
+    public static final double rotisserieIn = 0.95; //rotisserie out, actually
     public static final double bucketOpen = 0;
     public static final double bucketClosed = 1;
-    public static final double purpleArmOut = 0.5;
+    public static final double purpleArmOut = 0.25;
     public static final double purpleArmIn = 1;
 
 
@@ -405,8 +405,9 @@ public class CenterstagePackBot {
     
     /** Averages and then returns the two straight odometers */
     public double getStraightEncoderCount() {
-        return (dcMotor1.getCurrentPosition() + dcMotor2.getCurrentPosition()) / 2;
+        return (-dcMotor1.getCurrentPosition() + -dcMotor2.getCurrentPosition()) / 2;
     }
+    //was originally +dcMotor1 + +dcMotor2
 
     /** Returns  the two straight odometers*/
     public double getHorizontalEncoderCount() {
@@ -468,7 +469,7 @@ public class CenterstagePackBot {
      * @param direction possible directions: "Forward", "Backward", "Left", "Right"
      */
     public void advancedEncoderDrive(LinearOpMode opMode, double distance, String direction, double speed) {
-        double targetCt = distance * COUNTS_PER_INCH * (-.242 * speed + .905);
+        double targetCt = distance * COUNTS_PER_INCH * (.05 * speed + 0.185);
         //double targetCt = distance * COUNTS_PER_INCH * (-.23 * speed + .471); // * (-.647 * speed + 1.048);
         /*
             y = mx + b where m = -.647 and b = 1.048
@@ -479,8 +480,13 @@ public class CenterstagePackBot {
             it went. (actually I'm not sure about that last sentence)
             Power is x and Drift is y (in inches). Use these to find the slope and y-intercept.
         */
-
-
+        //30% 31.5 inches over (total of 41.5 inches)
+        //70% 35 inches over (total of 45 inches)
+        //all at 13 < x < 14 volts
+        // or try (0.22 - 0.24)/(.7 - .3) = -.02/.4 = .05
+        // 0.22 = (.05)(.7) + b
+        //0.22 = 0.035 + b
+        //b = 0.185
 
         double targetHeading = getHeading();
         double currentHeading = getHeading();

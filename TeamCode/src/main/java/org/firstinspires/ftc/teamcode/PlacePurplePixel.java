@@ -46,6 +46,8 @@ public class PlacePurplePixel extends LinearOpMode {
 
         CenterstageAuto autoClass = new CenterstageAuto(this, robot, hardwareMap);
 
+        autoClass.initCV("Blue");
+
         telemetry.addData("Ready", "");
         telemetry.update();
 
