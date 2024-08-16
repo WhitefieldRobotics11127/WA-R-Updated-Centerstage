@@ -32,6 +32,13 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+/*This class along with MomAdj7 is used to recalibrate the momentum adjustor, which needs to change every
+  time the weight of the bot changes significantly, as this will cause the bot to over or undershoot the
+  distance it needs to go. Run this program, which makes the bot move forward 10 inches at 30% speed, and
+  record the actual distance it went for the calculations in the advancedEncoderDrive method (which is
+  within this season's PackBot class). Do the same for MomAdj7 (which is supposed to travel the same distance
+  but at 70% speed).
+ */
 
 @Autonomous(name= "Momentum Adjustor 3", group ="Test")
 //@Disabled

@@ -110,6 +110,7 @@ public class CenterstageAuto {
     private final int rows = 640;
     private final int cols = 480;
 
+    //OpenCV variables
     private String position = "";
     public OpenCvWebcam webcam;
     public TSEDeterminationPipeline pipeline; //BEWARE THE PIPELINE
@@ -125,7 +126,8 @@ public class CenterstageAuto {
     public static double bucketDrop = 655; //bucket drop also needs to be changed in the bucket position
                                             //function in Centerstage Rover
 
-    //Encoder constants for the entire lift
+    //Encoder constants for the entire lift. The amount of encoder counts the slide motor will rotate before
+    //stopping
     final double floorHeight = 1705;
     double backboardHeight = 1695;
 
@@ -133,6 +135,7 @@ public class CenterstageAuto {
     final double baseHeight = 0;
     double backboardLevel = 0;
 
+    //Constructor
     public CenterstageAuto(LinearOpMode theOpMode, CenterstagePackBot theRobot, HardwareMap theHwMap) {
         myOpMode = theOpMode;
         myRobot = theRobot;
@@ -144,8 +147,10 @@ public class CenterstageAuto {
     }
 
     /*
-    This method is the method that just places the purple pixel, should be the same for all 4 sides
-    //TODO: put this in all other autonomous methods
+    This method is the method that just places the purple pixel, should be the same for all 4 sides.
+    Make sure you keep every autonomous program within a method in the main autonomous class and then
+    call that method from each OpMode class, which you will directly run from the Driver Hub.
+    TODO: put this in all other autonomous methods
     */
     public void placePurplePixel(String color){
         double driveSpeed = 0.35;
@@ -690,6 +695,7 @@ public class CenterstageAuto {
         webcam.closeCameraDevice();
     }
 
+    //Takes in the color of our alliance and analyzes where the team prop is.
     public void snapshotCV(String color) {
         if (color.equals("Red"))
             savedAnalysis = pipeline.getAnalysis();
@@ -792,9 +798,6 @@ public class CenterstageAuto {
         static final int REGION_WIDTH = 51;
         static final int REGION_HEIGHT = 51;
 
-        //375 cm wide
-        //52.5 cm = 90 pixels
-
         /*
          * Points which actually define the sample region rectangles, derived from above values
          *
@@ -879,7 +882,7 @@ public class CenterstageAuto {
         {
 
             /*
-             * Overview of what we're doing:
+             * Overview of what we're doing (Skystone):
              *
              * We first convert to YCrCb color space, from RGB color space.
              * Why do we do this? Well, in the RGB color space, chroma and

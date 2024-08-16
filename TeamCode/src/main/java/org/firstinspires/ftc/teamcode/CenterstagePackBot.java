@@ -63,11 +63,12 @@ public class CenterstagePackBot {
 
     /* Public OpMode members. */
     public WebcamName webcamName = null; //creates the webcam
-    public DcMotor dcMotor1 = null;
+    public DcMotor dcMotor1 = null; //four drive motors. won't change from year to year.
     public DcMotor dcMotor2 = null;
     public DcMotor dcMotor3 = null;
-    public DcMotor dcMotor4 = null; //four drive motors
+    public DcMotor dcMotor4 = null;
 
+    //these motors will change from year to year. Remember you're only allowed to have 8 motors.
     public DcMotor dcMotor5 = null; //intake roller motor
     public DcMotor dcMotor6 = null; //slide/string movement
     public DcMotor dcMotor7 = null; // hang motor
@@ -81,7 +82,7 @@ public class CenterstagePackBot {
     //Not deleted to demonstrate how color sensors work
     //public NormalizedColorSensor colorSensor1;
 
-    //LED indicator lights for changing the direction of the robot
+    //LED indicator lights for changing the direction of the robot. Last used in 2022.
     public DigitalChannel led1R;
     public DigitalChannel led1G;
     public DigitalChannel led2R;
@@ -106,6 +107,7 @@ public class CenterstagePackBot {
 //not deleted to demonstrate CR Servos
 //    public CRServo intakeServoBR = null;
 
+    //Regular Servos
     public Servo rotisserie = null;
     public Servo bucket = null;
     public Servo purpleArm = null;
@@ -132,7 +134,6 @@ public class CenterstagePackBot {
     public static final double purpleArmOut = 0.25;
     public static final double purpleArmIn = 1;
 
-
     //From bot 2.0
     /*
     public static final double leftClawOpen = .15;
@@ -153,7 +154,9 @@ public class CenterstagePackBot {
     }
 
     /* Initialize standard Hardware interfaces */
-    //This is where we initialize all the public variables that define our hardware
+    //This is where we initialize all the public variables that define our hardware. Every deviceName
+    //is what you should type into the Driver Hub config file to connect that specific piece of hardware
+    //to the Control Hub computer.
     public void init(HardwareMap ahwMap) {
         // save reference to HW Map
         hwMap = ahwMap;
@@ -177,7 +180,8 @@ public class CenterstagePackBot {
 
         // This is what lets us be an omnidirectional bot, changed from previous years to allow us
         // to use vertical motors
-        //Also how to change the direction of motors if they're spinning the wrong way
+        //Also how to change the direction of motors if they're spinning the wrong way. You should hold
+        //the bot up and check how the wheels spin once you install them, then adjust accordingly here.
 
         //dcMotor1.setDirection(DcMotor.Direction.REVERSE);
         dcMotor2.setDirection(DcMotor.Direction.REVERSE);
@@ -250,7 +254,7 @@ public class CenterstagePackBot {
         led4G.setMode(DigitalChannel.Mode.OUTPUT);
          */
 
-//        not deleted for demonstrative purposes
+//        CR servo initialization, not deleted for demonstrative purposes
 //        intakeServoFL = hwMap.get(CRServo.class, "intakeServoFL");
 
         //imu code for heading hold
@@ -273,6 +277,7 @@ public class CenterstagePackBot {
         webcamName = hwMap.get(WebcamName.class, "Webcam 1");
     }
 
+    //uses the distance sensor
     public boolean closeTo(double val, double target, double error) {
         return (val >= target - error && val < target + error);
     }
@@ -323,7 +328,9 @@ public class CenterstagePackBot {
         purpleArm.setPosition(purpleArmIn);
     }
 
-    //Method that moves the lift up a certain amount of encoder counts during autonomous
+    //Method that moves the lift up a certain amount of encoder counts during autonomous. You can keep this
+    //method and the moveLiftDown method from year to year, you may just need to change the directions
+    // or specific motors that use it.
     public void moveLiftUp(LinearOpMode opMode, double targetCt, double speed) {
         int posCurrent = -(dcMotor6.getCurrentPosition());
         // Converts the vertical distance to diagonal distance using trig.
@@ -349,7 +356,8 @@ public class CenterstagePackBot {
         dcMotor6.setPower(0);
     }
 
-    //Drives to a certain distance in autonomous using input from the distance sensors
+    //Drives to a certain distance in autonomous using input from the distance sensors. Only needed if
+    //you're using distance sensors.
     public void driveToDist(LinearOpMode opMode, String sensor, double inchDist, double driveSpeed) {
         double targetHeading = getHeading();
         double correctionCoefficient = 0.06;
@@ -463,7 +471,7 @@ public class CenterstagePackBot {
         }
     }
 
-    //the drive method for autonomous
+    //the primary drive method we use for autonomous
     /** A more advanced version of encoderDrive, with heading hold to stay straight when driving.
      * @param distance must be in inches
      * @param direction possible directions: "Forward", "Backward", "Left", "Right"
@@ -473,13 +481,14 @@ public class CenterstagePackBot {
         //double targetCt = distance * COUNTS_PER_INCH * (-.23 * speed + .471); // * (-.647 * speed + 1.048);
         /*
             y = mx + b where m = -.647 and b = 1.048
-            To recalibrate:
+            To recalibrate heading hold (VERY IMPORTANT, DO THIS EVERY TIME THE WEIGHT SIGNIFICANTLY CHANGES):
             Comment out the part in parentheses. Run the bot at 30% speed (x = 0.3) to a certain distance and record the drift (in inches),
             then run the bot at 70% speed (x = 0.7) to the same distance and record the drift (in
             inches). Your y value for each will be the target distance divided by the actual distance
             it went. (actually I'm not sure about that last sentence)
             Power is x and Drift is y (in inches). Use these to find the slope and y-intercept.
         */
+        //Math from previous attempts:
         //30% 31.5 inches over (total of 41.5 inches)
         //70% 35 inches over (total of 45 inches)
         //all at 13 < x < 14 volts
@@ -564,7 +573,7 @@ public class CenterstagePackBot {
         }
     }
 
-    //heading hold
+    //heading hold code here. Don't really need to touch.
     /** Helper method for `advancedEncoderDrive` */
     private void driveWithCorrection(String dir, double headingDelta, double correctionCoefficient, double driveSpeed) {
 
@@ -603,6 +612,7 @@ public class CenterstagePackBot {
         }
     }
 
+    //Old drive methods
     public void driveForward(double driveSpeed) {
         dcMotor1.setPower(-driveSpeed);
         dcMotor2.setPower(-driveSpeed);
@@ -653,6 +663,8 @@ public class CenterstagePackBot {
         dcMotor4.setPower(-driveSpeed * 1.75);
 
     }
+
+    //We still use these 2:
 
     public void rotateCCW(double driveSpeed) {
         dcMotor1.setPower(-driveSpeed);

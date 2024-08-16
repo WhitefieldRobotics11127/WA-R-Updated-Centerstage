@@ -48,7 +48,8 @@ import java.util.concurrent.TimeUnit;
 /*This is the header for a typical opmode. The type is at the front, either @TeleOp or
 * @Autonomous. The name is what shows up during opmode selection on the driver hub, and the group
 * is the other opmodes it shows up next to during opmode selection on the driver hub. If
-* @Disabled is commented out, then the opmode will show up on the driver hub.
+* @Disabled is commented out, then the opmode will show up on the driver hub. Refer to any of the
+* Autonomous OpModes to see how an Autonomous program differs from TeleOp.
 */
 @TeleOp(name="Centerstage_Rover", group="Packbot")
 //@Disabled
@@ -129,7 +130,7 @@ public class CenterstageRover extends OpMode {
             gamepadRateLimit.reset();
         }
 
-        //Drive code, doesn't need to be changed
+        //Drive code, only needs to be changed if you need to reverse the directions of the sticks.
         forward = gear * gamepad1.left_stick_y;
         strafe = gear * -gamepad1.left_stick_x;
         rotate = gear * -gamepad1.right_stick_x;
@@ -141,6 +142,7 @@ public class CenterstageRover extends OpMode {
         rear_right = direction * forward - rotate + (direction * strafe);
 
 
+        //Code to release the paper airplane
         if (gamepad1.start) //reset & hold
             robot.launcher.setPosition(0);
         if (gamepad1.back) //release
@@ -152,7 +154,7 @@ public class CenterstageRover extends OpMode {
         //thunder = struck;
 
 
-        //Changes if the robot "front" is in the front or the back of the bot
+        //Changes if the robot "front" is in the front or the back of the bot. Here for driver's preference only.
         if (gamepad1.left_bumper)
             direction = -1;
         if (gamepad1.right_bumper)
@@ -180,13 +182,14 @@ public class CenterstageRover extends OpMode {
         */
 
         /** GAMEPAD 2 */
+        //Will change every year.
 
         //PAST telemetry.addData("Grabber encoder value: ", robot.dcMotor7.getCurrentPosition());
         //PAST telemetry.update();
         telemetry.addData("Slide encoder value: ", robot.dcMotor6.getCurrentPosition());
         telemetry.update();
 
-        //Right stick pushes the slide up/down
+        //Right stick pushes the slide up/down. Use a negative sign to reverse the direction.
         robot.dcMotor6.setPower(gamepad2.right_stick_y);
 
         //Left stick powers the intake (in and out)
@@ -236,6 +239,11 @@ public class CenterstageRover extends OpMode {
             robot.deployPurpleArm();
         }
 
+        /* You can set up an odometry retraction system to pull the odometers off the ground & out of the
+           way if the game has a bumpy field that could cause the odometers to get ripped off during TeleOp
+           or during rough driving. Add this later, however.
+         */
+
         /*
         if (gamepad2.back){ //retract the odometer wheels
             robot.parmesan.setPosition(1);
@@ -261,7 +269,6 @@ public class CenterstageRover extends OpMode {
             robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.FIRE_LARGE);
         if (gamepad2.dpad_left)
             robot.blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET);
-// This is my Comment :) //
 
         /** TELEMETRY */
 
